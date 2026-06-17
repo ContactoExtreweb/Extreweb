@@ -1,0 +1,343 @@
+---
+// src/pages/nosotros.astro
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import PageHero from '@/components/PageHero.astro'
+
+const valores = [
+    {
+        num: '01',
+        titulo: 'A medida, siempre',
+        desc: 'Nada de plantillas recicladas. Cada proyecto se diseña y programa desde cero para tu negocio.',
+    },
+    {
+        num: '02',
+        titulo: 'Cercanía real',
+        desc: 'Equipo local de Extremadura. Trato directo, sin intermediarios ni call centers.',
+    },
+    {
+        num: '03',
+        titulo: 'Técnicos de verdad',
+        desc: 'De la web al servidor. Dominamos el diseño, el código y también el hardware y las redes.',
+    },
+    {
+        num: '04',
+        titulo: 'Sin humo',
+        desc: 'Te explicamos todo claro, cumplimos plazos y no prometemos lo que no podemos dar.',
+    },
+]
+
+// Cambia nombres, roles e iniciales por los vuestros.
+// Para foto: crea public/equipo/ y pon p.ej. foto: '/equipo/saul.webp'
+const equipo = [
+    {
+        nombre: 'Tu nombre',
+        rol: 'Diseño y desarrollo web',
+        iniciales: 'XX',
+        foto: null,
+    },
+    {
+        nombre: 'Tu socio',
+        rol: 'Sistemas, redes y soporte',
+        iniciales: 'XX',
+        foto: null,
+    },
+]
+---
+
+<BaseLayout
+    title='Nosotros — extreweb'
+    description='Somos extreweb, un equipo de diseño y desarrollo web con base en Extremadura. Conoce nuestra forma de trabajar.'
+>
+    <PageHero
+        label='// nosotros'
+        intro='Dos técnicos, una obsesión: hacer webs que de verdad funcionen y dar el soporte que tu negocio merece.'
+    >
+        Tu equipo digital en <em class='text-accent'>Extremadura</em>
+    </PageHero>
+
+    <main>
+        <!-- Historia -->
+        <section class='about-story'>
+            <div class='container about-grid'>
+                <div class='about-statement'>
+                    <h2>No somos una agencia más.</h2>
+                </div>
+                <div class='about-text'>
+                    <p>
+                        <strong>extreweb</strong> nace en Extremadura de la mano de
+                        dos apasionados de la web y la tecnología. Venimos de la formación
+                        en Desarrollo de Aplicaciones Web y en Sistemas Microinformáticos
+                        y Redes, y esa doble base es lo que nos hace diferentes.
+                    </p>
+                    <p class='text-muted'>
+                        Significa que cubrimos todo el círculo: diseñamos,
+                        programamos, posicionamos y, además, montamos y
+                        mantenemos los equipos y redes que hacen funcionar tu
+                        negocio. Sin pasar la pelota a terceros.
+                    </p>
+                    <p class='text-muted'>
+                        Trabajamos para negocios de Don Benito, Villanueva de la
+                        Serena, Cáceres y toda la región — y también online,
+                        estés donde estés.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Valores -->
+        <section class='values'>
+            <div class='container'>
+                <div class='values-head'>
+                    <span class='mono text-accent'>// cómo trabajamos</span>
+                    <h2>Lo que nos <em class='text-accent'>mueve</em></h2>
+                </div>
+                <div class='values-grid'>
+                    {
+                        valores.map((v) => (
+                            <div class='value-card'>
+                                <span class='value-num'>{v.num}</span>
+                                <h3 class='value-title'>{v.titulo}</h3>
+                                <p class='value-desc text-muted'>{v.desc}</p>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+
+        <!-- Equipo -->
+        <section class='team'>
+            <div class='container'>
+                <div class='team-head'>
+                    <span class='mono text-accent'>// el equipo</span>
+                    <h2>Las caras <em class='text-accent'>detrás</em></h2>
+                </div>
+                <div class='team-grid'>
+                    {
+                        equipo.map((m) => (
+                            <div class='member'>
+                                <div class='member-photo'>
+                                    {m.foto ? (
+                                        <img src={m.foto} alt={m.nombre} />
+                                    ) : (
+                                        <span class='member-initials'>
+                                            {m.iniciales}
+                                        </span>
+                                    )}
+                                </div>
+                                <h3 class='member-name'>{m.nombre}</h3>
+                                <span class='member-role mono text-accent'>
+                                    {m.rol}
+                                </span>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+    </main>
+</BaseLayout>
+
+<style>
+    /* Historia */
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.3fr;
+        gap: clamp(2rem, 6vw, 5rem);
+        align-items: start;
+    }
+    .about-statement h2 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+    }
+    .about-text p {
+        font-size: 1.15rem;
+        line-height: 1.6;
+        margin-bottom: 1.2rem;
+        max-width: none;
+    }
+    .about-text strong {
+        color: var(--fg);
+    }
+
+    /* Valores */
+    .values {
+        border-top: var(--border-w) solid var(--fg);
+    }
+    .values-head {
+        margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    }
+    .values-head h2 {
+        margin-top: 0.8rem;
+    }
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0;
+        border: var(--border-w) solid var(--fg);
+    }
+    .value-card {
+        padding: clamp(1.5rem, 3vw, 2rem);
+        border-right: var(--border-w) solid var(--fg);
+        transition: background 0.25s ease;
+    }
+    .value-card:last-child {
+        border-right: none;
+    }
+    .value-card:hover {
+        background: var(--surface);
+    }
+    .value-num {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        color: var(--accent);
+        display: block;
+        margin-bottom: 1.2rem;
+    }
+    .value-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.6rem;
+    }
+    .value-desc {
+        font-size: 0.92rem;
+    }
+
+    /* Equipo */
+    .team {
+        border-top: var(--border-w) solid var(--fg);
+    }
+    .team-head {
+        margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    }
+    .team-head h2 {
+        margin-top: 0.8rem;
+    }
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        max-width: 700px;
+    }
+    .member-photo {
+        aspect-ratio: 1;
+        border: var(--border-w) solid var(--fg);
+        box-shadow: var(--shadow);
+        background: var(--surface);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        margin-bottom: 1.2rem;
+        transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
+    }
+    .member:hover .member-photo {
+        transform: translate(-5px, -5px);
+        box-shadow: 12px 12px 0 var(--accent);
+    }
+    .member-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .member-initials {
+        font-weight: 700;
+        font-size: 3rem;
+        color: var(--muted);
+        letter-spacing: -0.03em;
+    }
+    .member-name {
+        font-size: 1.5rem;
+        margin-bottom: 0.3rem;
+    }
+    .member-role {
+        font-size: 0.8rem;
+    }
+
+    @media (max-width: 900px) {
+        .values-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+        .value-card {
+            border-bottom: var(--border-w) solid var(--fg);
+        }
+        .value-card:nth-child(2) {
+            border-right: none;
+        }
+        .value-card:nth-child(3),
+        .value-card:nth-child(4) {
+            border-bottom: none;
+        }
+    }
+    @media (max-width: 768px) {
+        .about-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    @media (max-width: 520px) {
+        .values-grid {
+            grid-template-columns: 1fr;
+        }
+        .value-card {
+            border-right: none;
+        }
+        .team-grid {
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap } from 'gsap'
+    import { ScrollTrigger } from 'gsap/ScrollTrigger'
+    gsap.registerPlugin(ScrollTrigger)
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (!reduce) {
+        gsap.from('.about-statement, .about-text p', {
+            scrollTrigger: { trigger: '.about-story', start: 'top 75%' },
+            y: 30,
+            autoAlpha: 0,
+            stagger: 0.12,
+            duration: 0.7,
+            ease: 'power3.out',
+        })
+
+        gsap.from('.values-head > *', {
+            scrollTrigger: { trigger: '.values', start: 'top 78%' },
+            y: 24,
+            autoAlpha: 0,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: 'power3.out',
+        })
+        gsap.from('.value-card', {
+            scrollTrigger: { trigger: '.values-grid', start: 'top 82%' },
+            y: 30,
+            autoAlpha: 0,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: 'power3.out',
+        })
+
+        gsap.from('.team-head > *', {
+            scrollTrigger: { trigger: '.team', start: 'top 80%' },
+            y: 24,
+            autoAlpha: 0,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: 'power3.out',
+        })
+        gsap.from('.member', {
+            scrollTrigger: { trigger: '.team-grid', start: 'top 85%' },
+            y: 40,
+            autoAlpha: 0,
+            stagger: 0.15,
+            duration: 0.7,
+            ease: 'power3.out',
+        })
+    }
+</script>

@@ -1,0 +1,298 @@
+---
+// src/pages/servicios.astro
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import PageHero from '@/components/PageHero.astro'
+
+const servicios = [
+    {
+        num: '01',
+        titulo: 'Diseño y desarrollo web',
+        desc: 'Webs a medida, rápidas y pensadas para convertir. Nada de plantillas recicladas: diseñamos y programamos cada proyecto desde cero para que tu negocio destaque y cargue al instante.',
+        incluye: [
+            'Diseño UI/UX',
+            'Desarrollo a medida',
+            'Webs corporativas',
+            'Tiendas online',
+            'Landing pages',
+            'Diseño responsive',
+        ],
+    },
+    {
+        num: '02',
+        titulo: 'SEO y posicionamiento',
+        desc: 'Que te encuentren justo cuando buscan lo que ofreces. Optimizamos tu web por dentro y trabajamos el posicionamiento local para que aparezcas en tu zona.',
+        incluye: [
+            'SEO técnico',
+            'SEO local',
+            'Optimización de contenido',
+            'Velocidad de carga',
+            'Analítica',
+            'Google Business',
+        ],
+    },
+    {
+        num: '03',
+        titulo: 'Redes sociales',
+        desc: 'Tu marca activa y conectando de verdad. Gestionamos tus perfiles con contenido y estrategia para que tu presencia digital trabaje por ti.',
+        incluye: [
+            'Gestión de perfiles',
+            'Creación de contenido',
+            'Estrategia',
+            'Diseño gráfico',
+        ],
+    },
+    {
+        num: '04',
+        titulo: 'Sistemas y soporte',
+        desc: 'El soporte técnico que tu negocio necesita. Montamos y mantenemos equipos y redes para que la parte técnica nunca te frene.',
+        incluye: [
+            'Montaje de equipos',
+            'Mantenimiento',
+            'Configuración de redes',
+            'Soporte técnico',
+        ],
+    },
+]
+
+const proceso = [
+    {
+        num: '01',
+        titulo: 'Hablamos',
+        desc: 'Entendemos tu negocio, tus objetivos y a quién te diriges.',
+    },
+    {
+        num: '02',
+        titulo: 'Diseñamos',
+        desc: 'Creamos una propuesta visual a medida, sin plantillas.',
+    },
+    {
+        num: '03',
+        titulo: 'Desarrollamos',
+        desc: 'Convertimos el diseño en una web rápida y bien construida.',
+    },
+    {
+        num: '04',
+        titulo: 'Lanzamos',
+        desc: 'Publicamos, configuramos el dominio y dejamos todo a punto.',
+    },
+    {
+        num: '05',
+        titulo: 'Mantenemos',
+        desc: 'Te acompañamos con soporte, mejoras y actualizaciones.',
+    },
+]
+---
+
+<BaseLayout
+    title='Servicios — extreweb'
+    description='Diseño y desarrollo web, SEO, redes sociales y soporte técnico en Don Benito, Villanueva de la Serena y Cáceres.'
+>
+    <PageHero
+        label='// servicios'
+        intro='Del diseño al mantenimiento, cubrimos todas las fases. Un único equipo para toda la presencia digital de tu negocio.'
+    >
+        Todo lo que tu <em class='text-accent'>negocio</em> necesita
+    </PageHero>
+
+    <main>
+        <section class='svc-detail'>
+            <div class='container'>
+                {
+                    servicios.map((s) => (
+                        <article class='svc-block'>
+                            <div class='svc-block-head'>
+                                <span class='svc-num'>{s.num}</span>
+                                <h2 class='svc-title'>{s.titulo}</h2>
+                            </div>
+                            <div class='svc-block-body'>
+                                <p class='svc-desc text-muted'>{s.desc}</p>
+                                <div class='svc-incluye'>
+                                    <span class='mono svc-incluye-label'>
+                                        Incluye
+                                    </span>
+                                    <ul class='svc-list'>
+                                        {s.incluye.map((i) => (
+                                            <li class='svc-item'>{i}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+                    ))
+                }
+            </div>
+        </section>
+
+        <section class='process'>
+            <div class='container'>
+                <div class='process-head'>
+                    <span class='mono text-accent'>// cómo trabajamos</span>
+                    <h2>Nuestro <em class='text-accent'>proceso</em></h2>
+                </div>
+                <div class='process-grid'>
+                    {
+                        proceso.map((p) => (
+                            <div class='proc-step'>
+                                <span class='proc-num'>{p.num}</span>
+                                <h3 class='proc-title'>{p.titulo}</h3>
+                                <p class='proc-desc text-muted'>{p.desc}</p>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </section>
+    </main>
+</BaseLayout>
+
+<style>
+    /* Bloques de servicio */
+    .svc-block {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1.5rem, 4vw, 3rem);
+        padding-block: clamp(2.5rem, 6vw, 4rem);
+        border-top: var(--border-w) solid var(--fg);
+        align-items: start;
+    }
+    .svc-block:last-child {
+        border-bottom: var(--border-w) solid var(--fg);
+    }
+
+    .svc-block-head {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+    }
+    .svc-num {
+        font-weight: 700;
+        font-size: clamp(1.5rem, 4vw, 2.2rem);
+        color: var(--muted);
+        letter-spacing: -0.03em;
+    }
+    .svc-title {
+        font-size: clamp(1.6rem, 4vw, 2.6rem);
+    }
+
+    .svc-desc {
+        font-size: 1.05rem;
+        margin-bottom: 1.5rem;
+    }
+    .svc-incluye-label {
+        color: var(--muted);
+        display: block;
+        margin-bottom: 0.8rem;
+    }
+    .svc-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem 1.5rem;
+    }
+    .svc-item {
+        position: relative;
+        padding-left: 1.3rem;
+        font-size: 0.95rem;
+    }
+    .svc-item::before {
+        content: '→';
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+    }
+
+    /* Proceso */
+    .process {
+        border-top: var(--border-w) solid var(--fg);
+    }
+    .process-head {
+        margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    }
+    .process-head h2 {
+        margin-top: 0.8rem;
+    }
+    .process-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1.5rem;
+    }
+    .proc-step {
+        padding-top: 1.2rem;
+        border-top: 2px solid var(--muted);
+    }
+    .proc-num {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        color: var(--accent);
+        margin-bottom: 0.8rem;
+    }
+    .proc-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+    .proc-desc {
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+        .svc-block {
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+        }
+    }
+    @media (max-width: 420px) {
+        .svc-list {
+            grid-template-columns: 1fr;
+        }
+    }
+    @media (max-width: 900px) {
+        .process-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem 1.5rem;
+        }
+    }
+    @media (max-width: 480px) {
+        .process-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap } from 'gsap'
+    import { ScrollTrigger } from 'gsap/ScrollTrigger'
+    gsap.registerPlugin(ScrollTrigger)
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (!reduce) {
+        gsap.utils.toArray('.svc-block').forEach((block) => {
+            gsap.from(block, {
+                scrollTrigger: { trigger: block, start: 'top 80%' },
+                y: 40,
+                autoAlpha: 0,
+                duration: 0.7,
+                ease: 'power3.out',
+            })
+        })
+
+        gsap.from('.process-head > *', {
+            scrollTrigger: { trigger: '.process', start: 'top 80%' },
+            y: 24,
+            autoAlpha: 0,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: 'power3.out',
+        })
+
+        gsap.from('.proc-step', {
+            scrollTrigger: { trigger: '.process-grid', start: 'top 80%' },
+            y: 30,
+            autoAlpha: 0,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: 'power3.out',
+        })
+    }
+</script>

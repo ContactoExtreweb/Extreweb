@@ -139,3 +139,9 @@ section { padding-block: clamp(4rem, 12vh, 9rem); }
 
 /* Evita el parpadeo del hero hasta que carga la animación (solo si hay JS) */
 html.js .hero { visibility: hidden; }
+
+/* em lo usamos como acento, nunca en cursiva */
+em { font-style: normal; }
+
+/* Evita el parpadeo de la cabecera de página hasta que carga la animación */
+html.js .page-hero { visibility: hidden; }
