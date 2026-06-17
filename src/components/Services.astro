@@ -1,0 +1,192 @@
+---
+// src/components/Services.astro
+const servicios = [
+    {
+        num: '01',
+        titulo: 'Diseño y desarrollo web',
+        desc: 'Webs a medida, rápidas y con carácter. Del diseño al despliegue, sin plantillas genéricas.',
+        tags: ['Diseño UI', 'Desarrollo', 'Tiendas online', 'Mantenimiento'],
+    },
+    {
+        num: '02',
+        titulo: 'SEO y posicionamiento',
+        desc: 'Que te encuentren cuando buscan lo que ofreces. Optimización técnica y posicionamiento local en tu zona.',
+        tags: ['SEO técnico', 'SEO local', 'Optimización', 'Analítica'],
+    },
+    {
+        num: '03',
+        titulo: 'Redes sociales',
+        desc: 'Gestionamos tu presencia para que tu marca esté activa y conecte de verdad con tu público.',
+        tags: ['Gestión', 'Contenido', 'Estrategia'],
+    },
+    {
+        num: '04',
+        titulo: 'Sistemas y soporte',
+        desc: 'Montaje y mantenimiento de equipos y redes. El soporte técnico que tu negocio necesita.',
+        tags: ['Montaje de equipos', 'Mantenimiento', 'Redes'],
+    },
+]
+---
+
+<section class='services'>
+    <div class='services-head container'>
+        <span class='mono text-accent'>// servicios</span>
+        <h2>Lo que <em class='text-accent'>hacemos</em></h2>
+        <p class='services-intro text-muted'>
+            De la idea al mantenimiento. Cubrimos todas las fases para que tú
+            solo te preocupes de tu negocio.
+        </p>
+    </div>
+
+    <div class='services-list container'>
+        {
+            servicios.map((s) => (
+                <a href='/servicios' class='service-row'>
+                    <span class='service-num'>{s.num}</span>
+                    <div class='service-body'>
+                        <h3 class='service-title'>{s.titulo}</h3>
+                        <p class='service-desc'>{s.desc}</p>
+                        <div class='service-tags'>
+                            {s.tags.map((t) => (
+                                <span class='service-tag'>{t}</span>
+                            ))}
+                        </div>
+                    </div>
+                    <span class='service-arrow'>→</span>
+                </a>
+            ))
+        }
+    </div>
+</section>
+
+<style>
+    .services-head {
+        margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    }
+    .services-head h2 {
+        margin: 0.8rem 0;
+    }
+    .services-head em {
+        font-style: normal;
+    }
+    .services-intro {
+        font-size: 1.1rem;
+        max-width: 55ch;
+    }
+
+    .service-row {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 1rem 2rem;
+        align-items: center;
+        padding: clamp(1.5rem, 4vw, 2.5rem) 0;
+        border-top: var(--border-w) solid var(--fg);
+        color: var(--fg);
+        transition:
+            background 0.25s ease,
+            padding-left 0.25s ease;
+    }
+    .service-row:last-child {
+        border-bottom: var(--border-w) solid var(--fg);
+    }
+
+    .service-row:hover {
+        background: var(--surface);
+        padding-left: clamp(0.75rem, 2vw, 1.5rem);
+    }
+    .service-row:hover .service-num,
+    .service-row:hover .service-arrow {
+        color: var(--accent);
+    }
+    .service-row:hover .service-arrow {
+        transform: translateX(10px);
+    }
+
+    .service-num {
+        font-family: var(--font);
+        font-weight: 700;
+        font-size: clamp(1.8rem, 5vw, 3rem);
+        line-height: 0.9;
+        letter-spacing: -0.03em;
+        color: var(--muted);
+        transition: color 0.25s ease;
+    }
+
+    .service-title {
+        font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+        margin-bottom: 0.5rem;
+    }
+    .service-desc {
+        color: var(--muted);
+        margin-bottom: 0.9rem;
+        max-width: 60ch;
+    }
+
+    .service-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .service-tag {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--fg);
+        border: 1px solid var(--muted);
+        padding: 0.25rem 0.6rem;
+    }
+
+    .service-arrow {
+        font-size: 1.8rem;
+        color: var(--fg);
+        transition:
+            transform 0.25s ease,
+            color 0.25s ease;
+    }
+
+    @media (max-width: 640px) {
+        .service-row {
+            grid-template-columns: 1fr;
+            gap: 0.7rem;
+        }
+        .service-arrow {
+            display: none;
+        }
+        .service-num {
+            font-size: 1.4rem;
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap } from 'gsap'
+    import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+    gsap.registerPlugin(ScrollTrigger)
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (!reduce) {
+        // Cabecera
+        gsap.from('.services-head > *', {
+            scrollTrigger: { trigger: '.services', start: 'top 75%' },
+            y: 30,
+            autoAlpha: 0,
+            stagger: 0.12,
+            duration: 0.7,
+            ease: 'power3.out',
+        })
+
+        // Filas (aparecen en cascada al entrar en pantalla)
+        gsap.from('.service-row', {
+            scrollTrigger: { trigger: '.services-list', start: 'top 80%' },
+            y: 40,
+            autoAlpha: 0,
+            stagger: 0.12,
+            duration: 0.7,
+            ease: 'power3.out',
+        })
+    }
+</script>

@@ -1,0 +1,238 @@
+---
+// src/components/Projects.astro
+const proyectos = [
+    {
+        num: '01',
+        nombre: 'Toldos Pallares',
+        desc: 'Web corporativa para una empresa de toldos y protección solar. Diseño a medida, catálogo de productos y formulario de contacto.',
+        tags: ['WordPress', 'Elementor', 'Diseño web'],
+        url: 'https://toldospallares.com',
+        urlLabel: 'toldospallares.com',
+        img: '/public/proyectos/Toldos-Pallares.webp', // p.ej. '/proyectos/toldos.webp'
+    },
+    {
+        num: '02',
+        nombre: 'GuadiCar Multimarcas',
+        desc: 'Plataforma para un concesionario de vehículos de ocasión. Catálogo dinámico, buscador con fichas detalladas y panel de gestión.',
+        tags: ['Astro', 'Supabase', 'Desarrollo web'],
+        url: 'https://guadicar.es',
+        urlLabel: 'guadicar.es',
+        img: '/public/proyectos/Guadicar.webp', // p.ej. '/proyectos/guadicar.webp'
+    },
+]
+---
+
+<section class='projects'>
+    <div class='projects-head container'>
+        <span class='mono text-accent'>// proyectos</span>
+        <h2>Trabajo <em class='text-accent'>real</em></h2>
+        <p class='projects-intro text-muted'>
+            Proyectos en producción para negocios reales. Esto es lo que sabemos
+            hacer.
+        </p>
+    </div>
+
+    <div class='projects-list container'>
+        {
+            proyectos.map((p, i) => (
+                <article class:list={['project', { reverse: i % 2 === 1 }]}>
+                    <div class='project-visual'>
+                        <div class='project-frame'>
+                            {p.img ? (
+                                <img src={p.img} alt={p.nombre} />
+                            ) : (
+                                <span class='project-placeholder'>
+                                    {p.nombre}
+                                </span>
+                            )}
+                        </div>
+                    </div>
+
+                    <div class='project-meta'>
+                        <span class='mono project-num text-accent'>
+                            {p.num} · Proyecto
+                        </span>
+                        <h3 class='project-name'>{p.nombre}</h3>
+                        <p class='project-desc'>{p.desc}</p>
+                        <div class='project-tags'>
+                            {p.tags.map((t) => (
+                                <span class='project-tag'>{t}</span>
+                            ))}
+                        </div>
+                        <a
+                            href={p.url}
+                            target='_blank'
+                            rel='noopener'
+                            class='project-link mono'
+                        >
+                            Ver web — {p.urlLabel} ↗
+                        </a>
+                    </div>
+                </article>
+            ))
+        }
+    </div>
+</section>
+
+<style>
+    .projects {
+        background: var(--bg);
+    }
+    .projects-head {
+        margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    }
+    .projects-head h2 {
+        margin: 0.8rem 0;
+    }
+    .projects-head em {
+        font-style: normal;
+    }
+    .projects-intro {
+        font-size: 1.1rem;
+        max-width: 55ch;
+    }
+
+    .project {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(2rem, 5vw, 4rem);
+        align-items: center;
+        padding-block: clamp(3rem, 7vw, 5rem);
+    }
+    .project:not(:last-child) {
+        border-bottom: var(--border-w) solid var(--fg);
+    }
+    .project.reverse .project-visual {
+        order: 2;
+    }
+
+    /* Marco de la captura */
+    .project-frame {
+        border: var(--border-w) solid var(--fg);
+        box-shadow: var(--shadow);
+        background: var(--surface);
+        aspect-ratio: 16 / 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
+    }
+    .project:hover .project-frame {
+        transform: translate(-5px, -5px);
+        box-shadow: 12px 12px 0 var(--accent);
+    }
+    .project-frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .project-placeholder {
+        font-weight: 700;
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    /* Info */
+    .project-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .project-name {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+    }
+    .project-desc {
+        color: var(--muted);
+        max-width: 50ch;
+    }
+
+    .project-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .project-tag {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--fg);
+        border: 1px solid var(--muted);
+        padding: 0.25rem 0.6rem;
+    }
+
+    .project-link {
+        margin-top: 0.5rem;
+        padding-bottom: 2px;
+        border-bottom: 2px solid var(--accent);
+        transition: color 0.2s ease;
+    }
+    .project-link:hover {
+        color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+        .project {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        .project.reverse .project-visual {
+            order: 0;
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap } from 'gsap'
+    import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+    gsap.registerPlugin(ScrollTrigger)
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (!reduce) {
+        // Cabecera
+        gsap.from('.projects-head > *', {
+            scrollTrigger: { trigger: '.projects', start: 'top 75%' },
+            y: 30,
+            autoAlpha: 0,
+            stagger: 0.12,
+            duration: 0.7,
+            ease: 'power3.out',
+        })
+
+        // Cada proyecto: el marco entra y la info aparece en cascada
+        gsap.utils.toArray('.project').forEach((proj) => {
+            const frame = proj.querySelector('.project-frame')
+            const meta = proj.querySelectorAll('.project-meta > *')
+            const tl = gsap.timeline({
+                scrollTrigger: { trigger: proj, start: 'top 75%' },
+            })
+            tl.from(frame, {
+                autoAlpha: 0,
+                y: 50,
+                duration: 0.8,
+                ease: 'power3.out',
+            }).from(
+                meta,
+                {
+                    autoAlpha: 0,
+                    y: 30,
+                    stagger: 0.1,
+                    duration: 0.6,
+                    ease: 'power3.out',
+                },
+                '-=0.5',
+            )
+        })
+    }
+</script>
