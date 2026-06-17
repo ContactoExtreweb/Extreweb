@@ -1,17 +1,89 @@
 ---
-
+// src/pages/index.astro
+import BaseLayout from '@/layouts/BaseLayout.astro'
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+	<main class='container hero'>
+		<span class='mono text-accent hero-label'
+			>// agencia de diseño y desarrollo web</span
+		>
+		<h1 class='hero-title'>
+			<span class='line'><span>Construimos webs</span></span>
+			<span class='line'
+				><span>que <em class='text-accent'>revientan</em></span></span
+			>
+		</h1>
+		<p class='lead text-muted hero-lead'>
+			Diseño, desarrollo, SEO y mantenimiento. Webs rápidas y con carácter
+			para negocios de Don Benito, Villanueva de la Serena y Cáceres.
+		</p>
+		<div class='hero-btns'>
+			<a href='#' class='btn btn-accent'>Ver proyectos</a>
+			<a href='#' class='btn'>Hablemos →</a>
+		</div>
+	</main>
+</BaseLayout>
+
+<style>
+	.hero {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 1.5rem;
+		padding-block: 6rem;
+	}
+	.lead {
+		font-size: 1.15rem;
+	}
+	.hero-btns {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+		margin-top: 1rem;
+	}
+
+	/* Líneas del titular para el reveal con máscara */
+	.hero-title .line {
+		display: block;
+		overflow: hidden;
+		padding-bottom: 0.08em;
+	}
+	.hero-title .line > span {
+		display: block;
+	}
+	.hero-title em {
+		font-style: normal;
+	}
+</style>
+
+<script>
+	// @ts-nocheck
+	import { gsap } from 'gsap'
+
+	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+	// Revela el contenedor (anula el ocultado anti-parpadeo)
+	gsap.set('.hero', { autoAlpha: 1 })
+
+	if (!reduce) {
+		const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+		tl.from('.hero-label', { y: 24, autoAlpha: 0, duration: 0.6 })
+			.from(
+				'.hero-title .line > span',
+				{ yPercent: 110, autoAlpha: 0, stagger: 0.12, duration: 0.9 },
+				'-=0.3',
+			)
+			.from(
+				'.hero-lead',
+				{ y: 24, autoAlpha: 0, duration: 0.7 },
+				'-=0.45',
+			)
+			.from(
+				'.hero-btns > *',
+				{ autoAlpha: 0, stagger: 0.1, duration: 0.6 },
+				'-=0.4',
+			)
+	}
+</script>

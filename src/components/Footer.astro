@@ -1,0 +1,241 @@
+---
+// src/components/Footer.astro
+const year = new Date().getFullYear()
+
+const servicios = [
+    { href: '/servicios', label: 'Diseño web' },
+    { href: '/servicios', label: 'Desarrollo' },
+    { href: '/servicios', label: 'SEO y posicionamiento' },
+    { href: '/servicios', label: 'Redes sociales' },
+    { href: '/servicios', label: 'Sistemas y soporte' },
+]
+
+const empresa = [
+    { href: '/proyectos', label: 'Proyectos' },
+    { href: '/nosotros', label: 'Nosotros' },
+    { href: '/contacto', label: 'Contacto' },
+]
+---
+
+<footer class='footer'>
+    <!-- CTA -->
+    <div class='footer-cta container'>
+        <span class='mono text-accent'>// ¿empezamos?</span>
+        <h2>
+            ¿Tienes un proyecto<br /><span class='text-accent'>en mente?</span>
+        </h2>
+        <a href='/contacto' class='btn btn-accent'>Hablemos →</a>
+    </div>
+
+    <!-- Grid -->
+    <div class='footer-grid container'>
+        <div class='footer-brand'>
+            <a href='/' class='logo'>
+                <span class='logo-mark'>E</span>
+                <span class='logo-text'>extreweb</span>
+            </a>
+            <p class='footer-tagline text-muted'>
+                Diseño, desarrollo, SEO y soporte técnico para negocios de
+                Extremadura.
+            </p>
+        </div>
+
+        <div class='footer-col'>
+            <span class='mono footer-label'>Servicios</span>
+            {
+                servicios.map((l) => (
+                    <a href={l.href} class='footer-link'>
+                        {l.label}
+                    </a>
+                ))
+            }
+        </div>
+
+        <div class='footer-col'>
+            <span class='mono footer-label'>Empresa</span>
+            {
+                empresa.map((l) => (
+                    <a href={l.href} class='footer-link'>
+                        {l.label}
+                    </a>
+                ))
+            }
+        </div>
+
+        <div class='footer-col'>
+            <span class='mono footer-label'>Contacto</span>
+            <a href='mailto:hola@extreweb.es' class='footer-link'
+                >hola@extreweb.es</a
+            >
+            <span class='footer-link footer-place'
+                >Don Benito · Villanueva de la Serena · Cáceres</span
+            >
+            <div class='footer-socials'>
+                <a href='#' class='footer-social'>Instagram ↗</a>
+                <a href='#' class='footer-social'>LinkedIn ↗</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom -->
+    <div class='footer-bottom container'>
+        <span class='mono'>© {year} extreweb</span>
+        <div class='footer-legal'>
+            <a href='#' class='mono'>Aviso legal</a>
+            <a href='#' class='mono'>Privacidad</a>
+            <a href='#' class='mono'>Cookies</a>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .footer {
+        border-top: var(--border-w) solid var(--fg);
+        background: var(--bg);
+    }
+
+    /* CTA */
+    .footer-cta {
+        padding-block: clamp(3.5rem, 10vh, 7rem);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .footer-cta h2 {
+        font-size: clamp(2.2rem, 7vw, 5rem);
+    }
+    .footer-cta .btn {
+        margin-top: 0.8rem;
+    }
+
+    /* Grid */
+    .footer-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 1.3fr;
+        gap: 2.5rem;
+        padding-block: 3rem;
+        border-top: var(--border-w) solid var(--fg);
+    }
+
+    /* Logo (mismo que el navbar) */
+    .logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 700;
+        font-size: 1.35rem;
+        letter-spacing: -0.02em;
+        margin-bottom: 1rem;
+    }
+    .logo-mark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        background: var(--accent);
+        color: var(--accent-fg);
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+    .logo-text {
+        color: var(--fg);
+    }
+
+    .footer-tagline {
+        max-width: 32ch;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .footer-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+    .footer-label {
+        color: var(--muted);
+        margin-bottom: 0.4rem;
+    }
+    .footer-link {
+        color: var(--fg);
+        font-size: 0.95rem;
+        width: fit-content;
+        transition: color 0.2s ease;
+    }
+    .footer-link:hover {
+        color: var(--accent);
+    }
+    .footer-place {
+        color: var(--muted);
+        cursor: default;
+    }
+    .footer-place:hover {
+        color: var(--muted);
+    }
+
+    .footer-socials {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        margin-top: 0.5rem;
+    }
+    .footer-social {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--fg);
+        width: fit-content;
+        transition: color 0.2s ease;
+    }
+    .footer-social:hover {
+        color: var(--accent);
+    }
+
+    /* Bottom */
+    .footer-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-block: 1.5rem;
+        border-top: var(--border-w) solid var(--fg);
+        flex-wrap: wrap;
+    }
+    .footer-bottom .mono {
+        color: var(--muted);
+    }
+    .footer-legal {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+    .footer-legal a {
+        color: var(--muted);
+        transition: color 0.2s ease;
+    }
+    .footer-legal a:hover {
+        color: var(--accent);
+    }
+
+    @media (max-width: 880px) {
+        .footer-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        .footer-brand {
+            grid-column: 1 / -1;
+        }
+    }
+    @media (max-width: 520px) {
+        .footer-grid {
+            grid-template-columns: 1fr;
+        }
+        .footer-bottom {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>

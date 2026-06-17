@@ -1,0 +1,141 @@
+/* src/styles/global.css */
+
+:root {
+  /* ── Colores ── */
+  --bg: #0A0A0A;            /* negro casi puro */
+  --fg: #F5F5F0;            /* blanco roto */
+  --accent: #D9FF00;        /* lima eléctrico */
+  --accent-fg: #0A0A0A;     /* texto sobre el acento */
+  --muted: #8A8A85;         /* texto secundario */
+  --surface: #141414;       /* bloques/tarjetas sobre el fondo */
+  --border: #F5F5F0;        /* bordes (alto contraste) */
+
+  /* ── Tipografías ── */
+  --font: 'Space Grotesk Variable', system-ui, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  /* ── Brutalist ── */
+  --border-w: 2px;          /* bordes gruesos */
+  --radius: 0;              /* esquinas rectas */
+  --shadow: 6px 6px 0 var(--fg);          /* sombra dura, sin blur */
+  --shadow-accent: 6px 6px 0 var(--accent);
+
+  /* ── Layout ── */
+  --maxw: 1280px;
+  --pad: clamp(1rem, 5vw, 2rem);
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* El smooth scroll lo gestionará Lenis en el paso 4 */
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;       /* evita scroll lateral por las animaciones */
+}
+
+img, picture, video, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+ul, ol { list-style: none; }
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+/* ── Tipografía base ── */
+h1, h2, h3, h4 {
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+h1 { font-size: clamp(2.5rem, 9vw, 7rem); }
+h2 { font-size: clamp(2rem, 6vw, 4.5rem); }
+h3 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+h4 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+
+p { max-width: 65ch; }
+
+/* Detalle mono: labels, números, etiquetas */
+.mono {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.8rem;
+}
+
+/* ── Utilidades de texto ── */
+.text-accent { color: var(--accent); }
+.text-muted  { color: var(--muted); }
+
+/* ── Botones ── */
+.btn {
+  display: inline-block;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  padding: 0.9rem 1.6rem;
+  border: var(--border-w) solid var(--fg);
+  background: var(--bg);
+  color: var(--fg);
+  box-shadow: var(--shadow);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.btn:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 var(--fg);
+}
+.btn-accent {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-accent);
+}
+.btn-accent:hover {
+  box-shadow: 9px 9px 0 var(--accent);
+}
+
+/* ── Utilidades de layout ── */
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+section { padding-block: clamp(4rem, 12vh, 9rem); }
+
+/* ── Accesibilidad: respeta a quien prefiere menos movimiento ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Evita el parpadeo del hero hasta que carga la animación (solo si hay JS) */
+html.js .hero { visibility: hidden; }

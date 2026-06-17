@@ -1,0 +1,70 @@
+---
+// src/layouts/BaseLayout.astro
+import '@fontsource-variable/space-grotesk'
+import '@fontsource/space-mono/400.css'
+import '@fontsource/space-mono/700.css'
+import 'lenis/dist/lenis.css'
+import '@/styles/global.css'
+import Navbar from '@/components/Navbar.astro'
+import Footer from '@/components/Footer.astro'
+
+interface Props {
+    title?: string
+    description?: string
+}
+
+const {
+    title = 'extreweb — Diseño y desarrollo web en Extremadura',
+    description = 'Agencia de diseño, desarrollo web, SEO y soporte técnico en Don Benito, Villanueva de la Serena y Cáceres.',
+} = Astro.props
+---
+
+<!doctype html>
+<html lang='es'>
+    <head>
+        <meta charset='UTF-8' />
+        <script is:inline>
+            document.documentElement.classList.add('js')
+        </script>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+        <meta name='generator' content={Astro.generator} />
+
+        <title>{title}</title>
+        <meta name='description' content={description} />
+
+        <meta property='og:type' content='website' />
+        <meta property='og:title' content={title} />
+        <meta property='og:description' content={description} />
+        <meta property='og:url' content={Astro.url} />
+        <meta property='og:locale' content='es_ES' />
+    </head>
+    <body>
+        <Navbar />
+        <slot />
+        <Footer />
+    </body>
+</html>
+
+<script>
+    // @ts-nocheck
+    import Lenis from 'lenis'
+    import { gsap } from 'gsap'
+    import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+    gsap.registerPlugin(ScrollTrigger)
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (!reduce) {
+        const lenis = new Lenis({ lerp: 0.1 })
+
+        // Sincroniza Lenis con el ticker de GSAP (clave para ScrollTrigger)
+        lenis.on('scroll', ScrollTrigger.update)
+        gsap.ticker.add((time) => lenis.raf(time * 1000))
+        gsap.ticker.lagSmoothing(0)
+
+        // Lo dejamos accesible por si lo necesitamos en otros scripts
+        window.__lenis = lenis
+    }
+</script>
