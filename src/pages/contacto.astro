@@ -1,0 +1,259 @@
+---
+// src/pages/contacto.astro
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import PageHero from '@/components/PageHero.astro'
+
+const servicios = [
+    'Diseño y desarrollo web',
+    'SEO y posicionamiento',
+    'Redes sociales',
+    'Sistemas y soporte',
+    'Otro / No estoy seguro',
+]
+---
+
+<BaseLayout
+    title='Contacto — extreweb'
+    description='¿Tienes un proyecto en mente? Cuéntanoslo. Diseño y desarrollo web, SEO y soporte técnico en Extremadura.'
+>
+    <PageHero
+        label='// contacto'
+        intro='Cuéntanos qué necesitas y te respondemos en menos de 24h. Sin compromiso.'
+    >
+        Hablemos de tu <em class='text-accent'>proyecto</em>
+    </PageHero>
+
+    <main>
+        <section class='contact'>
+            <div class='container contact-grid'>
+                <!-- Info -->
+                <aside class='contact-info'>
+                    <div class='contact-block'>
+                        <span class='mono contact-label'>Email</span>
+                        <a
+                            href='mailto:contactoextreweb@gmail.com'
+                            class='contact-value'>contactoextreweb@gmail.com</a
+                        >
+                    </div>
+                    <div class='contact-block'>
+                        <span class='mono contact-label'>Zona</span>
+                        <span class='contact-value-static'>
+                            Don Benito · Villanueva de la Serena · Cáceres
+                        </span>
+                    </div>
+                    <div class='contact-block'>
+                        <span class='mono contact-label'>También online</span>
+                        <span class='contact-value-static'>
+                            Trabajamos con clientes de toda España.
+                        </span>
+                    </div>
+                    <div class='contact-block'>
+                        <span class='mono contact-label'>Síguenos</span>
+                        <div class='contact-socials'>
+                            <a href='#' class='contact-social'>Instagram ↗</a>
+                            <a href='#' class='contact-social'>LinkedIn ↗</a>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Formulario -->
+                <form
+                    name='contacto'
+                    method='POST'
+                    data-netlify='true'
+                    netlify-honeypot='bot-field'
+                    class='contact-form'
+                >
+                    <input type='hidden' name='form-name' value='contacto' />
+                    <p class='hp-field'>
+                        <label>No rellenar: <input name='bot-field' /></label>
+                    </p>
+
+                    <div class='field'>
+                        <label for='nombre' class='mono'>Nombre *</label>
+                        <input type='text' id='nombre' name='nombre' required />
+                    </div>
+
+                    <div class='field-row'>
+                        <div class='field'>
+                            <label for='email' class='mono'>Email *</label>
+                            <input
+                                type='email'
+                                id='email'
+                                name='email'
+                                required
+                            />
+                        </div>
+                        <div class='field'>
+                            <label for='telefono' class='mono'>Teléfono</label>
+                            <input type='tel' id='telefono' name='telefono' />
+                        </div>
+                    </div>
+
+                    <div class='field'>
+                        <label for='servicio' class='mono'
+                            >¿Qué necesitas?</label
+                        >
+                        <select id='servicio' name='servicio'>
+                            {
+                                servicios.map((s) => (
+                                    <option value={s}>{s}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
+
+                    <div class='field'>
+                        <label for='mensaje' class='mono'>Cuéntanos *</label>
+                        <textarea id='mensaje' name='mensaje' rows='5' required
+                        ></textarea>
+                    </div>
+
+                    <button type='submit' class='btn btn-accent contact-submit'>
+                        Enviar mensaje →
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+</BaseLayout>
+
+<style>
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: clamp(2rem, 6vw, 5rem);
+        align-items: start;
+    }
+
+    /* Info */
+    .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+    .contact-block {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+    .contact-label {
+        color: var(--muted);
+    }
+    .contact-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--fg);
+        width: fit-content;
+        border-bottom: 2px solid var(--accent);
+        transition: color 0.2s ease;
+    }
+    .contact-value:hover {
+        color: var(--accent);
+    }
+    .contact-value-static {
+        font-size: 1.05rem;
+        color: var(--fg);
+    }
+    .contact-socials {
+        display: flex;
+        gap: 1.2rem;
+    }
+    .contact-social {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        color: var(--fg);
+        transition: color 0.2s ease;
+    }
+    .contact-social:hover {
+        color: var(--accent);
+    }
+
+    /* Formulario */
+    .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.3rem;
+        border: var(--border-w) solid var(--fg);
+        padding: clamp(1.5rem, 4vw, 2.5rem);
+    }
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .field-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.3rem;
+    }
+    .field label {
+        color: var(--muted);
+    }
+
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+        font-family: var(--font);
+        font-size: 1rem;
+        color: var(--fg);
+        background: var(--bg);
+        border: var(--border-w) solid var(--muted);
+        padding: 0.8rem 1rem;
+        width: 100%;
+        transition: border-color 0.2s ease;
+    }
+    .contact-form input:focus,
+    .contact-form select:focus,
+    .contact-form textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+    .contact-form textarea {
+        resize: vertical;
+    }
+    .contact-form select {
+        cursor: pointer;
+    }
+
+    .contact-submit {
+        margin-top: 0.5rem;
+        align-self: flex-start;
+        font-size: 0.95rem;
+        padding: 1rem 2rem;
+    }
+
+    @media (max-width: 768px) {
+        .contact-grid {
+            grid-template-columns: 1fr;
+        }
+        .field-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap } from 'gsap'
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (!reduce) {
+        gsap.from('.contact-info > *', {
+            y: 24,
+            autoAlpha: 0,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: 'power3.out',
+            delay: 0.2,
+        })
+        gsap.from('.contact-form', {
+            y: 30,
+            autoAlpha: 0,
+            duration: 0.7,
+            ease: 'power3.out',
+            delay: 0.3,
+        })
+    }
+</script>

@@ -145,3 +145,6 @@ em { font-style: normal; }
 
 /* Evita el parpadeo de la cabecera de página hasta que carga la animación */
 html.js .page-hero { visibility: hidden; }
+
+/* Honeypot anti-spam (campo oculto para humanos) */
+.hp-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
