@@ -2,159 +2,193 @@
 // src/components/Services.astro
 const servicios = [
     {
-        num: '01',
-        titulo: 'Diseño y desarrollo web',
-        desc: 'Webs a medida, rápidas y con carácter. Del diseño al despliegue, sin plantillas genéricas.',
-        tags: ['Diseño UI', 'Desarrollo', 'Tiendas online', 'Mantenimiento'],
+        ic: 'web',
+        t: 'Diseño y desarrollo web',
+        d: 'Webs a medida, rápidas y pensadas para convertir. Del diseño al despliegue, sin plantillas.',
+        tags: ['Diseño UI', 'Desarrollo', 'Tiendas'],
     },
     {
-        num: '02',
-        titulo: 'SEO y posicionamiento',
-        desc: 'Que te encuentren cuando buscan lo que ofreces. Optimización técnica y posicionamiento local en tu zona.',
-        tags: ['SEO técnico', 'SEO local', 'Optimización', 'Analítica'],
+        ic: 'seo',
+        t: 'SEO y posicionamiento',
+        d: 'Que te encuentren cuando buscan lo que ofreces. Técnica y posicionamiento local.',
+        tags: ['SEO técnico', 'SEO local', 'Analítica'],
     },
     {
-        num: '03',
-        titulo: 'Redes sociales',
-        desc: 'Gestionamos tu presencia para que tu marca esté activa y conecte de verdad con tu público.',
+        ic: 'social',
+        t: 'Redes sociales',
+        d: 'Tu marca activa y conectando, con contenido y estrategia que trabajan por ti.',
         tags: ['Gestión', 'Contenido', 'Estrategia'],
     },
     {
-        num: '04',
-        titulo: 'Sistemas y soporte',
-        desc: 'Montaje y mantenimiento de equipos y redes. El soporte técnico que tu negocio necesita.',
-        tags: ['Montaje de equipos', 'Mantenimiento', 'Redes'],
+        ic: 'sys',
+        t: 'Sistemas y soporte',
+        d: 'Montaje y mantenimiento de equipos y redes. El soporte que tu negocio necesita.',
+        tags: ['Montaje', 'Mantenimiento', 'Redes'],
     },
 ]
+
+const icons = {
+    web: '<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13 5l-2 14"/>',
+    seo: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+    social: '<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.3 10.8l7.4-3.6M8.3 13.2l7.4 3.6"/>',
+    sys: '<rect x="3" y="4" width="18" height="7" rx="1.5"/><rect x="3" y="13" width="18" height="7" rx="1.5"/><path d="M7 7.5h.01M7 16.5h.01"/>',
+}
 ---
 
-<section class='services'>
-    <div class='services-head container'>
-        <span class='mono text-accent'>// servicios</span>
-        <h2>Lo que <em class='text-accent'>hacemos</em></h2>
-        <p class='services-intro text-muted'>
-            De la idea al mantenimiento. Cubrimos todas las fases para que tú
-            solo te preocupes de tu negocio.
-        </p>
-    </div>
+<section class='svc' id='svc'>
+    <canvas class='svc-canvas' id='svcCanvas' aria-hidden='true'></canvas>
 
-    <div class='services-list container'>
-        {
-            servicios.map((s) => (
-                <a href='/servicios' class='service-row'>
-                    <span class='service-num'>{s.num}</span>
-                    <div class='service-body'>
-                        <h3 class='service-title'>{s.titulo}</h3>
-                        <p class='service-desc'>{s.desc}</p>
-                        <div class='service-tags'>
+    <div class='container svc-content'>
+        <div class='svc-head'>
+            <span class='mono text-accent'>Servicios</span>
+            <h2>Lo que <em class='text-accent'>hacemos</em></h2>
+            <p class='svc-sub'>
+                Toca el fondo. Reacciona — igual que tu próxima web.
+            </p>
+        </div>
+
+        <div class='svc-grid'>
+            {
+                servicios.map((s, i) => (
+                    <a href='/servicios' class='svc-tile' style={`--i:${i}`}>
+                        <span
+                            class='svc-ic'
+                            set:html={`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icons[s.ic as keyof typeof icons]}</svg>`}
+                        />
+                        <h3>{s.t}</h3>
+                        <p>{s.d}</p>
+                        <div class='svc-tags'>
                             {s.tags.map((t) => (
-                                <span class='service-tag'>{t}</span>
+                                <span>{t}</span>
                             ))}
                         </div>
-                    </div>
-                    <span class='service-arrow'>→</span>
-                </a>
-            ))
-        }
+                        <span class='svc-go'>Saber más →</span>
+                    </a>
+                ))
+            }
+        </div>
     </div>
 </section>
 
 <style>
-    .services-head {
+    .svc {
+        position: relative;
+        padding-block: clamp(4rem, 12vh, 8rem);
+        overflow: hidden;
+        background: var(--bg);
+    }
+    .svc-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+    }
+    .svc-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .svc-head {
         margin-bottom: clamp(2.5rem, 6vw, 4rem);
     }
-    .services-head h2 {
-        margin: 0.8rem 0;
+    .svc-head h2 {
+        margin: 0.6rem 0;
     }
-    .services-head em {
-        font-style: normal;
-    }
-    .services-intro {
-        font-size: 1.1rem;
-        max-width: 55ch;
+    .svc-sub {
+        color: var(--muted);
+        font-size: 1.15rem;
     }
 
-    .service-row {
+    .svc-grid {
         display: grid;
-        grid-template-columns: auto 1fr auto;
-        gap: 1rem 2rem;
-        align-items: center;
-        padding: clamp(1.5rem, 4vw, 2.5rem) 0;
-        border-top: var(--border-w) solid var(--fg);
-        color: var(--fg);
-        transition:
-            background 0.25s ease,
-            padding-left 0.25s ease;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(1rem, 2.5vw, 1.6rem);
     }
-    .service-row:last-child {
-        border-bottom: var(--border-w) solid var(--fg);
+    /* Desfase para romper la rejilla */
+    .svc-tile:nth-child(even) {
+        margin-top: clamp(0px, 4vw, 3.5rem);
     }
 
-    .service-row:hover {
-        background: var(--surface);
-        padding-left: clamp(0.75rem, 2vw, 1.5rem);
+    .svc-tile {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: clamp(1.5rem, 3vw, 2.2rem);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.72);
+        color: var(--fg);
+        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.04);
+        animation: floatY 6s ease-in-out infinite;
+        animation-delay: calc(var(--i) * -1.5s);
+        transition:
+            box-shadow 0.3s ease,
+            border-color 0.3s ease;
     }
-    .service-row:hover .service-num,
-    .service-row:hover .service-arrow {
+    .svc-tile:hover {
+        box-shadow: var(--shadow-lg);
+        border-color: rgba(0, 113, 227, 0.4);
+    }
+    @keyframes floatY {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .svc-ic {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: var(--surface);
         color: var(--accent);
     }
-    .service-row:hover .service-arrow {
-        transform: translateX(10px);
+    .svc-tile h3 {
+        font-size: clamp(1.25rem, 2.4vw, 1.7rem);
     }
-
-    .service-num {
-        font-family: var(--font);
-        font-weight: 700;
-        font-size: clamp(1.8rem, 5vw, 3rem);
-        line-height: 0.9;
-        letter-spacing: -0.03em;
+    .svc-tile p {
         color: var(--muted);
-        transition: color 0.25s ease;
+        font-size: 0.96rem;
+        max-width: 40ch;
     }
-
-    .service-title {
-        font-size: clamp(1.4rem, 3.5vw, 2.2rem);
-        margin-bottom: 0.5rem;
-    }
-    .service-desc {
-        color: var(--muted);
-        margin-bottom: 0.9rem;
-        max-width: 60ch;
-    }
-
-    .service-tags {
+    .svc-tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
+        gap: 0.4rem;
+        margin-top: auto;
+        padding-top: 0.6rem;
     }
-    .service-tag {
-        font-family: var(--font-mono);
+    .svc-tags span {
         font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--fg);
-        border: 1px solid var(--muted);
-        padding: 0.25rem 0.6rem;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        border-radius: 980px;
+        padding: 0.2rem 0.65rem;
+        background: rgba(255, 255, 255, 0.6);
     }
-
-    .service-arrow {
-        font-size: 1.8rem;
-        color: var(--fg);
-        transition:
-            transform 0.25s ease,
-            color 0.25s ease;
+    .svc-go {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--accent);
+        margin-top: 0.4rem;
     }
 
     @media (max-width: 640px) {
-        .service-row {
+        .svc-grid {
             grid-template-columns: 1fr;
-            gap: 0.7rem;
+            gap: 1.2rem;
         }
-        .service-arrow {
-            display: none;
-        }
-        .service-num {
-            font-size: 1.4rem;
+        .svc-tile:nth-child(even) {
+            margin-top: 0;
         }
     }
 </style>
@@ -163,30 +197,137 @@ const servicios = [
     // @ts-nocheck
     import { gsap } from 'gsap'
     import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
     gsap.registerPlugin(ScrollTrigger)
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+    /* ---- Entrada de las tarjetas (barrido) ---- */
     if (!reduce) {
-        // Cabecera
-        gsap.from('.services-head > *', {
-            scrollTrigger: { trigger: '.services', start: 'top 75%' },
-            y: 30,
+        gsap.from('.svc-head > *', {
+            scrollTrigger: { trigger: '.svc', start: 'top 78%' },
+            y: 28,
             autoAlpha: 0,
-            stagger: 0.12,
+            stagger: 0.1,
             duration: 0.7,
             ease: 'power3.out',
         })
-
-        // Filas (aparecen en cascada al entrar en pantalla)
-        gsap.from('.service-row', {
-            scrollTrigger: { trigger: '.services-list', start: 'top 80%' },
-            y: 40,
+        gsap.from('.svc-tile', {
+            scrollTrigger: { trigger: '.svc-grid', start: 'top 82%' },
+            clipPath: 'inset(0 0 100% 0)',
             autoAlpha: 0,
-            stagger: 0.12,
-            duration: 0.7,
+            stagger: 0.14,
+            duration: 0.9,
             ease: 'power3.out',
         })
     }
+
+    /* ---- Campo de partículas interactivo ---- */
+    const canvas = document.getElementById('svcCanvas')
+    const ctx = canvas.getContext('2d')
+    let w = 0,
+        h = 0,
+        dpr = 1,
+        parts = [],
+        running = false,
+        rafId = null
+    const ptr = { x: -9999, y: -9999 }
+
+    const accent = '0,113,227' // rgb del azul
+
+    function size() {
+        dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+        const r = canvas.getBoundingClientRect()
+        w = r.width
+        h = r.height
+        canvas.width = Math.round(w * dpr)
+        canvas.height = Math.round(h * dpr)
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+        seed()
+    }
+    function seed() {
+        const count = window.innerWidth < 768 ? 70 : 130
+        parts = []
+        for (let i = 0; i < count; i++) {
+            parts.push({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                vx: (Math.random() - 0.5) * 0.25,
+                vy: (Math.random() - 0.5) * 0.25,
+                r: Math.random() * 1.6 + 0.7,
+            })
+        }
+    }
+    function frame() {
+        ctx.clearRect(0, 0, w, h)
+        const R = 130
+        for (const p of parts) {
+            const dx = p.x - ptr.x,
+                dy = p.y - ptr.y
+            const d2 = dx * dx + dy * dy
+            if (d2 < R * R) {
+                const d = Math.sqrt(d2) || 1
+                const f = 1 - d / R
+                p.vx += (dx / d) * f * 0.6
+                p.vy += (dy / d) * f * 0.6
+                // línea hacia el puntero (efecto imán)
+                ctx.strokeStyle = `rgba(${accent},${f * 0.5})`
+                ctx.lineWidth = 1
+                ctx.beginPath()
+                ctx.moveTo(p.x, p.y)
+                ctx.lineTo(ptr.x, ptr.y)
+                ctx.stroke()
+            }
+            p.vx *= 0.95
+            p.vy *= 0.95
+            p.x += p.vx + 0.12
+            p.y += p.vy
+            if (p.x > w + 6) p.x = -6
+            if (p.x < -6) p.x = w + 6
+            if (p.y > h + 6) p.y = -6
+            if (p.y < -6) p.y = h + 6
+            ctx.beginPath()
+            ctx.arc(p.x, p.y, p.r, 0, 6.2832)
+            ctx.fillStyle = `rgba(${accent},0.55)`
+            ctx.fill()
+        }
+        if (running) rafId = requestAnimationFrame(frame)
+    }
+    function start() {
+        if (!running && !reduce) {
+            running = true
+            frame()
+        }
+    }
+    function stop() {
+        running = false
+        if (rafId) cancelAnimationFrame(rafId)
+    }
+
+    // Puntero global (no bloquea el scroll: listener pasivo)
+    window.addEventListener(
+        'pointermove',
+        (e) => {
+            const r = canvas.getBoundingClientRect()
+            ptr.x = e.clientX - r.left
+            ptr.y = e.clientY - r.top
+        },
+        { passive: true },
+    )
+
+    // Pausa cuando no se ve (ahorra batería/CPU)
+    new IntersectionObserver(
+        ([en]) => {
+            en.isIntersecting ? start() : stop()
+        },
+        { threshold: 0 },
+    ).observe(canvas)
+
+    // Resize con debounce
+    let rt
+    window.addEventListener('resize', () => {
+        clearTimeout(rt)
+        rt = setTimeout(size, 200)
+    })
+
+    size()
 </script>

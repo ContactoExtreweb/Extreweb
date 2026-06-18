@@ -22,11 +22,7 @@ const path = Astro.url.pathname
                 links.map((l) => (
                     <a
                         href={l.href}
-                        class:list={[
-                            'nav-link',
-                            'mono',
-                            { active: path === l.href },
-                        ]}
+                        class:list={['nav-link', { active: path === l.href }]}
                     >
                         {l.label}
                     </a>
@@ -64,21 +60,31 @@ const path = Astro.url.pathname
         left: 0;
         width: 100%;
         z-index: 100;
-        border-bottom: var(--border-w) solid transparent;
-        transition:
-            background 0.3s ease,
-            border-color 0.3s ease;
     }
-    .nav.scrolled {
-        background: var(--bg);
-        border-bottom-color: var(--fg);
+
+    /* El cristal va en una capa propia, no en .nav (si no, rompe el overlay) */
+    .nav::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: rgba(255, 255, 255, 0.72);
+        backdrop-filter: saturate(180%) blur(20px);
+        -webkit-backdrop-filter: saturate(180%) blur(20px);
+        border-bottom: 1px solid var(--border);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    .nav.scrolled::before {
+        opacity: 1;
     }
 
     .nav-inner {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 72px;
+        height: 68px;
         position: relative;
         z-index: 2;
     }
@@ -88,8 +94,8 @@ const path = Astro.url.pathname
         display: inline-flex;
         align-items: center;
         gap: 0.6rem;
-        font-weight: 700;
-        font-size: 1.35rem;
+        font-weight: 600;
+        font-size: 1.3rem;
         letter-spacing: -0.02em;
     }
     .logo-mark {
@@ -98,9 +104,10 @@ const path = Astro.url.pathname
         justify-content: center;
         width: 2rem;
         height: 2rem;
+        border-radius: 7px;
         background: var(--accent);
         color: var(--accent-fg);
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         font-weight: 700;
     }
     .logo-text {
@@ -116,6 +123,7 @@ const path = Astro.url.pathname
     .nav-link {
         position: relative;
         color: var(--fg);
+        font-size: 0.95rem;
         padding: 0.3rem 0;
         transition: color 0.2s ease;
     }
@@ -142,16 +150,13 @@ const path = Astro.url.pathname
         color: var(--accent);
     }
 
-    /* CTA más pequeño que el botón normal */
+    /* CTA */
     .nav-cta {
-        padding: 0.55rem 1.1rem;
-        box-shadow: 4px 4px 0 var(--accent);
-    }
-    .nav-cta:hover {
-        box-shadow: 6px 6px 0 var(--accent);
+        padding: 0.5rem 1.2rem;
+        font-size: 0.9rem;
     }
 
-    /* Hamburguesa (oculta en desktop) */
+    /* Hamburguesa */
     .burger {
         display: none;
         flex-direction: column;
@@ -164,7 +169,7 @@ const path = Astro.url.pathname
     }
     .burger span {
         display: block;
-        width: 28px;
+        width: 26px;
         height: 2px;
         background: var(--fg);
         margin-inline: auto;
@@ -200,8 +205,7 @@ const path = Astro.url.pathname
         transform: translateY(0);
     }
     .overlay-link {
-        font-weight: 700;
-        text-transform: uppercase;
+        font-weight: 600;
         font-size: clamp(2rem, 9vw, 3.5rem);
         letter-spacing: -0.02em;
         color: var(--fg);
@@ -227,14 +231,12 @@ const path = Astro.url.pathname
     const burger = document.getElementById('burger')
     const overlay = document.getElementById('navOverlay')
 
-    // Fondo sólido + borde al hacer scroll
     const onScroll = () => {
         nav.classList.toggle('scrolled', window.scrollY > 20)
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
 
-    // Menú móvil
     const setMenu = (open) => {
         nav.classList.toggle('menu-open', open)
         burger.setAttribute('aria-expanded', String(open))

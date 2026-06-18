@@ -1,8 +1,6 @@
 ---
 // src/layouts/BaseLayout.astro
-import '@fontsource-variable/space-grotesk'
-import '@fontsource/space-mono/400.css'
-import '@fontsource/space-mono/700.css'
+import '@fontsource-variable/inter'
 import 'lenis/dist/lenis.css'
 import '@/styles/global.css'
 import Navbar from '@/components/Navbar.astro'
@@ -55,16 +53,17 @@ const {
     gsap.registerPlugin(ScrollTrigger)
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    // Lenis SOLO en escritorio con ratón. En móvil/táctil usamos el scroll nativo
+    // (ya es suave) y así evitamos los tirones y bloqueos.
+    const useLenis = window.matchMedia(
+        '(min-width: 768px) and (pointer: fine)',
+    ).matches
 
-    if (!reduce) {
+    if (!reduce && useLenis) {
         const lenis = new Lenis({ lerp: 0.1 })
-
-        // Sincroniza Lenis con el ticker de GSAP (clave para ScrollTrigger)
         lenis.on('scroll', ScrollTrigger.update)
         gsap.ticker.add((time) => lenis.raf(time * 1000))
         gsap.ticker.lagSmoothing(0)
-
-        // Lo dejamos accesible por si lo necesitamos en otros scripts
         window.__lenis = lenis
     }
 </script>

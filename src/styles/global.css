@@ -1,24 +1,25 @@
 /* src/styles/global.css */
 
 :root {
-  /* ── Colores ── */
-  --bg: #0A0A0A;            /* negro casi puro */
-  --fg: #F5F5F0;            /* blanco roto */
-  --accent: #D9FF00;        /* lima eléctrico */
-  --accent-fg: #0A0A0A;     /* texto sobre el acento */
-  --muted: #8A8A85;         /* texto secundario */
-  --surface: #141414;       /* bloques/tarjetas sobre el fondo */
-  --border: #F5F5F0;        /* bordes (alto contraste) */
+  /* ── Colores (Apple-clean) ── */
+  --bg: #ffffff;            /* blanco */
+  --surface: #f5f5f7;       /* gris claro Apple (secciones/tarjetas) */
+  --fg: #1d1d1f;            /* casi negro Apple (texto) */
+  --muted: #6e6e73;         /* gris secundario */
+  --accent: #0071e3;        /* azul Apple */
+  --accent-fg: #ffffff;     /* texto sobre el acento */
+  --border: #d2d2d7;        /* gris de bordes (hairline) */
 
-  /* ── Tipografías ── */
-  --font: 'Space Grotesk Variable', system-ui, sans-serif;
-  --font-mono: 'Space Mono', monospace;
+  /* ── Tipografía ── */
+  --font: 'Inter Variable', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Inter Variable', system-ui, sans-serif; /* alias por compatibilidad */
 
-  /* ── Brutalist ── */
-  --border-w: 2px;          /* bordes gruesos */
-  --radius: 0;              /* esquinas rectas */
-  --shadow: 6px 6px 0 var(--fg);          /* sombra dura, sin blur */
-  --shadow-accent: 6px 6px 0 var(--accent);
+  /* ── Forma (redondeado + sombras suaves) ── */
+  --radius: 14px;
+  --radius-pill: 980px;     /* botones pastilla estilo Apple */
+  --border-w: 1px;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 16px 50px rgba(0, 0, 0, 0.12);
 
   /* ── Layout ── */
   --maxw: 1280px;
@@ -26,97 +27,78 @@
 }
 
 /* ── Reset ── */
-*, *::before, *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-html {
-  -webkit-text-size-adjust: 100%;
-  /* El smooth scroll lo gestionará Lenis en el paso 4 */
-}
+html { -webkit-text-size-adjust: 100%; }
 
 body {
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font);
-  font-size: 1rem;
+  font-size: 1.0625rem;     /* ~17px, como Apple */
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;       /* evita scroll lateral por las animaciones */
+  overflow-x: hidden;
 }
 
-img, picture, video, svg {
-  display: block;
-  max-width: 100%;
-  height: auto;
-}
-
+img, picture, video, svg { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
 ul, ol { list-style: none; }
 
-::selection {
-  background: var(--accent);
-  color: var(--accent-fg);
-}
+::selection { background: var(--accent); color: var(--accent-fg); }
 
-/* ── Tipografía base ── */
+/* ── Tipografía base (limpia, sin mayúsculas) ── */
 h1, h2, h3, h4 {
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
+  font-weight: 600;
+  line-height: 1.07;
+  letter-spacing: -0.02em;
 }
-
-h1 { font-size: clamp(2.5rem, 9vw, 7rem); }
-h2 { font-size: clamp(2rem, 6vw, 4.5rem); }
-h3 { font-size: clamp(1.5rem, 4vw, 2.5rem); }
-h4 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+h1 { font-size: clamp(2.5rem, 7vw, 5.5rem); }
+h2 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h3 { font-size: clamp(1.4rem, 3vw, 2rem); }
+h4 { font-size: clamp(1.1rem, 2vw, 1.4rem); letter-spacing: -0.01em; }
 
 p { max-width: 65ch; }
 
-/* Detalle mono: labels, números, etiquetas */
+em { font-style: normal; }
+
+/* Eyebrow / etiqueta pequeña (antes era 'mono') */
 .mono {
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.8rem;
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 /* ── Utilidades de texto ── */
 .text-accent { color: var(--accent); }
 .text-muted  { color: var(--muted); }
 
-/* ── Botones ── */
+/* ── Botones (estilo Apple: pastilla, sombra suave) ── */
 .btn {
   display: inline-block;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.05em;
-  padding: 0.9rem 1.6rem;
-  border: var(--border-w) solid var(--fg);
-  background: var(--bg);
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0.75rem 1.7rem;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
   color: var(--fg);
-  box-shadow: var(--shadow);
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  border: 1px solid transparent;
+  transition: background 0.25s ease, opacity 0.25s ease;
 }
-.btn:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 9px 9px 0 var(--fg);
-}
+.btn:hover { background: #e8e8ed; }
+
 .btn-accent {
   background: var(--accent);
   color: var(--accent-fg);
-  border-color: var(--accent);
-  box-shadow: var(--shadow-accent);
 }
-.btn-accent:hover {
-  box-shadow: 9px 9px 0 var(--accent);
-}
+.btn-accent:hover { background: #0077ed; }
 
 /* ── Utilidades de layout ── */
 .container {
@@ -125,10 +107,9 @@ p { max-width: 65ch; }
   margin-inline: auto;
   padding-inline: var(--pad);
 }
-
 section { padding-block: clamp(4rem, 12vh, 9rem); }
 
-/* ── Accesibilidad: respeta a quien prefiere menos movimiento ── */
+/* ── Accesibilidad ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -137,14 +118,9 @@ section { padding-block: clamp(4rem, 12vh, 9rem); }
   }
 }
 
-/* Evita el parpadeo del hero hasta que carga la animación (solo si hay JS) */
+/* Evita el parpadeo de los héroes hasta que carga la animación */
 html.js .hero { visibility: hidden; }
-
-/* em lo usamos como acento, nunca en cursiva */
-em { font-style: normal; }
-
-/* Evita el parpadeo de la cabecera de página hasta que carga la animación */
 html.js .page-hero { visibility: hidden; }
 
-/* Honeypot anti-spam (campo oculto para humanos) */
+/* Honeypot anti-spam */
 .hp-field { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }

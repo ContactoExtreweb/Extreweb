@@ -1,0 +1,189 @@
+---
+// src/components/Showcase.astro
+const features = [
+    {
+        t: 'Carga instantánea',
+        d: 'Optimizada al milímetro para puntuar alto y no hacer esperar.',
+    },
+    {
+        t: 'Diseño a medida',
+        d: 'Nada de plantillas: cada pieza pensada para tu marca.',
+    },
+    { t: '100% responsive', d: 'Impecable en móvil, tablet y escritorio.' },
+]
+---
+
+<section class='showcase'>
+    <div class='container showcase-copy'>
+        <span class='mono text-accent'>Nuestro trabajo</span>
+        <h2>Webs que se sienten <em class='text-accent'>premium</em></h2>
+        <p>
+            No solo se ven bien: cargan al instante y están hechas para
+            convertir.
+        </p>
+    </div>
+
+    <div class='showcase-stage'>
+        <div class='mockup'>
+            <div class='mockup-bar'>
+                <span></span><span></span><span></span>
+            </div>
+            <div class='mockup-screen'>
+                <img
+                    src='/proyectos/Guadicar.webp'
+                    alt='Proyecto GuadiCar Multimarcas'
+                />
+            </div>
+        </div>
+    </div>
+
+    <div class='container showcase-features'>
+        {
+            features.map((f) => (
+                <div class='feature'>
+                    <h3>{f.t}</h3>
+                    <p>{f.d}</p>
+                </div>
+            ))
+        }
+    </div>
+</section>
+
+<style>
+    .showcase {
+        padding-block: clamp(4rem, 12vh, 8rem);
+        overflow: hidden;
+        background: var(--bg);
+    }
+
+    .showcase-copy {
+        text-align: center;
+        max-width: 720px;
+        margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    }
+    .showcase-copy h2 {
+        margin: 0.6rem 0;
+    }
+    .showcase-copy p {
+        color: var(--muted);
+        font-size: 1.15rem;
+        margin-inline: auto;
+    }
+
+    /* Escenario 3D */
+    .showcase-stage {
+        perspective: 1200px;
+        display: flex;
+        justify-content: center;
+        padding-inline: var(--pad);
+        margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    }
+    .mockup {
+        width: min(820px, 90vw);
+        transform-style: preserve-3d;
+        will-change: transform;
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        background: #fff;
+        border: 1px solid var(--border);
+    }
+    .mockup-bar {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 0.7rem 1rem;
+        background: #f5f5f7;
+        border-bottom: 1px solid var(--border);
+    }
+    .mockup-bar span {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: #d2d2d7;
+    }
+    .mockup-screen {
+        aspect-ratio: 16 / 10;
+        overflow: hidden;
+    }
+    .mockup-screen img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+    }
+
+    /* Features */
+    .showcase-features {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+    .feature {
+        border-top: 1px solid var(--border);
+        padding-top: 1.2rem;
+    }
+    .feature h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.4rem;
+    }
+    .feature p {
+        color: var(--muted);
+        font-size: 0.95rem;
+    }
+
+    @media (max-width: 767px) {
+        .showcase-features {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap } from 'gsap'
+    import { ScrollTrigger } from 'gsap/ScrollTrigger'
+    gsap.registerPlugin(ScrollTrigger)
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (!reduce) {
+        gsap.from('.showcase-copy > *', {
+            scrollTrigger: { trigger: '.showcase', start: 'top 75%' },
+            y: 28,
+            autoAlpha: 0,
+            stagger: 0.1,
+            duration: 0.7,
+            ease: 'power3.out',
+        })
+
+        // El mockup gira de inclinado a recto según entra. SIN fijar la pantalla,
+        // por eso funciona igual en móvil y no se bloquea.
+        gsap.fromTo(
+            '.mockup',
+            { rotateX: 55, scale: 0.6, y: 50 },
+            {
+                rotateX: 0,
+                scale: 1,
+                y: 0,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.showcase-stage',
+                    start: 'top bottom',
+                    end: 'center center',
+                    scrub: 1,
+                },
+            },
+        )
+
+        gsap.from('.feature', {
+            scrollTrigger: { trigger: '.showcase-features', start: 'top 88%' },
+            y: 30,
+            autoAlpha: 0,
+            stagger: 0.12,
+            duration: 0.6,
+            ease: 'power3.out',
+        })
+    }
+</script>
