@@ -1,279 +1,304 @@
 ---
 // src/components/Projects.astro
-const proyectos = [
+const projects = [
     {
-        num: '01',
-        nombre: 'GuadiCar Multimarcas',
-        desc: 'Plataforma para un concesionario: catálogo dinámico, fichas detalladas y panel de gestión.',
-        tags: ['Astro', 'Supabase', 'Netlify'],
-        url: 'https://guadicar.es',
-        img: '/proyectos/Guadicar.webp',
+        title: 'CarMeet',
+        category: 'Comunidad Automotriz',
+        image: '/proyectos/Car-MeetESP.webp',
+        link: 'https://carmeet.es',
+        color: '#f43f5e'
     },
     {
-        num: '02',
-        nombre: 'Toldos Pallares',
-        desc: 'Web corporativa para una empresa de toldos y protección solar, con catálogo de productos.',
-        tags: ['WordPress', 'Elementor'],
-        url: 'https://toldospallares.com',
-        img: '/proyectos/Toldos-Pallares.webp',
+        title: 'Fichar365',
+        category: 'SaaS / RRHH',
+        image: '/proyectos/Fichar.webp',
+        link: 'https://fichar365.com',
+        color: '#3b82f6'
     },
     {
-        num: '03',
-        nombre: 'CarMeet ESP',
-        desc: 'Comunidad para aficionados al motor: eventos, quedadas y mapa interactivo.',
-        tags: ['React', 'Supabase', 'Leaflet'],
-        url: 'https://carmeet.es',
-        img: '/proyectos/Car-MeetESP.webp',
+        title: 'Guadicar Multimarcas',
+        category: 'Concesionario',
+        image: '/proyectos/Guadicar.webp',
+        link: 'https://guadicar.es',
+        color: '#eab308'
     },
     {
-        num: '04',
-        nombre: 'Fichar365',
-        desc: 'Aplicación web a medida.',
-        tags: ['Web app'],
-        url: 'https://fichar365.com',
-        img: '/proyectos/Fichar.webp',
+        title: 'Taller M. Guzmán',
+        category: 'Automoción',
+        image: '/proyectos/Guzman.webp',
+        link: 'https://project-r5m3o.vercel.app/',
+        color: '#10b981'
     },
-
     {
-        num: '05',
-        nombre: 'Taller Chapa y Pintura M.Guzmán',
-        desc: 'Aplicación web a medida.',
-        tags: ['Web app'],
-        url: 'https://project-r5m3o.vercel.app/',
-        img: '/proyectos/Guzman.webp',
-    },
+        title: 'Toldos Pallares',
+        category: 'Web Corporativa',
+        image: '/proyectos/Toldos-Pallares.webp',
+        link: 'https://toldospallares.com',
+        color: '#a855f7'
+    }
 ]
 ---
 
-<section class='hproj' id='hproj'>
-    <div class='hproj-track'>
-        <div class='hproj-panel hproj-intro'>
-            <span class='mono text-accent'>Proyectos</span>
-            <h2>Trabajo real,<br />en producción</h2>
-            <p>Algunos de los proyectos que ya están online y funcionando.</p>
-            <span class='hproj-hint'>Desliza →</span>
-        </div>
+<section class='projects' id='proyectos'>
+    <div class='container p-head'>
+        <span class='eyebrow'>Nuestro Trabajo</span>
+        <h2>Proyectos que<br />marcan la diferencia.</h2>
+    </div>
 
-        {
-            proyectos.map((p) => (
-                <article class='hproj-panel hproj-card'>
-                    <a
-                        href={p.url}
-                        target='_blank'
-                        rel='noopener'
-                        class='hproj-frame'
-                    >
-                        {p.img ? (
-                            <img src={p.img} alt={p.nombre} />
-                        ) : (
-                            <span class='hproj-ph'>{p.nombre}</span>
-                        )}
-                    </a>
-                    <div class='hproj-info'>
-                        <span class='mono text-accent'>{p.num}</span>
-                        <h3>{p.nombre}</h3>
-                        <p>{p.desc}</p>
-                        <div class='hproj-tags'>
-                            {p.tags.map((t) => (
-                                <span class='hproj-tag'>{t}</span>
-                            ))}
+    <!-- Contenedor que se fijará (pin) durante el scroll -->
+    <div class='projects-wrapper'>
+        <div class='projects-track'>
+            
+            {projects.map((p, i) => (
+                <div class='project-card'>
+                    <div class='p-image'>
+                        <img src={p.image} alt={p.title} loading="lazy" />
+                        <div class='p-overlay' style={`--hover-c: ${p.color}`}>
+                            <a href={p.link} target="_blank" rel="noopener noreferrer" class='p-btn'>Visitar proyecto</a>
                         </div>
-                        <a
-                            href={p.url}
-                            target='_blank'
-                            rel='noopener'
-                            class='hproj-link'
-                        >
-                            Ver web ↗
-                        </a>
                     </div>
-                </article>
-            ))
-        }
+                    <div class='p-info'>
+                        <span class='p-cat'>{p.category}</span>
+                        <h3>{p.title}</h3>
+                    </div>
+                </div>
+            ))}
+
+            <!-- Card final de Call to Action -->
+            <div class='projects-end'>
+                <div class='end-content'>
+                    <div class='end-icon'>
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                    </div>
+                    <h3>¿Tienes un proyecto en mente?</h3>
+                    <p>Hablemos sobre cómo podemos escalar tu negocio al siguiente nivel.</p>
+                    <a href='/proyectos' class='btn btn-accent btn-large'>Ver todos los proyectos</a>
+                </div>
+            </div>
+
+        </div>
     </div>
 </section>
 
 <style>
-    .hproj {
-        min-height: 100vh;
-        overflow: hidden;
+    .projects {
+        padding: clamp(80px, 12vh, 140px) 0;
         background: var(--bg);
-        display: flex;
-        align-items: center;
-    }
-    .hproj-track {
-        display: flex;
-        align-items: center;
-        gap: clamp(2rem, 5vw, 5rem);
-        padding-inline: clamp(1.5rem, 8vw, 9rem);
-    }
-    .hproj-panel {
-        flex-shrink: 0;
-    }
-
-    /* Intro */
-    .hproj-intro {
-        width: min(520px, 85vw);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 1rem;
-    }
-    .hproj-intro h2 {
-        font-size: clamp(2.2rem, 5vw, 3.5rem);
-    }
-    .hproj-intro p {
-        color: var(--muted);
-        font-size: 1.1rem;
-    }
-    .hproj-hint {
-        font-weight: 600;
-        color: var(--accent);
-        margin-top: 0.5rem;
-    }
-
-    /* Tarjeta */
-    .hproj-card {
-        width: min(460px, 80vw);
-        display: flex;
-        flex-direction: column;
-        gap: 1.2rem;
-    }
-    .hproj-frame {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        aspect-ratio: 16 / 11;
-        border-radius: var(--radius);
         overflow: hidden;
+        position: relative;
+    }
+    
+    .p-head {
+        margin-bottom: clamp(2rem, 5vh, 4rem);
+    }
+    .eyebrow {
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.95rem;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.8rem;
+        display: block;
+        text-transform: uppercase;
+    }
+    .p-head h2 {
+        font-size: clamp(2.8rem, 6vw, 4.5rem);
+        font-weight: 600;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+        color: var(--fg);
+    }
+
+    /* --- HORIZONTAL SCROLL TRACK --- */
+    .projects-wrapper {
+        height: 80vh; 
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        /* En escritorio no tiene overflow porque GSAP mueve el track */
+    }
+    .projects-track {
+        display: flex;
+        gap: clamp(2rem, 5vw, 6rem);
+        padding: 0 10vw; /* Margen inicial para que la primera tarjeta no esté pegada al borde */
+        width: max-content;
+        align-items: center;
+    }
+
+    /* --- CARDS --- */
+    .project-card {
+        width: 55vw;
+        max-width: 900px;
+        min-width: 320px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .p-image {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        border-radius: 24px;
+        overflow: hidden;
+        position: relative;
         background: var(--surface);
         border: 1px solid var(--border);
-        box-shadow: var(--shadow);
-        transition:
-            transform 0.4s ease,
-            box-shadow 0.4s ease;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        transform: translateZ(0); /* Forzar aceleración hardware */
     }
-    .hproj-card:hover .hproj-frame {
-        transform: translateY(-6px);
-        box-shadow: var(--shadow-lg);
-    }
-    .hproj-frame img {
+    .p-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: top center;
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform;
     }
-    .hproj-ph {
+    
+    /* Overlay y Botón al hacer Hover */
+    .p-overlay {
+        position: absolute;
+        inset: 0;
+        background: color-mix(in srgb, var(--hover-c) 20%, rgba(0,0,0,0.4));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+    .p-btn {
+        background: #fff;
+        color: #000;
+        padding: 1rem 2rem;
+        border-radius: 100px;
         font-weight: 600;
-        font-size: clamp(1.2rem, 3vw, 1.8rem);
-        color: var(--muted);
-        text-align: center;
-        padding: 1rem;
+        font-size: 1.05rem;
+        transform: translateY(20px);
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        text-decoration: none;
+    }
+    html[data-theme='light'] .p-btn {
+        background: #000;
+        color: #fff;
+    }
+    
+    /* Efectos Hover Desktop */
+    @media (hover: hover) {
+        .project-card:hover .p-image img {
+            transform: scale(1.06);
+        }
+        .project-card:hover .p-overlay {
+            opacity: 1;
+        }
+        .project-card:hover .p-btn {
+            transform: translateY(0);
+        }
     }
 
-    .hproj-info {
+    .p-info {
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
     }
-    .hproj-info h3 {
-        font-size: clamp(1.4rem, 2.5vw, 1.9rem);
-    }
-    .hproj-info p {
-        color: var(--muted);
-        font-size: 0.98rem;
-    }
-    .hproj-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        margin-top: 0.3rem;
-    }
-    .hproj-tag {
-        font-size: 0.72rem;
-        color: var(--muted);
-        border: 1px solid var(--border);
-        border-radius: 980px;
-        padding: 0.2rem 0.7rem;
-    }
-    .hproj-link {
-        margin-top: 0.5rem;
-        color: var(--accent);
-        font-weight: 500;
+    .p-cat {
         font-size: 0.95rem;
+        font-weight: 500;
+        color: #86868b;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .p-info h3 {
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--fg);
     }
 
-    /* Móvil: pila vertical, sin scroll horizontal */
-    /* Móvil: carrusel deslizable con el dedo (swipe + snap) */
-    @media (max-width: 767px) {
-        .hproj {
-            min-height: auto;
-            display: block;
-            padding-block: clamp(3.5rem, 10vh, 5rem);
+    /* --- END CARD CTA --- */
+    .projects-end {
+        width: 40vw;
+        min-width: 320px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4rem;
+    }
+    .end-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    .end-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: color-mix(in srgb, var(--accent) 15%, transparent);
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+    .end-content h3 {
+        font-size: clamp(2rem, 3vw, 3rem);
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        color: var(--fg);
+    }
+    .end-content p {
+        color: #86868b;
+        font-size: 1.15rem;
+        max-width: 400px;
+        margin-bottom: 1rem;
+    }
+    .btn-large {
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+    }
+
+    /* --- RESPONSIVE MOBILE --- */
+    @media (max-width: 768px) {
+        .project-card {
+            width: 85vw;
         }
-        .hproj-track {
-            flex-direction: row;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-padding-left: var(--pad);
-            gap: 1rem;
-            padding-inline: var(--pad);
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
+        .projects-end {
+            width: 85vw;
+            padding: 0 1rem;
         }
-        .hproj-track::-webkit-scrollbar {
-            display: none;
-        }
-        .hproj-intro,
-        .hproj-card {
-            width: 82vw;
-        }
-        .hproj-panel {
-            scroll-snap-align: start;
-        }
-        .hproj-frame {
-            aspect-ratio: 16 / 10;
-        }
+        .p-btn { display: none; }
     }
 </style>
 
 <script>
     // @ts-nocheck
-    import { gsap } from 'gsap'
-    import { ScrollTrigger } from 'gsap/ScrollTrigger'
-    gsap.registerPlugin(ScrollTrigger)
+    import { gsap, ScrollTrigger, reduceMotion } from '@/lib/motion.js'
 
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!reduceMotion) {
+        const wrapper = document.querySelector('.projects-wrapper');
+        const track = document.querySelector('.projects-track');
+        
+        if (wrapper && track) {
+            // Función para calcular la distancia a desplazar
+            const getScrollAmount = () => -(track.scrollWidth - window.innerWidth);
+            
+            const tween = gsap.to(track, {
+                x: getScrollAmount,
+                ease: "none"
+            });
 
-    if (!reduce) {
-        if (window.innerWidth >= 768) {
-            // ESCRITORIO: la sección se fija y la fila se mueve en horizontal con el scroll
-            const track = document.querySelector('.hproj-track')
-            const amount = () => track.scrollWidth - window.innerWidth
-
-            gsap.to(track, {
-                x: () => -amount(),
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: '.hproj',
-                    start: 'top top',
-                    end: () => '+=' + amount(),
-                    scrub: 1,
-                    pin: true,
-                    anticipatePin: 1,
-                    invalidateOnRefresh: true,
-                },
-            })
-        } else {
-            // MÓVIL: revelado en cascada
-            gsap.from('.hproj-panel', {
-                scrollTrigger: { trigger: '.hproj', start: 'top 80%' },
-                y: 40,
-                autoAlpha: 0,
-                stagger: 0.1,
-                duration: 0.7,
-                ease: 'power3.out',
-            })
+            ScrollTrigger.create({
+                trigger: wrapper,
+                start: "center center",      // Cuando el contenedor llega al centro de la pantalla
+                end: () => `+=${track.scrollWidth - window.innerWidth}`, // Hacer scroll la misma distancia que la anchura sobrante
+                pin: true,                   // Fijar la sección
+                animation: tween,
+                scrub: 1,                    // Suavizado del scroll
+                invalidateOnRefresh: true,   // Recalcular medidas al redimensionar la ventana
+            });
         }
     }
 </script>

@@ -1,0 +1,138 @@
+---
+// src/components/Cta.astro
+---
+<section class='cta-section'>
+    <div class='container'>
+        <div class='cta-card'>
+            <!-- Elemento decorativo de luz de fondo (Glow) -->
+            <div class="cta-glow"></div>
+            
+            <div class='cta-content'>
+                <span class='eyebrow'>El siguiente paso</span>
+                <h2>¿Listo para construir<br />tu futuro digital?</h2>
+                <p>Deja de perder clientes por culpa de una web lenta o con diseño genérico. Hablemos sobre tu proyecto y descubramos cómo podemos ayudarte a dominar tu mercado.</p>
+                <div class="cta-actions">
+                    <a href="/contacto" class="btn btn-accent btn-large">Iniciar Proyecto</a>
+                    <a href="/servicios" class="btn btn-outline btn-large">Explorar Servicios</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .cta-section {
+        padding: clamp(60px, 10vh, 120px) 0;
+        background: var(--bg);
+        position: relative;
+    }
+    
+    .cta-card {
+        position: relative;
+        background: color-mix(in srgb, var(--surface) 30%, transparent);
+        border: 1px solid var(--border);
+        border-radius: clamp(24px, 4vw, 48px);
+        padding: clamp(4rem, 8vw, 8rem) clamp(1.5rem, 5vw, 4rem);
+        text-align: center;
+        overflow: hidden;
+        isolation: isolate;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+    html[data-theme='light'] .cta-card {
+        background: rgba(255,255,255,0.6);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+    }
+
+    /* Brillo de fondo animado */
+    .cta-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 80%;
+        height: 80%;
+        background: radial-gradient(circle, color-mix(in srgb, var(--accent) 30%, transparent) 0%, transparent 70%);
+        z-index: -1;
+        filter: blur(60px);
+        border-radius: 50%;
+        animation: pulseGlow 10s ease-in-out infinite alternate;
+        pointer-events: none;
+    }
+    @keyframes pulseGlow {
+        0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 0.6; }
+        100% { transform: translate(-50%, -50%) scale(1.3) rotate(15deg); opacity: 1; }
+    }
+
+    .cta-content {
+        max-width: 800px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .eyebrow {
+        background: color-mix(in srgb, var(--accent) 15%, transparent);
+        color: var(--accent);
+        padding: 0.5rem 1.2rem;
+        border-radius: 100px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
+        margin-bottom: 2rem;
+        display: inline-block;
+        text-transform: uppercase;
+        border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    .cta-content h2 {
+        font-size: clamp(3rem, 6vw, 5rem);
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+        color: var(--fg);
+        margin-bottom: 1.5rem;
+    }
+    .cta-content p {
+        font-size: clamp(1.1rem, 1.5vw, 1.25rem);
+        color: #86868b;
+        line-height: 1.6;
+        max-width: 600px;
+        margin-bottom: 3rem;
+    }
+
+    .cta-actions {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .btn-large {
+        padding: 1.2rem 2.5rem;
+        font-size: 1.1rem;
+    }
+    .btn-outline {
+        background: transparent;
+        color: var(--fg);
+        border: 1px solid var(--border);
+        padding: 1.2rem 2.5rem;
+        border-radius: 100px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    .btn-outline:hover {
+        background: var(--surface);
+        border-color: var(--fg);
+    }
+
+    @media (max-width: 600px) {
+        .cta-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+        .btn-large, .btn-outline {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>

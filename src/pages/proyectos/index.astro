@@ -1,0 +1,348 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navbar from '@/components/Navbar.astro'
+import Cta from '@/components/Cta.astro'
+import Footer from '@/components/Footer.astro'
+
+const projects = [
+    {
+        title: 'CarMeet',
+        category: 'Comunidad Automotriz',
+        image: '/proyectos/Car-MeetESP.webp',
+        link: 'https://carmeet.es',
+        color: '#f43f5e',
+        desc: 'Diseño de interfaz moderna para gestión de eventos, rutas y perfiles.'
+    },
+    {
+        title: 'Fichar365',
+        category: 'SaaS / RRHH',
+        image: '/proyectos/Fichar.webp',
+        link: 'https://fichar365.com',
+        color: '#3b82f6',
+        desc: 'Software integral con enfoque en la usabilidad y rapidez para empresas.'
+    },
+    {
+        title: 'Guadicar',
+        category: 'Concesionario',
+        image: '/proyectos/Guadicar.webp',
+        link: 'https://guadicar.es',
+        color: '#eab308',
+        desc: 'Catálogo digital avanzado con optimización extrema para SEO local.'
+    },
+    {
+        title: 'Taller M. Guzmán',
+        category: 'Automoción',
+        image: '/proyectos/Guzman.webp',
+        link: 'https://project-r5m3o.vercel.app/',
+        color: '#10b981',
+        desc: 'Web corporativa con sistema de cita previa para automatizar el taller.'
+    },
+    {
+        title: 'Toldos Pallares',
+        category: 'Web Corporativa',
+        image: '/proyectos/Toldos-Pallares.webp',
+        link: 'https://toldospallares.com',
+        color: '#a855f7',
+        desc: 'Presencia digital líder centrada en destacar captación de leads.'
+    }
+]
+---
+
+<BaseLayout 
+    title="Portfolio | Extreweb" 
+    description="Descubre nuestros proyectos destacados. Diseño web de alto rendimiento."
+>
+    <Navbar />
+    
+    <main class="page-main">
+        
+        <!-- HERO CLEAN -->
+        <section class="p-hero">
+            <div class="container">
+                <div class="hero-content">
+                    <span class="eyebrow gsap-fade">Portfolio</span>
+                    <h1 class="gsap-reveal">Casos de<br/><span class="text-accent">Éxito.</span></h1>
+                    <p class="gsap-fade">Desliza hacia abajo para descubrir nuestros mejores proyectos, uno por uno.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- STICKY DECK (BARAJA APILADA) -->
+        <section class="deck-sec">
+            {projects.map((p, index) => (
+                <div class="deck-card" id={`card-${index}`}>
+                    <div class="card-inner" style={`--p-color: ${p.color}`}>
+                        
+                        <!-- Contenedor de la foto -->
+                        <div class="card-img-wrap">
+                            <img src={p.image} alt={p.title} loading="lazy" />
+                            <div class="card-overlay"></div>
+                        </div>
+
+                        <!-- Tarjeta Glassmorphism inferior con el contenido -->
+                        <div class="card-content-glass">
+                            <div class="c-left">
+                                <span class="c-cat" style={`color: ${p.color}`}>{p.category}</span>
+                                <h2>{p.title}</h2>
+                            </div>
+                            
+                            <div class="c-right">
+                                <p>{p.desc}</p>
+                                <a href={p.link} target="_blank" rel="noopener noreferrer" class="c-btn">
+                                    Ver Proyecto
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                </a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            ))}
+        </section>
+
+        <!-- CTA FINAL -->
+        <div style="position: relative; z-index: 10; background: var(--bg);">
+            <Cta />
+        </div>
+        
+    </main>
+    <Footer />
+</BaseLayout>
+
+<style>
+    .page-main {
+        background: var(--bg);
+        overflow-x: hidden;
+    }
+
+    /* --- HERO --- */
+    .p-hero {
+        padding: clamp(160px, 20vh, 220px) 0 clamp(40px, 10vh, 100px);
+        text-align: center;
+    }
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .eyebrow {
+        color: var(--accent);
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 1.5rem;
+    }
+    .p-hero h1 {
+        font-size: clamp(3.5rem, 8vw, 7rem);
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+        margin-bottom: 1.5rem;
+    }
+    .p-hero p {
+        font-size: clamp(1.2rem, 2vw, 1.4rem);
+        color: var(--muted);
+        line-height: 1.5;
+    }
+
+    /* --- STICKY DECK WRAPPER --- */
+    .deck-sec {
+        position: relative;
+        width: 100%;
+        padding-bottom: 10vh; /* Espacio para el CTA al final */
+    }
+
+    /* --- TARJETA GIGANTE --- */
+    .deck-card {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    /* EL "BENTO" GIGANTE INTERNO */
+    .card-inner {
+        width: 90%;
+        max-width: 1400px;
+        height: 85vh; /* Ocupa el 85% de la pantalla */
+        border-radius: 32px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        will-change: transform;
+    }
+
+    /* IMAGEN (Parte superior) */
+    .card-img-wrap {
+        flex: 1; /* Coge todo el espacio restante */
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        background: var(--bg);
+    }
+    .card-img-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center; /* Perfecto para webs largas */
+        transition: transform 0.6s ease;
+    }
+    .deck-card:hover .card-img-wrap img {
+        transform: scale(1.03); /* Ligero zoom al hacer hover en la tarjeta */
+    }
+    .card-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, var(--surface) 0%, transparent 15%); /* Fusión suave con el glassmorphism */
+    }
+
+    /* TEXTO GLASSMORPHISM (Parte inferior) */
+    .card-content-glass {
+        position: relative;
+        width: 100%;
+        padding: clamp(2rem, 4vw, 3rem);
+        background: rgba(15, 15, 15, 0.7);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255,255,255,0.05);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+        color: white;
+    }
+    html[data-theme='light'] .card-content-glass {
+        background: rgba(255, 255, 255, 0.85);
+        border-top: 1px solid rgba(0,0,0,0.05);
+        color: black;
+    }
+
+    .c-cat {
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-size: 1rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    .c-left h2 {
+        font-size: clamp(2.5rem, 4vw, 4rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin: 0;
+    }
+
+    .c-right p {
+        font-size: 1.15rem;
+        opacity: 0.8;
+        line-height: 1.5;
+        margin-bottom: 2rem;
+    }
+    .c-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8rem;
+        background: white;
+        color: black;
+        padding: 1rem 2rem;
+        border-radius: 100px;
+        font-weight: 600;
+        font-size: 1.05rem;
+        text-decoration: none;
+        transition: transform 0.3s ease;
+        width: fit-content;
+    }
+    html[data-theme='light'] .c-btn {
+        background: black;
+        color: white;
+    }
+    .c-btn:hover {
+        transform: scale(1.05);
+    }
+
+    /* --- RESPONSIVE MOBILE --- */
+    @media (max-width: 900px) {
+        .card-inner {
+            width: 95%;
+            height: 80vh;
+            border-radius: 24px;
+        }
+        .card-content-glass {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            align-items: flex-start;
+        }
+        .c-left h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0;
+        }
+        .c-right p {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+        .c-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap, ScrollTrigger } from '@/lib/motion.js'
+
+    document.addEventListener('DOMContentLoaded', initStickyDeck);
+    initStickyDeck();
+
+    function initStickyDeck() {
+        if (window.__deck_inited) return;
+        window.__deck_inited = true;
+
+        // 1. Animación del Hero
+        gsap.from(".gsap-reveal", { y: 50, opacity: 0, duration: 1.2, ease: "power4.out", delay: 0.1 });
+        gsap.from(".gsap-fade", { y: 20, opacity: 0, duration: 1, ease: "power3.out", delay: 0.4 });
+
+        // 2. Lógica del Sticky Deck (ScrollTrigger)
+        const cards = gsap.utils.toArray('.deck-card');
+
+        cards.forEach((card, i) => {
+            const inner = card.querySelector('.card-inner');
+            const isLast = i === cards.length - 1;
+            
+            // Si no es la última tarjeta, le aplicamos el efecto de "quedarse pegada y encogerse"
+            if (!isLast) {
+                // Pin la tarjeta contenedora para que se quede en pantalla
+                ScrollTrigger.create({
+                    trigger: card,
+                    start: "top top", 
+                    endTrigger: cards[i + 1], // Termina cuando la SIGUIENTE tarjeta llega al top
+                    end: "top top",
+                    pin: true,
+                    pinSpacing: false // CRUCIAL: Permite que la siguiente tarjeta pase por encima
+                });
+
+                // Animamos el interior (encogerse sutilmente y oscurecerse) mientras está pegada
+                gsap.to(inner, {
+                    scale: 0.9,      // Hace un zoom-out 3D
+                    opacity: 0.3,    // Se oscurece al irse al fondo
+                    ease: "none",    // Lineal con el scroll
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top top",
+                        endTrigger: cards[i + 1],
+                        end: "top top",
+                        scrub: true
+                    }
+                });
+            }
+        });
+    }
+</script>

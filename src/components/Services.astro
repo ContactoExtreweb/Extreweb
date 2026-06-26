@@ -1,333 +1,543 @@
 ---
 // src/components/Services.astro
-const servicios = [
-    {
-        ic: 'web',
-        t: 'Diseño y desarrollo web',
-        d: 'Webs a medida, rápidas y pensadas para convertir. Del diseño al despliegue, sin plantillas.',
-        tags: ['Diseño UI', 'Desarrollo', 'Tiendas'],
-    },
-    {
-        ic: 'seo',
-        t: 'SEO y posicionamiento',
-        d: 'Que te encuentren cuando buscan lo que ofreces. Técnica y posicionamiento local.',
-        tags: ['SEO técnico', 'SEO local', 'Analítica'],
-    },
-    {
-        ic: 'social',
-        t: 'Redes sociales',
-        d: 'Tu marca activa y conectando, con contenido y estrategia que trabajan por ti.',
-        tags: ['Gestión', 'Contenido', 'Estrategia'],
-    },
-    {
-        ic: 'sys',
-        t: 'Sistemas y soporte',
-        d: 'Montaje y mantenimiento de equipos y redes. El soporte que tu negocio necesita.',
-        tags: ['Montaje', 'Mantenimiento', 'Redes'],
-    },
-]
-
-const icons = {
-    web: '<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13 5l-2 14"/>',
-    seo: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
-    social: '<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.3 10.8l7.4-3.6M8.3 13.2l7.4 3.6"/>',
-    sys: '<rect x="3" y="4" width="18" height="7" rx="1.5"/><rect x="3" y="13" width="18" height="7" rx="1.5"/><path d="M7 7.5h.01M7 16.5h.01"/>',
-}
 ---
 
-<section class='svc' id='svc'>
-    <canvas class='svc-canvas' id='svcCanvas' aria-hidden='true'></canvas>
-
-    <div class='container svc-content'>
-        <div class='svc-head'>
-            <span class='mono text-accent'>Servicios</span>
-            <h2>Lo que <em class='text-accent'>hacemos</em></h2>
-            <p class='svc-sub'>
-                Toca el fondo. Reacciona — igual que tu próxima web.
+<section class='services-premium' id='servicios'>
+    <div class='container'>
+        <div class='section-head'>
+            <span class='eyebrow'>Especialidades</span>
+            <h2>Servicios premium.<br />Nivel corporativo.</h2>
+            <p class='sub'>
+                Olvídate de las plantillas y las soluciones a medias. 
+                Construimos ecosistemas digitales de alto rendimiento pensados para escalar y dominar tu sector.
             </p>
         </div>
+    </div>
 
-        <div class='svc-grid'>
-            {
-                servicios.map((s, i) => (
-                    <a href='/servicios' class='svc-tile' style={`--i:${i}`}>
-                        <span
-                            class='svc-ic'
-                            set:html={`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${icons[s.ic as keyof typeof icons]}</svg>`}
-                        />
-                        <h3>{s.t}</h3>
-                        <p>{s.d}</p>
-                        <div class='svc-tags'>
-                            {s.tags.map((t) => (
-                                <span>{t}</span>
-                            ))}
+    <!-- Contenedor Sticky Stacking -->
+    <div class='cards-stack container' id='servicesStack'>
+        
+        <!-- Tarjeta 1: Desarrollo -->
+        <div class='stack-card' id='sc-1'>
+            <div class='sc-bg sc-bg-1'></div>
+            <div class='sc-content'>
+                <div class='sc-text'>
+                    <div class='sc-icon'>
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                    </div>
+                    <h3>Desarrollo a Medida</h3>
+                    <p>Aplicaciones web y plataformas construidas con código nativo desde cero. Logramos un rendimiento impecable (100/100) y seguridad absoluta sin depender de constructores visuales lentos.</p>
+                </div>
+                <div class='sc-visual'>
+                    <!-- IDE Flotante -->
+                    <div class='ide-window floating'>
+                        <div class='ide-head'>
+                            <i></i><i></i><i></i>
+                            <span>App.tsx</span>
                         </div>
-                        <span class='svc-go'>Saber más →</span>
-                    </a>
-                ))
-            }
+                        <div class='ide-body'>
+                            <p><span class='c-pink'>import</span> { '{' } <span class='c-blue'>Extreweb</span> { '}' } <span class='c-pink'>from</span> <span class='c-green'>'@/core'</span></p>
+                            <br>
+                            <p><span class='c-pink'>export default function</span> <span class='c-blue'>App</span>() { '{' }</p>
+                            <p class='indent'><span class='c-pink'>return</span> (</p>
+                            <p class='indent-2'>&lt;<span class='c-blue'>Extreweb.Engine</span></p>
+                            <p class='indent-3'>performance=<span class='c-green'>"maximum"</span></p>
+                            <p class='indent-3'>design=<span class='c-green'>"premium"</span></p>
+                            <p class='indent-2'>/&gt;</p>
+                            <p class='indent'>)</p>
+                            <p>}</p>
+                            <div class='cursor'></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- Tarjeta 2: E-commerce -->
+        <div class='stack-card' id='sc-2'>
+            <div class='sc-bg sc-bg-2'></div>
+            <div class='sc-content'>
+                <div class='sc-text'>
+                    <div class='sc-icon' style="color: #a855f7; border-color: rgba(168,85,247,0.3);">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    </div>
+                    <h3>E-commerce Rentable</h3>
+                    <p>Tiendas online optimizadas científicamente para reducir la fricción. Multiplicamos la conversión de tus visitas combinando arquitecturas Headless y diseño persuasivo.</p>
+                </div>
+                <div class='sc-visual'>
+                    <!-- Tarjeta de crédito Glassmorphism -->
+                    <div class='glass-card floating-alt'>
+                        <div class='card-chip'>
+                            <svg width="32" height="24" viewBox="0 0 32 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5"><rect x="2" y="2" width="28" height="20" rx="4"/><path d="M10 2v20M22 2v20M2 12h8M22 12h8"/></svg>
+                        </div>
+                        <div class='card-details'>
+                            <div class='card-number'>**** **** **** 4092</div>
+                            <div class='card-bottom'>
+                                <span class='card-name'>TU NEGOCIO</span>
+                                <span class='visa-text'>CREDIT</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Popup de ventas -->
+                    <div class='stat-popup floating'>
+                        <span class='stat-up'>+142%</span>
+                        <span class='stat-label'>Conversión</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 3: SEO -->
+        <div class='stack-card' id='sc-3'>
+            <div class='sc-bg sc-bg-3'></div>
+            <div class='sc-content'>
+                <div class='sc-text'>
+                    <div class='sc-icon' style="color: #4ade80; border-color: rgba(74,222,128,0.3);">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
+                    </div>
+                    <h3>SEO Técnico Base</h3>
+                    <p>Core Web Vitals impecables y microdatos semánticos. Preparamos el código a un nivel tan bajo que Google te priorizará de forma orgánica desde el primer día de lanzamiento.</p>
+                </div>
+                <div class='sc-visual'>
+                    <!-- Gráfico SEO animado -->
+                    <div class='seo-chart'>
+                        <div class='chart-grid'></div>
+                        <div class='chart-bars'>
+                            <div class='bar b1'></div>
+                            <div class='bar b2'></div>
+                            <div class='bar b3'></div>
+                            <div class='bar b4'></div>
+                            <div class='bar b5'></div>
+                        </div>
+                        <svg viewBox="0 0 100 50" class='chart-line-svg' preserveAspectRatio="none">
+                            <path d="M0 45 Q 20 40, 40 35 T 70 20 T 100 5" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"></path>
+                        </svg>
+                        <div class='chart-glow'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 4: Soporte -->
+        <div class='stack-card' id='sc-4'>
+            <div class='sc-bg sc-bg-4'></div>
+            <div class='sc-content'>
+                <div class='sc-text'>
+                    <div class='sc-icon' style="color: #f59e0b; border-color: rgba(245,158,11,0.3);">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <h3>Evolución y Soporte</h3>
+                    <p>Tu infraestructura no puede caerse. Ofrecemos mantenimiento proactivo, actualizaciones de seguridad severas y monitorización 24/7. Duerme tranquilo mientras tu negocio opera.</p>
+                </div>
+                <div class='sc-visual'>
+                    <!-- Radar Ping -->
+                    <div class='radar-container'>
+                        <div class='radar-core'>
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <div class='radar-ring r1'></div>
+                        <div class='radar-ring r2'></div>
+                        <div class='radar-ring r3'></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
 <style>
-    .svc {
+    .services-premium {
+        padding: clamp(80px, 12vh, 140px) 0 0;
         position: relative;
-        padding-block: clamp(4rem, 12vh, 8rem);
-        overflow: hidden;
         background: var(--bg);
     }
-    .svc-canvas {
+    
+    .section-head {
+        text-align: center;
+        margin-bottom: clamp(4rem, 8vw, 6rem);
+    }
+    .eyebrow {
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.95rem;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.8rem;
+        display: block;
+        text-transform: uppercase;
+    }
+    .section-head h2 {
+        font-size: clamp(2.8rem, 6vw, 4.5rem);
+        font-weight: 600;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+        margin-bottom: 1.2rem;
+        color: var(--fg);
+    }
+    .sub {
+        font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+        color: #86868b;
+        line-height: 1.5;
+        max-width: 650px;
+        margin: 0 auto;
+    }
+
+    /* --- CONTENEDOR STICKY --- */
+    .cards-stack {
+        position: relative;
+        padding-bottom: 25vh; /* Espacio extra para hacer scroll después de las tarjetas */
+        display: flex;
+        flex-direction: column;
+        gap: 30px; 
+    }
+
+    /* --- LAS TARJETAS --- */
+    .stack-card {
+        position: sticky;
+        top: 15vh; /* Se pegan a esta altura de la pantalla */
+        height: 70vh; /* Ocupan gran parte de la pantalla */
+        min-height: 500px;
+        border-radius: 40px;
+        background: color-mix(in srgb, var(--surface) 75%, transparent);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+        box-shadow: 0 -20px 60px rgba(0,0,0,0.05);
+        overflow: hidden;
+        transform-origin: top center;
+        will-change: transform, opacity;
+    }
+
+    /* Ajuste de tema claro/oscuro */
+    html[data-theme='dark'] .stack-card {
+        box-shadow: 0 -20px 60px rgba(0,0,0,0.4);
+    }
+    html[data-theme='light'] .stack-card {
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* Pequeño offset para que parezcan una baraja real */
+    #sc-1 { top: calc(15vh + 0px); }
+    #sc-2 { top: calc(15vh + 20px); }
+    #sc-3 { top: calc(15vh + 40px); }
+    #sc-4 { top: calc(15vh + 60px); }
+
+    /* Fondos radiales de cada tarjeta */
+    .sc-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        opacity: 0.5;
+    }
+    .sc-bg-1 { background: radial-gradient(circle at 100% 100%, rgba(0, 113, 227, 0.15), transparent 60%); }
+    .sc-bg-2 { background: radial-gradient(circle at 100% 0%, rgba(168, 85, 247, 0.15), transparent 60%); }
+    .sc-bg-3 { background: radial-gradient(circle at 0% 100%, rgba(74, 222, 128, 0.12), transparent 60%); }
+    .sc-bg-4 { background: radial-gradient(circle at 50% 100%, rgba(245, 158, 11, 0.12), transparent 60%); }
+
+    /* Layout interno de la tarjeta */
+    .sc-content {
+        position: relative;
+        z-index: 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: 100%;
+        width: 100%;
+    }
+    .sc-text {
+        padding: clamp(3rem, 6vw, 5rem);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .sc-visual {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        border-left: 1px solid rgba(255,255,255,0.05);
+    }
+    html[data-theme='light'] .sc-visual { border-left-color: rgba(0,0,0,0.05); }
+
+    .sc-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2rem;
+        background: var(--bg);
+        border: 1px solid rgba(0, 113, 227, 0.3);
+        color: var(--accent);
+        box-shadow: var(--shadow);
+    }
+    .sc-text h3 {
+        font-size: clamp(2rem, 3.5vw, 3rem);
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        margin-bottom: 1.2rem;
+        color: var(--fg);
+        line-height: 1.1;
+    }
+    .sc-text p {
+        color: #86868b;
+        font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* --- VISUALES ESPECÍFICOS --- */
+    .floating { animation: float 6s ease-in-out infinite; }
+    .floating-alt { animation: float-alt 7s ease-in-out infinite; }
+    
+    @keyframes float { 
+        0%, 100% { transform: translateY(0) rotate(0deg); } 
+        50% { transform: translateY(-15px) rotate(1deg); } 
+    }
+    @keyframes float-alt { 
+        0%, 100% { transform: translateY(0) rotate(0deg); } 
+        50% { transform: translateY(12px) rotate(-1deg); } 
+    }
+
+    /* Card 1: IDE */
+    .ide-window {
+        width: 100%;
+        max-width: 450px;
+        background: #0d0d12;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        overflow: hidden;
+    }
+    .ide-head {
+        height: 36px;
+        background: rgba(255,255,255,0.03);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        display: flex;
+        align-items: center;
+        padding: 0 1rem;
+        gap: 6px;
+        position: relative;
+    }
+    .ide-head i { width: 10px; height: 10px; border-radius: 50%; background: #4b4b55; }
+    .ide-head i:nth-child(1) { background: #ef4444; }
+    .ide-head i:nth-child(2) { background: #f59e0b; }
+    .ide-head i:nth-child(3) { background: #10b981; }
+    .ide-head span {
+        position: absolute;
+        width: 100%; left: 0; text-align: center;
+        font-size: 0.75rem; color: #71717a; font-family: sans-serif;
+    }
+    .ide-body {
+        padding: 1.5rem;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.85rem;
+        color: #a1a1aa;
+        line-height: 1.7;
+    }
+    .c-pink { color: #f472b6; }
+    .c-blue { color: #38bdf8; }
+    .c-green { color: #4ade80; }
+    .indent { margin-left: 1.5rem; }
+    .indent-2 { margin-left: 3rem; }
+    .indent-3 { margin-left: 4.5rem; }
+    .cursor { display: inline-block; width: 8px; height: 1.2em; background: #fff; vertical-align: middle; animation: blink 1s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* Card 2: Glass Credit Card */
+    .glass-card {
+        width: 320px;
+        height: 200px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.02));
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid rgba(255,255,255,0.3);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.1);
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        z-index: 2;
+    }
+    html[data-theme='light'] .glass-card {
+        background: linear-gradient(135deg, rgba(0,0,0,0.05), rgba(0,0,0,0.01));
+        border-color: rgba(0,0,0,0.1);
+    }
+    .card-number { font-size: 1.4rem; font-family: monospace; letter-spacing: 2px; color: var(--fg); margin-top: auto; margin-bottom: 1rem; }
+    .card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .card-name { font-size: 0.9rem; font-weight: 600; color: var(--fg); letter-spacing: 1px; }
+    .visa-text { font-size: 1.2rem; font-style: italic; font-weight: 800; color: var(--fg); opacity: 0.8; }
+    
+    .stat-popup {
+        position: absolute;
+        bottom: 20%;
+        right: 15%;
+        background: var(--surface);
+        padding: 1rem 1.5rem;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-lg);
+        display: flex;
+        flex-direction: column;
+        z-index: 1;
+        transform: translateZ(-20px);
+    }
+    .stat-up { color: #a855f7; font-size: 1.8rem; font-weight: 700; line-height: 1; }
+    .stat-label { color: var(--muted); font-size: 0.85rem; font-weight: 500; margin-top: 4px; }
+
+    /* Card 3: SEO Chart */
+    .seo-chart {
+        width: 100%;
+        max-width: 400px;
+        height: 250px;
+        position: relative;
+    }
+    .chart-grid {
+        position: absolute;
+        inset: 0;
+        background-image: 
+            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+        background-size: 40px 40px;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
+        border-left: 2px solid rgba(255,255,255,0.1);
+    }
+    html[data-theme='light'] .chart-grid {
+        background-image: 
+            linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+        border-color: rgba(0,0,0,0.1);
+    }
+    .chart-bars {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding: 0 10%;
+    }
+    .bar {
+        width: 12%;
+        background: linear-gradient(to top, rgba(74, 222, 128, 0.4), transparent);
+        border-top: 2px solid #4ade80;
+        border-radius: 4px 4px 0 0;
+        transform-origin: bottom;
+        animation: pulseBar 3s ease-in-out infinite alternate;
+    }
+    .b1 { height: 20%; animation-delay: 0s; }
+    .b2 { height: 35%; animation-delay: 0.2s; }
+    .b3 { height: 50%; animation-delay: 0.4s; }
+    .b4 { height: 75%; animation-delay: 0.6s; }
+    .b5 { height: 95%; animation-delay: 0.8s; }
+    
+    @keyframes pulseBar {
+        0% { transform: scaleY(0.9); }
+        100% { transform: scaleY(1.1); }
+    }
+    
+    .chart-line-svg {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
-        z-index: 0;
-        pointer-events: none;
+        overflow: visible;
+        filter: drop-shadow(0 4px 10px rgba(74, 222, 128, 0.5));
     }
-    .svc-content {
+
+    /* Card 4: Radar Ping */
+    .radar-container {
         position: relative;
-        z-index: 1;
-    }
-
-    .svc-head {
-        margin-bottom: clamp(2.5rem, 6vw, 4rem);
-    }
-    .svc-head h2 {
-        margin: 0.6rem 0;
-    }
-    .svc-sub {
-        color: var(--muted);
-        font-size: 1.15rem;
-    }
-
-    .svc-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: clamp(1rem, 2.5vw, 1.6rem);
-    }
-    /* Desfase para romper la rejilla */
-    .svc-tile:nth-child(even) {
-        margin-top: clamp(0px, 4vw, 3.5rem);
-    }
-
-    .svc-tile {
-        position: relative;
+        width: 300px;
+        height: 300px;
         display: flex;
-        flex-direction: column;
-        gap: 0.8rem;
-        padding: clamp(1.5rem, 3vw, 2.2rem);
-        border-radius: var(--radius);
-        border: 1px solid var(--border);
-        background: rgba(255, 255, 255, 0.72);
-        color: var(--fg);
-        box-shadow: 0 2px 14px rgba(0, 0, 0, 0.04);
-        animation: floatY 6s ease-in-out infinite;
-        animation-delay: calc(var(--i) * -1.5s);
-        transition:
-            box-shadow 0.3s ease,
-            border-color 0.3s ease;
-    }
-    .svc-tile:hover {
-        box-shadow: var(--shadow-lg);
-        border-color: rgba(0, 113, 227, 0.4);
-    }
-    @keyframes floatY {
-        0%,
-        100% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(-10px);
-        }
-    }
-
-    .svc-ic {
-        display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
-        background: var(--surface);
-        color: var(--accent);
     }
-    .svc-tile h3 {
-        font-size: clamp(1.25rem, 2.4vw, 1.7rem);
-    }
-    .svc-tile p {
-        color: var(--muted);
-        font-size: 0.96rem;
-        max-width: 40ch;
-    }
-    .svc-tags {
+    .radar-core {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: #f59e0b;
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        margin-top: auto;
-        padding-top: 0.6rem;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        z-index: 10;
+        box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
     }
-    .svc-tags span {
-        font-size: 0.7rem;
-        color: var(--muted);
-        border: 1px solid var(--border);
-        border-radius: 980px;
-        padding: 0.2rem 0.65rem;
-        background: rgba(255, 255, 255, 0.6);
+    .radar-ring {
+        position: absolute;
+        inset: 0;
+        border: 2px solid #f59e0b;
+        border-radius: 50%;
+        opacity: 0;
+        animation: pulseRing 3s linear infinite;
     }
-    .svc-go {
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: var(--accent);
-        margin-top: 0.4rem;
+    .r2 { animation-delay: 1s; }
+    .r3 { animation-delay: 2s; }
+    @keyframes pulseRing {
+        0% { transform: scale(0.3); opacity: 0.8; }
+        100% { transform: scale(1.5); opacity: 0; }
     }
 
-    @media (max-width: 640px) {
-        .svc-grid {
+    /* --- RESPONSIVE --- */
+    @media (max-width: 900px) {
+        .sc-content {
             grid-template-columns: 1fr;
-            gap: 1.2rem;
+            grid-template-rows: auto 1fr;
         }
-        .svc-tile:nth-child(even) {
-            margin-top: 0;
+        .stack-card {
+            height: auto;
+            min-height: 85vh; 
+            margin-bottom: 20px;
         }
+        .sc-text {
+            padding: 2.5rem 2rem 1rem;
+            text-align: center;
+            align-items: center;
+        }
+        .sc-visual {
+            padding: 2rem 1rem;
+            border-left: none;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        html[data-theme='light'] .sc-visual { border-top-color: rgba(0,0,0,0.05); }
+        .cards-stack { padding-bottom: 10vh; }
     }
 </style>
 
 <script>
     // @ts-nocheck
-    import { gsap } from 'gsap'
-    import { ScrollTrigger } from 'gsap/ScrollTrigger'
-    gsap.registerPlugin(ScrollTrigger)
+    import { gsap, ScrollTrigger, reduceMotion } from '@/lib/motion.js'
 
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-    /* ---- Entrada de las tarjetas (barrido) ---- */
-    if (!reduce) {
-        gsap.from('.svc-head > *', {
-            scrollTrigger: { trigger: '.svc', start: 'top 78%' },
-            y: 28,
-            autoAlpha: 0,
-            stagger: 0.1,
-            duration: 0.7,
-            ease: 'power3.out',
-        })
-        gsap.from('.svc-tile', {
-            scrollTrigger: { trigger: '.svc-grid', start: 'top 82%' },
-            clipPath: 'inset(0 0 100% 0)',
-            autoAlpha: 0,
-            stagger: 0.14,
-            duration: 0.9,
-            ease: 'power3.out',
-        })
-    }
-
-    /* ---- Campo de partículas interactivo ---- */
-    const canvas = document.getElementById('svcCanvas')
-    const ctx = canvas.getContext('2d')
-    let w = 0,
-        h = 0,
-        dpr = 1,
-        parts = [],
-        running = false,
-        rafId = null
-    const ptr = { x: -9999, y: -9999 }
-
-    const accent = '0,113,227' // rgb del azul
-
-    function size() {
-        dpr = Math.min(window.devicePixelRatio || 1, 1.5)
-        const r = canvas.getBoundingClientRect()
-        w = r.width
-        h = r.height
-        canvas.width = Math.round(w * dpr)
-        canvas.height = Math.round(h * dpr)
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-        seed()
-    }
-    function seed() {
-        const count = window.innerWidth < 768 ? 70 : 130
-        parts = []
-        for (let i = 0; i < count; i++) {
-            parts.push({
-                x: Math.random() * w,
-                y: Math.random() * h,
-                vx: (Math.random() - 0.5) * 0.25,
-                vy: (Math.random() - 0.5) * 0.25,
-                r: Math.random() * 1.6 + 0.7,
-            })
+    if (!reduceMotion) {
+        // Efecto 3D de profundidad al hacer scroll (las tarjetas se encogen al ser pisadas)
+        // Solo lo aplicamos en escritorio para no comprometer el rendimiento/layout en móvil
+        if (window.innerWidth > 900) {
+            const cards = gsap.utils.toArray('.stack-card');
+            
+            cards.forEach((card, index) => {
+                if (index < cards.length - 1) {
+                    const nextCard = cards[index + 1];
+                    
+                    gsap.to(card, {
+                        scale: 0.92,
+                        opacity: 0.4,
+                        scrollTrigger: {
+                            trigger: nextCard,
+                            // Cuando la siguiente tarjeta llega al 75% de la pantalla, empieza a encoger la actual
+                            start: 'top 75%', 
+                            // Cuando la siguiente tarjeta se "pega" (20%), la actual ya se ha encogido del todo
+                            end: 'top 20%',
+                            scrub: true,
+                        }
+                    });
+                }
+            });
         }
     }
-    function frame() {
-        ctx.clearRect(0, 0, w, h)
-        const R = 130
-        for (const p of parts) {
-            const dx = p.x - ptr.x,
-                dy = p.y - ptr.y
-            const d2 = dx * dx + dy * dy
-            if (d2 < R * R) {
-                const d = Math.sqrt(d2) || 1
-                const f = 1 - d / R
-                p.vx += (dx / d) * f * 0.6
-                p.vy += (dy / d) * f * 0.6
-                // línea hacia el puntero (efecto imán)
-                ctx.strokeStyle = `rgba(${accent},${f * 0.5})`
-                ctx.lineWidth = 1
-                ctx.beginPath()
-                ctx.moveTo(p.x, p.y)
-                ctx.lineTo(ptr.x, ptr.y)
-                ctx.stroke()
-            }
-            p.vx *= 0.95
-            p.vy *= 0.95
-            p.x += p.vx + 0.12
-            p.y += p.vy
-            if (p.x > w + 6) p.x = -6
-            if (p.x < -6) p.x = w + 6
-            if (p.y > h + 6) p.y = -6
-            if (p.y < -6) p.y = h + 6
-            ctx.beginPath()
-            ctx.arc(p.x, p.y, p.r, 0, 6.2832)
-            ctx.fillStyle = `rgba(${accent},0.55)`
-            ctx.fill()
-        }
-        if (running) rafId = requestAnimationFrame(frame)
-    }
-    function start() {
-        if (!running && !reduce) {
-            running = true
-            frame()
-        }
-    }
-    function stop() {
-        running = false
-        if (rafId) cancelAnimationFrame(rafId)
-    }
-
-    // Puntero global (no bloquea el scroll: listener pasivo)
-    window.addEventListener(
-        'pointermove',
-        (e) => {
-            const r = canvas.getBoundingClientRect()
-            ptr.x = e.clientX - r.left
-            ptr.y = e.clientY - r.top
-        },
-        { passive: true },
-    )
-
-    // Pausa cuando no se ve (ahorra batería/CPU)
-    new IntersectionObserver(
-        ([en]) => {
-            en.isIntersecting ? start() : stop()
-        },
-        { threshold: 0 },
-    ).observe(canvas)
-
-    // Resize con debounce
-    let rt
-    window.addEventListener('resize', () => {
-        clearTimeout(rt)
-        rt = setTimeout(size, 200)
-    })
-
-    size()
 </script>

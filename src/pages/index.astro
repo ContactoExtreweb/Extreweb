@@ -1,230 +1,28 @@
 ---
-// src/pages/index.astro
 import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navbar from '@/components/Navbar.astro'
+import Hero from '@/components/Hero.astro'
+import Playground from '@/components/Playground.astro'
+import Showcase from '@/components/Showcase.astro'
 import Services from '@/components/Services.astro'
 import Projects from '@/components/Projects.astro'
-import Stats from '@/components/Stats.astro'
-import Showcase from '@/components/Showcase.astro'
+import Process from '@/components/Process.astro'
+import Faq from '@/components/Faq.astro'
+import Cta from '@/components/Cta.astro'
+import Footer from '@/components/Footer.astro'
 ---
 
 <BaseLayout>
+	<Navbar />
 	<main>
-		<section class='hero'>
-			<div class='hero-aurora' aria-hidden='true'>
-				<span class='blob blob-1'></span>
-				<span class='blob blob-2'></span>
-				<span class='blob blob-3'></span>
-			</div>
-
-			<div class='container hero-inner'>
-				<span class='mono text-accent hero-label'
-					>Agencia de diseño y desarrollo web</span
-				>
-				<h1 class='hero-title'>
-					<span class='line'><span>Construimos webs</span></span>
-					<span class='line'
-						><span>que <em class='text-accent'>revientan</em></span
-						></span
-					>
-				</h1>
-				<p class='lead text-muted hero-lead'>
-					Diseño, desarrollo, SEO y mantenimiento. Webs rápidas y con
-					carácter para negocios de Don Benito, Villanueva de la
-					Serena y Cáceres.
-				</p>
-				<div class='hero-btns'>
-					<a href='/proyectos' class='btn btn-accent'>Ver proyectos</a
-					>
-					<a href='/contacto' class='btn'>Hablemos →</a>
-				</div>
-			</div>
-
-			<div class='hero-scroll' aria-hidden='true'>
-				<svg width='22' height='22' viewBox='0 0 24 24' fill='none'>
-					<path
-						d='M6 9l6 6 6-6'
-						stroke='currentColor'
-						stroke-width='2'
-						stroke-linecap='round'
-						stroke-linejoin='round'></path>
-				</svg>
-			</div>
-		</section>
-
+		<Hero />
 		<Showcase />
+		<Playground />
 		<Services />
 		<Projects />
-		<Stats />
+		<Process />
+		<Faq />
+		<Cta />
 	</main>
+	<Footer />
 </BaseLayout>
-
-<style>
-	.hero {
-		position: relative;
-		min-height: 100vh;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		overflow: hidden;
-	}
-	.hero-inner {
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-		padding-block: 6rem;
-	}
-	.lead {
-		font-size: 1.2rem;
-	}
-	.hero-btns {
-		display: flex;
-		gap: 1rem;
-		flex-wrap: wrap;
-		margin-top: 1rem;
-	}
-
-	.hero-title .line {
-		display: block;
-		overflow: hidden;
-		padding-bottom: 0.08em;
-	}
-	.hero-title .line > span {
-		display: block;
-	}
-
-	/* Fondo de auroras (sutil, se mueve) */
-	.hero-aurora {
-		position: absolute;
-		inset: 0;
-		z-index: -1;
-		overflow: hidden;
-		pointer-events: none;
-	}
-	.blob {
-		position: absolute;
-		border-radius: 50%;
-		filter: blur(70px);
-		opacity: 0.5;
-		will-change: transform;
-	}
-	.blob-1 {
-		width: 40vw;
-		height: 40vw;
-		background: #4f93ff;
-		top: -6%;
-		left: -4%;
-		animation: drift1 20s ease-in-out infinite;
-	}
-	.blob-2 {
-		width: 34vw;
-		height: 34vw;
-		background: #b07cff;
-		top: 6%;
-		right: -5%;
-		animation: drift2 24s ease-in-out infinite;
-	}
-	.blob-3 {
-		width: 30vw;
-		height: 30vw;
-		background: #3fcfe8;
-		bottom: -8%;
-		left: 32%;
-		animation: drift3 22s ease-in-out infinite;
-	}
-	@keyframes drift1 {
-		0%,
-		100% {
-			transform: translate(0, 0);
-		}
-		50% {
-			transform: translate(8%, 10%);
-		}
-	}
-	@keyframes drift2 {
-		0%,
-		100% {
-			transform: translate(0, 0);
-		}
-		50% {
-			transform: translate(-10%, 6%);
-		}
-	}
-	@keyframes drift3 {
-		0%,
-		100% {
-			transform: translate(0, 0);
-		}
-		50% {
-			transform: translate(7%, -9%);
-		}
-	}
-
-	/* Indicador de scroll */
-	.hero-scroll {
-		position: absolute;
-		bottom: 2.2rem;
-		left: 50%;
-		transform: translateX(-50%);
-		color: var(--muted);
-	}
-	.hero-scroll svg {
-		animation: scrollBounce 1.8s ease-in-out infinite;
-	}
-	@keyframes scrollBounce {
-		0%,
-		100% {
-			transform: translateY(0);
-			opacity: 0.5;
-		}
-		50% {
-			transform: translateY(6px);
-			opacity: 1;
-		}
-	}
-</style>
-
-<script>
-	// @ts-nocheck
-	import { gsap } from 'gsap'
-	import { ScrollTrigger } from 'gsap/ScrollTrigger'
-	gsap.registerPlugin(ScrollTrigger)
-
-	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-	gsap.set('.hero', { autoAlpha: 1 })
-
-	if (!reduce) {
-		// Entrada
-		const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-		tl.from('.hero-label', { y: 24, autoAlpha: 0, duration: 0.6 })
-			.from(
-				'.hero-title .line > span',
-				{ yPercent: 110, autoAlpha: 0, stagger: 0.12, duration: 0.9 },
-				'-=0.3',
-			)
-			.from(
-				'.hero-lead',
-				{ y: 24, autoAlpha: 0, duration: 0.7 },
-				'-=0.45',
-			)
-			.from(
-				'.hero-btns > *',
-				{ autoAlpha: 0, stagger: 0.1, duration: 0.6 },
-				'-=0.4',
-			)
-			.from('.hero-scroll', { autoAlpha: 0, duration: 0.6 }, '-=0.2')
-
-		// El contenido reacciona al scroll: sube y se desvanece
-		gsap.to('.hero-inner', {
-			scrollTrigger: {
-				trigger: '.hero',
-				start: 'top top',
-				end: 'bottom top',
-				scrub: true,
-			},
-			yPercent: -18,
-			opacity: 0,
-			ease: 'none',
-		})
-	}
-</script>

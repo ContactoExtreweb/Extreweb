@@ -1,189 +1,569 @@
 ---
 // src/components/Showcase.astro
-const features = [
-    {
-        t: 'Carga instantánea',
-        d: 'Optimizada al milímetro para puntuar alto y no hacer esperar.',
-    },
-    {
-        t: 'Diseño a medida',
-        d: 'Nada de plantillas: cada pieza pensada para tu marca.',
-    },
-    { t: '100% responsive', d: 'Impecable en móvil, tablet y escritorio.' },
-]
 ---
 
-<section class='showcase'>
-    <div class='container showcase-copy'>
-        <span class='mono text-accent'>Nuestro trabajo</span>
-        <h2>Webs que se sienten <em class='text-accent'>premium</em></h2>
-        <p>
-            No solo se ven bien: cargan al instante y están hechas para
-            convertir.
-        </p>
-    </div>
-
-    <div class='showcase-stage'>
-        <div class='mockup'>
-            <div class='mockup-bar'>
-                <span></span><span></span><span></span>
+<section class='anatomy-scroll-section' id='anatomyPin'>
+    <div class='container grid-wrap'>
+        <!-- TEXTO QUE CAMBIA CON EL SCROLL -->
+        <div class='text-content' id='textFlow'>
+            <div class='step active' data-step='0'>
+                <p class='eyebrow'>Arquitectura a medida</p>
+                <h2>Desarmamos el rendimiento.</h2>
+                <p>
+                    Desliza hacia abajo para entender qué hay detrás de nuestras
+                    webs. Cada capa es vital.
+                </p>
             </div>
-            <div class='mockup-screen'>
-                <img
-                    src='/proyectos/Guadicar.webp'
-                    alt='Proyecto GuadiCar Multimarcas'
-                />
+            <div class='step future' data-step='1'>
+                <p class='eyebrow'>Infraestructura</p>
+                <h2>1. Servidor Edge</h2>
+                <p>
+                    Desplegamos en infraestructuras globales (Netlify/Supabase)
+                    para que la carga sea instantánea en cualquier lugar.
+                </p>
+            </div>
+            <div class='step future' data-step='2'>
+                <p class='eyebrow'>Código</p>
+                <h2>2. Estructura SEO</h2>
+                <p>
+                    Escribimos código semántico limpio. Facilitamos a Google la
+                    lectura de tu negocio.
+                </p>
+            </div>
+            <div class='step future' data-step='3'>
+                <p class='eyebrow'>Experiencia</p>
+                <h2>3. Diseño UI Premium</h2>
+                <p>
+                    Estética impecable, limpia y centrada en convertir a tu
+                    visitante en cliente.
+                </p>
             </div>
         </div>
-    </div>
 
-    <div class='container showcase-features'>
-        {
-            features.map((f) => (
-                <div class='feature'>
-                    <h3>{f.t}</h3>
-                    <p>{f.d}</p>
+        <!-- ESCENARIO 3D: EFECTO ACORDEÓN OPTIMIZADO -->
+        <div class='sticky-stage'>
+            <!-- Fondo copiado del Playground -->
+            <div class='showcase-bg' aria-hidden='true'>
+                <div class='showcase-aurora'></div>
+                <div class='showcase-grid'></div>
+            </div>
+
+            <div
+                class='scene'
+                id='anatomyScene'
+                style='--exp: 0; --p1: 0; --p2: 0; --p3: 0;'
+            >
+                <!-- Capa 1: Servidor -->
+                <div class='layer black-layer' id='layer-server'>
+                    <div class='server-grid'></div>
+                    <div class='b-content'>
+                        <div class='b-title'>1. Servidor Edge</div>
+                        <div class='b-nodes'>
+                            <div class='b-node' style='animation-delay: 0s'>
+                            </div>
+                            <div class='b-node' style='animation-delay: 0.5s'>
+                            </div>
+                            <div class='b-node' style='animation-delay: 1s'>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            ))
-        }
+
+                <!-- Capa 2: Estructura SEO (Código HTML) -->
+                <div class='layer black-layer' id='layer-seo'>
+                    <div class='code-bg'>
+                        &lt;html lang="es"&gt; &lt;head&gt; &lt;title&gt;Premium
+                        SEO&lt;/title&gt; &lt;meta name="viewport"
+                        content="width=device-width"&gt; &lt;script
+                        type="module" src="/core.js"&gt;&lt;/script&gt;
+                        &lt;/head&gt; &lt;body class="dark-theme"&gt; &lt;header
+                        class="nav-bar"&gt;&lt;/header&gt; &lt;main id="app"&gt;
+                        &lt;h1&gt;Rendimiento Extremo&lt;/h1&gt;
+                        &lt;p&gt;Arquitectura al milímetro...&lt;/p&gt;
+                        &lt;/main&gt; &lt;/body&gt; &lt;/html&gt;
+                    </div>
+                    <div class='b-content'>
+                        <div class='b-title' style='color: #4ade80;'>
+                            2. Estructura SEO
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Capa 3: UI Base (Wireframes) -->
+                <div class='layer black-layer' id='layer-ui'>
+                    <div class='wire-layout'>
+                        <div class='wire-box header-box'></div>
+                        <div class='wire-box hero-box'></div>
+                        <div class='wire-box card-box c1'></div>
+                        <div class='wire-box card-box c2'></div>
+                    </div>
+                    <div class='b-content'>
+                        <div class='b-title' style='color: #fff;'>
+                            3. Diseño UI Base
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Capa Principal: La Imagen (Siempre arriba) -->
+                <div class='layer layer-image'>
+                    <img src='/proyectos/Guadicar.webp' alt='UI' />
+                    <!-- Glare Frontal ligero -->
+                    <div class='layer-fx'></div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
 <style>
-    .showcase {
-        padding-block: clamp(4rem, 12vh, 8rem);
-        overflow: hidden;
+    .anatomy-scroll-section {
+        position: relative;
+        height: 500vh;
         background: var(--bg);
+        overflow-x: clip; /* Fix lateral scroll */
     }
 
-    .showcase-copy {
-        text-align: center;
-        max-width: 720px;
-        margin-bottom: clamp(2.5rem, 6vw, 4rem);
-    }
-    .showcase-copy h2 {
-        margin: 0.6rem 0;
-    }
-    .showcase-copy p {
-        color: var(--muted);
-        font-size: 1.15rem;
-        margin-inline: auto;
+    .grid-wrap {
+        display: grid;
+        grid-template-columns: 0.8fr 1.2fr;
+        gap: 4rem;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        align-items: center;
+        padding-top: 0;
     }
 
-    /* Escenario 3D */
-    .showcase-stage {
-        perspective: 1200px;
-        display: flex;
-        justify-content: center;
-        padding-inline: var(--pad);
-        margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    /* --- TEXTOS (ESTILO APPLE) --- */
+    .text-content {
+        position: relative;
+        height: 350px;
+        z-index: 10;
     }
-    .mockup {
-        width: min(820px, 90vw);
-        transform-style: preserve-3d;
-        will-change: transform;
-        border-radius: var(--radius);
-        overflow: hidden;
-        box-shadow: var(--shadow-lg);
-        background: #fff;
-        border: 1px solid var(--border);
+
+    .step {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        pointer-events: none;
+        /* Transición hiper suave tipo Apple (cubic-bezier) */
+        transition:
+            opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .mockup-bar {
+    .step.future {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    .step.active {
+        opacity: 1;
+        transform: translateY(-50%);
+        pointer-events: auto;
+    }
+    .step.past {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+
+    .eyebrow {
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.95rem;
+        letter-spacing: 0.01em;
+        margin-bottom: 0.6rem;
+        display: block;
+    }
+    .step h2 {
+        font-size: clamp(2.2rem, 4vw, 3.5rem);
+        font-weight: 600;
+        letter-spacing: -0.04em; /* Tracking negativo característico de Apple */
+        line-height: 1.1;
+        margin-bottom: 1rem;
+        color: var(--fg);
+    }
+    .step p {
+        font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+        color: #86868b; /* Gris característico de Apple */
+        line-height: 1.5;
+        max-width: 420px;
+    }
+
+    /* --- CONTENEDOR 3D --- */
+    .sticky-stage {
+        position: relative;
+        height: 100%;
+        width: 100%;
         display: flex;
         align-items: center;
-        gap: 7px;
-        padding: 0.7rem 1rem;
-        background: #f5f5f7;
-        border-bottom: 1px solid var(--border);
+        justify-content: center;
+        perspective: 1200px;
     }
-    .mockup-bar span {
-        width: 11px;
-        height: 11px;
-        border-radius: 50%;
-        background: #d2d2d7;
+
+    /* Fondo copiado del Playground */
+    .showcase-bg {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
     }
-    .mockup-screen {
-        aspect-ratio: 16 / 10;
+    .showcase-aurora {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: min(1100px, 130%);
+        height: 760px;
+        background:
+            radial-gradient(
+                40% 50% at 50% 50%,
+                color-mix(in srgb, var(--accent) 18%, transparent),
+                transparent 70%
+            ),
+            radial-gradient(
+                35% 45% at 72% 40%,
+                rgba(120, 90, 255, 0.12),
+                transparent 70%
+            ),
+            radial-gradient(
+                35% 45% at 28% 60%,
+                rgba(0, 200, 220, 0.1),
+                transparent 70%
+            );
+        filter: blur(60px);
+        opacity: calc(0.3 + (var(--exp) * 0.7));
+    }
+    .showcase-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(var(--border) 1px, transparent 1px),
+            linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 46px 46px;
+        -webkit-mask: radial-gradient(circle at 50% 50%, #000, transparent 70%);
+        mask: radial-gradient(circle at 50% 50%, #000, transparent 70%);
+        opacity: 0.32;
+    }
+
+    /* --- EL MOTOR 3D --- */
+    .scene {
+        width: 110%;
+        max-width: 900px;
+        aspect-ratio: 16/10;
+        transform-style: preserve-3d;
+        transform: rotateX(calc(var(--exp) * 60deg))
+            rotateZ(calc(var(--exp) * -20deg))
+            scale(calc(1 - (var(--exp) * 0.05)));
+        will-change: transform;
+    }
+
+    .layer {
+        position: absolute;
+        inset: 0;
+        border-radius: var(--radius-lg);
+        will-change: transform;
+        backface-visibility: hidden;
+    }
+
+    /* --- LAS CAPAS PERSONALIZADAS --- */
+    .black-layer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         overflow: hidden;
+        border-radius: var(--radius-lg);
     }
-    .mockup-screen img {
+
+    /* Insignias centrales para los títulos */
+    .b-content {
+        position: relative;
+        z-index: 5;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 0.8rem 1.5rem;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+    .b-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.02em;
+    }
+
+    /* Capa 1: Servidor Edge */
+    #layer-server {
+        background: #0a0a0c;
+        border: 1px solid rgba(0, 113, 227, 0.4);
+        transform: translateZ(
+            calc(
+                (var(--p1) * -120px) + (var(--p2) * -120px) +
+                    (var(--p3) * -120px)
+            )
+        );
+    }
+    .server-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+            radial-gradient(
+                circle at 20% 20%,
+                rgba(0, 113, 227, 0.15) 0%,
+                transparent 40%
+            ),
+            radial-gradient(
+                circle at 70% 60%,
+                rgba(0, 113, 227, 0.15) 0%,
+                transparent 40%
+            ),
+            linear-gradient(rgba(0, 113, 227, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 113, 227, 0.05) 1px, transparent 1px);
+        background-size:
+            cover,
+            cover,
+            30px 30px,
+            30px 30px;
+        opacity: 0.8;
+    }
+    .b-nodes {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.8rem;
+    }
+    .b-node {
+        width: 10px;
+        height: 10px;
+        background: var(--accent);
+        border-radius: 50%;
+        animation: pulseNode 1.5s infinite alternate;
+    }
+    @keyframes pulseNode {
+        0% {
+            opacity: 0.3;
+            transform: scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+    }
+
+    /* Capa 2: Estructura SEO (Código) */
+    #layer-seo {
+        background: rgba(10, 10, 15, 0.95);
+        border: 1px solid rgba(74, 222, 128, 0.2);
+        transform: translateZ(
+            calc((var(--p2) * -120px) + (var(--p3) * -120px))
+        );
+    }
+    .code-bg {
+        position: absolute;
+        inset: 0;
+        color: #4ade80;
+        font-family: 'Space Mono', monospace;
+        font-size: 0.8rem;
+        padding: 2rem;
+        white-space: pre;
+        line-height: 1.5;
+        opacity: 0.6;
+        text-align: left;
+    }
+
+    /* Capa 3: UI Base (Wireframes) */
+    #layer-ui {
+        background: rgba(15, 15, 18, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transform: translateZ(calc((var(--p3) * -120px)));
+    }
+    .wire-layout {
+        position: absolute;
+        inset: 0;
+    }
+    .wire-box {
+        position: absolute;
+        border: 2px dashed rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.02);
+    }
+    .header-box {
+        top: 5%;
+        left: 5%;
+        width: 90%;
+        height: 10%;
+    }
+    .hero-box {
+        top: 20%;
+        left: 5%;
+        width: 90%;
+        height: 35%;
+    }
+    .card-box {
+        top: 60%;
+        width: 42%;
+        height: 30%;
+    }
+    .c1 {
+        left: 5%;
+    }
+    .c2 {
+        right: 5%;
+    }
+
+    /* Espaciadores optimizados (Pseudo-elementos) */
+    .black-layer::before {
+        content: '';
+        position: absolute;
+        inset: -20px;
+        background: radial-gradient(
+            circle at center,
+            rgba(0, 113, 227, 0.25) 0%,
+            transparent 65%
+        );
+        transform: translateZ(50px);
+        pointer-events: none;
+        opacity: 0;
+    }
+    #layer-server::before {
+        opacity: var(--p1);
+    }
+    #layer-seo::before {
+        opacity: var(--p2);
+        background: radial-gradient(
+            circle at center,
+            rgba(74, 222, 128, 0.15) 0%,
+            transparent 65%
+        );
+    }
+    #layer-ui::before {
+        opacity: var(--p3);
+        background: radial-gradient(
+            circle at center,
+            rgba(255, 255, 255, 0.15) 0%,
+            transparent 65%
+        );
+    }
+
+    /* --- IMAGEN PRINCIPAL (TOP) --- */
+    .layer-image {
+        transform: translateZ(0px);
+        background: var(--bg);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        box-shadow: -20px 40px 80px rgba(0, 0, 0, calc(var(--exp) * 0.3));
+    }
+    .layer-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: top center;
     }
 
-    /* Features */
-    .showcase-features {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-    }
-    .feature {
-        border-top: 1px solid var(--border);
-        padding-top: 1.2rem;
-    }
-    .feature h3 {
-        font-size: 1.2rem;
-        margin-bottom: 0.4rem;
-    }
-    .feature p {
-        color: var(--muted);
-        font-size: 0.95rem;
+    /* Glare FX ligero */
+    .layer-fx {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: var(--exp);
+        background: linear-gradient(
+            115deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.05) 45%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0.05) 55%,
+            transparent 100%
+        );
+        background-size: 300% 300%;
+        background-position: calc(100% - (var(--exp) * 100%)) 0;
     }
 
-    @media (max-width: 767px) {
-        .showcase-features {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
+    @media (max-width: 768px) {
+        .grid-wrap {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            height: 100svh;
+            padding: 80px 20px 40px; /* FUNDAMENTAL: 20px para que el texto no se aplaste */
+        }
+        .sticky-stage {
+            order: -1;
+            height: 45vh; /* Dejamos más aire abajo para que respire el texto */
+            width: 100%;
+            align-items: center;
+            padding-top: 1rem;
+        }
+        .text-content {
+            height: auto;
+            min-height: 200px;
+            width: 100%; /* Evita que el flexbox colapse el ancho a 1 palabra por línea */
+            text-align: center;
+            margin-top: auto; /* Anclado 100% abajo */
+        }
+        .step p {
+            margin: 0 auto;
+        }
+        .scene {
+            width: 100%;
+            /* EL TRUCO: Según se abre en Z (lo que visualmente la estira hacia abajo), la desplazamos físicamente hacia ARRIBA en Y para compensar, así nunca pisa el texto y podemos tenerla enorme. */
+            transform: translateY(calc(var(--exp) * -100px))
+                rotateX(calc(var(--exp) * 55deg))
+                rotateZ(calc(var(--exp) * -10deg))
+                scale(calc(0.85 - (var(--exp) * 0.1)));
+        }
+        .code-bg {
+            font-size: 0.5rem;
+            padding: 1rem;
+        }
+        .b-title {
+            font-size: 1.1rem;
         }
     }
 </style>
 
 <script>
     // @ts-nocheck
-    import { gsap } from 'gsap'
-    import { ScrollTrigger } from 'gsap/ScrollTrigger'
-    gsap.registerPlugin(ScrollTrigger)
+    import { ScrollTrigger } from '@/lib/motion.js'
 
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const scene = document.getElementById('anatomyScene')
+    const steps = document.querySelectorAll('.step')
 
-    if (!reduce) {
-        gsap.from('.showcase-copy > *', {
-            scrollTrigger: { trigger: '.showcase', start: 'top 75%' },
-            y: 28,
-            autoAlpha: 0,
-            stagger: 0.1,
-            duration: 0.7,
-            ease: 'power3.out',
-        })
+    if (scene && steps.length > 0) {
+        ScrollTrigger.create({
+            trigger: '#anatomyPin',
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 1,
+            onUpdate: (self) => {
+                const exp = self.progress
+                scene.style.setProperty('--exp', exp)
 
-        // El mockup gira de inclinado a recto según entra. SIN fijar la pantalla,
-        // por eso funciona igual en móvil y no se bloquea.
-        gsap.fromTo(
-            '.mockup',
-            { rotateX: 55, scale: 0.6, y: 50 },
-            {
-                rotateX: 0,
-                scale: 1,
-                y: 0,
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: '.showcase-stage',
-                    start: 'top bottom',
-                    end: 'center center',
-                    scrub: 1,
-                },
+                const p1 = Math.max(0, Math.min(1, (exp - 0.1) * 4))
+                const p2 = Math.max(0, Math.min(1, (exp - 0.35) * 4))
+                const p3 = Math.max(0, Math.min(1, (exp - 0.6) * 4))
+
+                scene.style.setProperty('--p1', p1)
+                scene.style.setProperty('--p2', p2)
+                scene.style.setProperty('--p3', p3)
+
+                let stepIndex = 0
+                if (exp > 0.6) stepIndex = 3
+                else if (exp > 0.35) stepIndex = 2
+                else if (exp > 0.1) stepIndex = 1
+                else stepIndex = 0
+
+                steps.forEach((s, i) => {
+                    if (i === stepIndex) {
+                        s.className = 'step active'
+                    } else if (i < stepIndex) {
+                        s.className = 'step past'
+                    } else {
+                        s.className = 'step future'
+                    }
+                })
             },
-        )
-
-        gsap.from('.feature', {
-            scrollTrigger: { trigger: '.showcase-features', start: 'top 88%' },
-            y: 30,
-            autoAlpha: 0,
-            stagger: 0.12,
-            duration: 0.6,
-            ease: 'power3.out',
         })
     }
 </script>

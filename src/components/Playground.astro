@@ -1,0 +1,1450 @@
+---
+// src/components/Playground.astro
+---
+
+<section class='playground-section'>
+    <div class='hero-bg' aria-hidden='true'>
+        <div class='hero-aurora'></div>
+        <div class='hero-grid'></div>
+    </div>
+
+    <div class='container hero-copy'>
+        <span class='eyebrow hero-eyebrow'
+            >Diseño y desarrollo web · Extremadura</span
+        >
+        <h1 class='hero-title'>
+            <span class='line'><span>Construimos webs</span></span>
+            <span class='line'
+                ><span>que <em class='text-accent'>funcionan</em></span></span
+            >
+        </h1>
+        <p class='hero-sub'>
+            Del diseño al despliegue, sin plantillas. Y la pruebas tú.
+        </p>
+    </div>
+
+    <div class='container hero-stage-wrap'>
+        <div class='stage' id='stage'>
+            <div class='stage-glow' aria-hidden='true'></div>
+
+            <div class='browser'>
+                <div class='browser-bar'>
+                    <span class='dot'></span><span class='dot'></span><span
+                        class='dot'></span>
+                    <div class='browser-url'>🔒 extreweb.es</div>
+                </div>
+                <div class='viewport'>
+                    <div class='mini'>
+                        <header class='region r-header' data-region>
+                            <span class='tag'>header</span>
+                            <span class='mini-logo'>E</span>
+                            <span class='mini-brand'>extreweb</span>
+                            <nav class='mini-nav'>
+                                <span>Servicios</span><span>Proyectos</span
+                                ><span>Contacto</span>
+                            </nav>
+                            <span class='mini-navcta'>Hablemos</span>
+                        </header>
+
+                        <main class='region r-main' data-region>
+                            <span class='tag'>main</span>
+                            <div class='mini-herorow'>
+                                <div class='mini-htext'>
+                                    <span class='mini-eyebrow'
+                                        >Agencia web · Extremadura</span
+                                    >
+                                    <h3
+                                        class='mini-h1'
+                                        contenteditable='true'
+                                        spellcheck='false'
+                                        title='Haz clic para editar'
+                                    >
+                                        Tu web, lista para vender.
+                                    </h3>
+                                    <p class='mini-p'>
+                                        Diseño rápido, cuidado y pensado para
+                                        convertir visitas en clientes.
+                                    </p>
+                                    <span class='mini-cta'>Empezar ahora →</span
+                                    >
+                                </div>
+                                <div class='mini-himg'>
+                                    <img
+                                        src='/proyectos/Guadicar.webp'
+                                        alt=''
+                                        loading='lazy'
+                                    />
+                                </div>
+                            </div>
+                            <div class='mini-cards'>
+                                <span class='mini-card' data-price='850'
+                                    ><b>Diseño web</b><i>A medida</i></span
+                                >
+                                <span class='mini-card' data-price='250'
+                                    ><b>SEO local</b><i>Más visitas</i></span
+                                >
+                                <span class='mini-card' data-price='150'
+                                    ><b>Soporte</b><i>Siempre</i></span
+                                >
+                            </div>
+                        </main>
+
+                        <aside class='region r-aside' data-region>
+                            <span class='tag'>aside</span>
+                            <div class='mini-user'>
+                                <span class='mini-avatar'>G</span>
+                                <div class='mini-ulines'>
+                                    <b>GuadiCar</b><i>Cliente</i>
+                                </div>
+                            </div>
+                            <p class='mini-quote'>
+                                "Triplicamos las consultas desde la web nueva."
+                            </p>
+                            <div class='mini-stat'>
+                                <b><span id='calc-price'>0</span>€</b><i
+                                    >Presupuesto est.</i
+                                >
+                            </div>
+                            <span class='mini-acta'>Hacer mi web →</span>
+                        </aside>
+
+                        <footer class='region r-footer' data-region>
+                            <span class='tag'>footer</span>
+                            <span class='mini-flogo'>extreweb</span>
+                            <span class='mini-fcopy'
+                                >© 2026 · Hecho en Extremadura</span
+                            >
+                        </footer>
+                    </div>
+                </div>
+            </div>
+
+            <div class='sat sat-perf'>
+                <div class='sat-in'>
+                    <span class='perf-ring'><span>100</span></span>
+                    <div class='sat-txt'>
+                        <b>Rendimiento</b><i>PageSpeed 100/100</i>
+                    </div>
+                </div>
+            </div>
+            <div class='sat sat-lead'>
+                <div class='sat-in'>
+                    <span class='lead-ic'>✓</span>
+                    <div class='sat-txt'>
+                        <b>Nuevo cliente</b><i>Formulario enviado · ahora</i>
+                    </div>
+                </div>
+            </div>
+            <div class='sat sat-review'>
+                <div class='sat-in'>
+                    <span class='stars'>★★★★★</span>
+                    <div class='sat-txt'><b>4,9</b><i>23 reseñas</i></div>
+                </div>
+            </div>
+            <div class='sat sat-cursor' id='satCursor'>
+                <div class='sat-in'>
+                    <svg class='cur-svg' viewBox='0 0 24 24'
+                        ><path d='M4 2l15.5 9.2-6.6 1.6L9.2 20.5z'></path></svg
+                    >
+                    <span class='cur-tag' id='curTag'>Tú</span>
+                </div>
+            </div>
+        </div>
+
+        <div class='hero-toolbar' role='group' aria-label='Personaliza la demo'>
+            <div class='tb-group'>
+                <span class='tb-label'>Tema</span>
+                <div class='tb-row' id='theme-toggles'>
+                    <button class='cz is-on' data-theme='light' aria-label='Día'
+                        >☀️</button
+                    >
+                    <button class='cz' data-theme='dark' aria-label='Noche'
+                        >🌙</button
+                    >
+                </div>
+            </div>
+            <span class='tb-div'></span>
+            <div class='tb-group' id='device-group'>
+                <span class='tb-label'>Dispositivo</span>
+                <div class='tb-row' id='device-toggles'>
+                    <button
+                        class='cz is-on'
+                        data-device='desktop'
+                        aria-label='Desktop'>💻</button
+                    >
+                    <button class='cz' data-device='mobile' aria-label='Móvil'
+                        >📱</button
+                    >
+                </div>
+            </div>
+            <span class='tb-div'></span>
+            <div class='tb-group'>
+                <span class='tb-label'>Color</span>
+                <div class='tb-row' id='swatches'>
+                    <button
+                        class='sw is-on'
+                        style='--c:#0071e3'
+                        data-color='#0071e3'
+                        aria-label='Azul'></button>
+                    <button
+                        class='sw'
+                        style='--c:#7c5cff'
+                        data-color='#7c5cff'
+                        aria-label='Violeta'></button>
+                    <button
+                        class='sw'
+                        style='--c:#1f9d57'
+                        data-color='#1f9d57'
+                        aria-label='Verde'></button>
+                    <button
+                        class='sw'
+                        style='--c:#ff7a18'
+                        data-color='#ff7a18'
+                        aria-label='Naranja'></button>
+                    <button
+                        class='sw'
+                        style='--c:#ff4d8d'
+                        data-color='#ff4d8d'
+                        aria-label='Rosa'></button>
+                </div>
+            </div>
+            <span class='tb-div'></span>
+            <div class='tb-group'>
+                <span class='tb-label'>Cursor</span>
+                <div class='tb-row' id='cursors'>
+                    <button class='cz is-on' data-cur='#0071e3' data-name='Tú'
+                        ><i style='--c:#0071e3'></i>Tú</button
+                    >
+                    <button class='cz' data-cur='#ff4d8d' data-name='Ana'
+                        ><i style='--c:#ff4d8d'></i>Ana</button
+                    >
+                    <button class='cz' data-cur='#1f9d57' data-name='Dev'
+                        ><i style='--c:#1f9d57'></i>Dev</button
+                    >
+                </div>
+            </div>
+            <span class='tb-div'></span>
+            <div class='tb-group'>
+                <span class='tb-label'>Estructura</span>
+                <div class='tb-row' id='wireframe-toggles'>
+                    <button class='cz is-on' data-wire='off'>UI</button>
+                    <button class='cz' data-wire='on'>SEO</button>
+                </div>
+            </div>
+            <span class='tb-div'></span>
+            <button class='tb-reset' id='reset'>↺ Reiniciar</button>
+        </div>
+
+        <p class='hero-hint'>
+            Cambia el color, elige cursor y <b>arrastra</b> las tarjetas ✦
+        </p>
+    </div>
+</section>
+
+<style>
+    .playground-section {
+        position: relative;
+        min-height: 100svh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-top: clamp(80px, 11vh, 120px);
+        padding-bottom: clamp(18px, 3vh, 36px);
+        --da: var(--accent);
+        --cur: var(--accent);
+    }
+
+    .hero-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+    }
+    .hero-aurora {
+        position: absolute;
+        left: 50%;
+        top: 34%;
+        transform: translate(-50%, -50%);
+        width: min(1100px, 130%);
+        height: 760px;
+        background:
+            radial-gradient(
+                40% 50% at 50% 50%,
+                color-mix(in srgb, var(--da) 20%, transparent),
+                transparent 70%
+            ),
+            radial-gradient(
+                35% 45% at 72% 40%,
+                rgba(120, 90, 255, 0.13),
+                transparent 70%
+            ),
+            radial-gradient(
+                35% 45% at 28% 60%,
+                rgba(0, 200, 220, 0.11),
+                transparent 70%
+            );
+        filter: blur(60px);
+        transition: background 0.5s ease;
+    }
+    .hero-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(var(--border) 1px, transparent 1px),
+            linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 46px 46px;
+        -webkit-mask: radial-gradient(circle at 50% 30%, #000, transparent 70%);
+        mask: radial-gradient(circle at 50% 30%, #000, transparent 70%);
+        opacity: 0.32;
+    }
+
+    .hero-copy {
+        position: relative;
+        z-index: 1;
+        max-width: 820px;
+        margin-inline: auto;
+        text-align: center;
+    }
+    .hero-eyebrow {
+        display: inline-block;
+        margin-bottom: 0.9rem;
+    }
+    .hero-title {
+        margin-bottom: 0.9rem;
+        font-size: clamp(2.1rem, 5vw, 3.9rem);
+    }
+    .hero-title .line {
+        display: block;
+        overflow: hidden;
+        padding-bottom: 0.06em;
+    }
+    .hero-title .line > span {
+        display: block;
+        will-change: transform;
+    }
+    .hero-sub {
+        font-size: clamp(1rem, 1.5vw, 1.2rem);
+        color: var(--muted);
+        margin: 0 auto;
+        max-width: 42ch;
+    }
+
+    .hero-stage-wrap {
+        position: relative;
+        z-index: 1;
+        margin-top: clamp(1.5rem, 4vh, 2.8rem);
+        width: 100%;
+    }
+    .stage {
+        position: relative;
+        max-width: 980px;
+        margin-inline: auto;
+    }
+    .stage-glow {
+        position: absolute;
+        inset: -10% 0 -16%;
+        z-index: 0;
+        background: radial-gradient(
+            circle at 50% 42%,
+            color-mix(in srgb, var(--da) 16%, transparent),
+            transparent 60%
+        );
+        filter: blur(55px);
+        transition: background 0.5s ease;
+    }
+
+    .browser {
+        position: relative;
+        z-index: 1;
+        border-radius: 16px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        box-shadow: 0 30px 80px rgba(0, 30, 80, 0.18);
+        overflow: hidden;
+        transition:
+            max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+            background 0.4s ease,
+            border-color 0.4s ease;
+        color: var(--fg);
+    }
+    .browser.is-dark {
+        --bg: #111111;
+        --surface: #1e1e1e;
+        --fg: #ffffff;
+        --muted: #a1a1aa;
+        --border: #333333;
+    }
+    .browser.is-mobile {
+        max-width: 380px;
+        margin: 0 auto;
+        border-radius: 24px;
+    }
+    .browser.is-mobile .mini {
+        grid-template-columns: 1fr;
+        grid-template-areas: 'header' 'main' 'aside' 'footer';
+    }
+    .browser.is-mobile .mini-nav {
+        display: none;
+    }
+    .browser.is-mobile .mini-herorow {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .browser.is-mobile .mini-himg {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+    }
+    .browser-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.65rem 1rem;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        transition:
+            background 0.4s ease,
+            border-color 0.4s ease;
+    }
+    .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+    }
+    .dot:nth-child(1) {
+        background: #ff5f57;
+    }
+    .dot:nth-child(2) {
+        background: #febc2e;
+    }
+    .dot:nth-child(3) {
+        background: #28c840;
+    }
+    .browser-url {
+        margin-left: 0.6rem;
+        font-size: 0.76rem;
+        color: var(--muted);
+        background: var(--bg);
+        border-radius: 6px;
+        padding: 0.2rem 0.9rem;
+    }
+    .viewport {
+        background: var(--bg);
+        padding: 15px;
+        transition: background 0.4s ease;
+    }
+
+    .mini {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: 2fr 1fr;
+        grid-template-areas: 'header header' 'main aside' 'footer footer';
+        font-size: 13px;
+    }
+    .r-header {
+        grid-area: header;
+    }
+    .r-main {
+        grid-area: main;
+    }
+    .r-aside {
+        grid-area: aside;
+    }
+    .r-footer {
+        grid-area: footer;
+    }
+    .region {
+        position: relative;
+        border-radius: 11px;
+        border: 1px solid var(--border);
+        transition:
+            background 0.4s ease,
+            border-color 0.4s ease;
+    }
+    .tag {
+        position: absolute;
+        top: -9px;
+        left: 12px;
+        font-family: ui-monospace, 'SF Mono', monospace;
+        font-size: 10px;
+        font-weight: 600;
+        color: #fff;
+        background: var(--da);
+        padding: 1px 7px;
+        border-radius: 5px;
+        z-index: 5;
+        opacity: 0;
+        transition:
+            background 0.4s ease,
+            opacity 0.3s ease;
+    }
+
+    .browser.is-wireframe .region {
+        border-style: dashed;
+        border-color: var(--da);
+        background: transparent !important;
+    }
+    .browser.is-wireframe .tag {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    .browser.is-wireframe img {
+        opacity: 0.3;
+    }
+
+    .r-header {
+        background: var(--surface);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 10px 14px;
+    }
+    .mini-logo {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        background: var(--da);
+        color: #fff;
+        font-weight: 700;
+        font-size: 13px;
+        display: grid;
+        place-items: center;
+        transition: background 0.4s ease;
+    }
+    .mini-brand {
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: -0.02em;
+    }
+    .mini-nav {
+        display: flex;
+        gap: 13px;
+        margin-left: auto;
+        color: var(--muted);
+        font-size: 12px;
+    }
+    .mini-navcta {
+        background: var(--da);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 5px 12px;
+        border-radius: 980px;
+        transition: background 0.4s ease;
+    }
+
+    .r-main {
+        background: var(--bg);
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+    .mini-herorow {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+    }
+    .mini-htext {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .mini-eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--da);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        transition: color 0.4s ease;
+    }
+    .mini-h1 {
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        line-height: 1.12;
+        margin: 5px 0 6px;
+        outline: none;
+        border-bottom: 1px dashed transparent;
+        transition: border-color 0.3s ease;
+    }
+    .mini-h1:hover {
+        border-color: var(--muted);
+    }
+    .mini-h1:focus-visible {
+        border-color: var(--da);
+    }
+    .mini-p {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.45;
+        max-width: 30ch;
+    }
+    .mini-cta {
+        align-self: flex-start;
+        background: var(--da);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 7px 15px;
+        border-radius: 980px;
+        margin-top: 10px;
+        transition:
+            background 0.4s ease,
+            transform 0.2s ease;
+        cursor: pointer;
+        position: relative;
+    }
+    .mini-cta:hover {
+        transform: scale(1.04);
+    }
+    .mini-himg {
+        width: 42%;
+        aspect-ratio: 16 / 11;
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--surface);
+        flex-shrink: 0;
+        border: 1px solid var(--border);
+        transition:
+            background 0.4s ease,
+            border-color 0.4s ease;
+    }
+    .mini-himg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .mini-cards {
+        display: flex;
+        gap: 11px;
+    }
+    .mini-card {
+        flex: 1;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 10px 13px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        transition:
+            background 0.4s ease,
+            border-color 0.4s ease,
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
+        cursor: pointer;
+        user-select: none;
+    }
+    .mini-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+    .mini-card.is-active {
+        border-color: var(--da);
+        background: color-mix(in srgb, var(--da) 8%, transparent);
+    }
+    .mini-card.is-active b {
+        color: var(--da);
+    }
+    .mini-card b {
+        font-size: 13px;
+        font-weight: 600;
+    }
+    .mini-card i {
+        font-style: normal;
+        font-size: 11px;
+        color: var(--muted);
+    }
+
+    .r-aside {
+        background: var(--surface);
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .mini-user {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+    .mini-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--da);
+        color: #fff;
+        font-weight: 700;
+        display: grid;
+        place-items: center;
+        font-size: 14px;
+        transition: background 0.4s ease;
+    }
+    .mini-ulines {
+        display: flex;
+        flex-direction: column;
+    }
+    .mini-ulines b {
+        font-size: 13px;
+        font-weight: 600;
+    }
+    .mini-ulines i {
+        font-style: normal;
+        font-size: 11px;
+        color: var(--muted);
+    }
+    .mini-quote {
+        font-size: 12.5px;
+        line-height: 1.5;
+    }
+    .mini-stat {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        padding: 10px 13px;
+    }
+    .mini-stat b {
+        display: block;
+        font-size: 19px;
+        font-weight: 700;
+        color: var(--da);
+        letter-spacing: -0.02em;
+        transition: color 0.4s ease;
+    }
+    .mini-stat i {
+        font-style: normal;
+        font-size: 11px;
+        color: var(--muted);
+    }
+    .mini-acta {
+        background: var(--da);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 8px;
+        border-radius: 980px;
+        text-align: center;
+        margin-top: auto;
+        transition: background 0.4s ease;
+    }
+
+    .r-footer {
+        background: var(--surface);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 14px;
+    }
+    .mini-flogo {
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: -0.02em;
+    }
+    .mini-fcopy {
+        font-size: 11px;
+        color: var(--muted);
+        margin-left: auto;
+    }
+
+    /* Tarjetas flotantes (arrastrables) */
+    .sat {
+        position: absolute;
+        z-index: 4;
+        touch-action: none;
+        cursor: grab;
+    }
+    .sat:active {
+        cursor: grabbing;
+    }
+    .sat-in {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        box-shadow: 0 16px 44px rgba(0, 30, 80, 0.16);
+        padding: 9px 13px;
+        animation: floaty 5s ease-in-out infinite;
+    }
+    .sat-txt {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.25;
+    }
+    .sat-txt b {
+        font-size: 13px;
+        font-weight: 600;
+    }
+    .sat-txt i {
+        font-style: normal;
+        font-size: 11px;
+        color: var(--muted);
+    }
+    @keyframes floaty {
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .sat-perf {
+        top: 4%;
+        left: -3%;
+    }
+    .sat-perf .sat-in {
+        animation-duration: 5.5s;
+    }
+    .perf-ring {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 13px;
+        color: #0a8f3c;
+        background: conic-gradient(#28c840 92%, #e4e4e9 0);
+        position: relative;
+    }
+    .perf-ring::before {
+        content: '';
+        position: absolute;
+        inset: 4px;
+        border-radius: 50%;
+        background: var(--bg);
+    }
+    .perf-ring > span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .sat-lead {
+        top: -4%;
+        right: 2%;
+    }
+    .sat-lead .sat-in {
+        animation-duration: 6s;
+        animation-delay: -1s;
+    }
+    .lead-ic {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #28c840;
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    .sat-review {
+        bottom: 11%;
+        left: -4%;
+    }
+    .sat-review .sat-in {
+        animation-duration: 5.8s;
+        animation-delay: -2s;
+    }
+    .stars {
+        color: #f5a623;
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+
+    .sat-cursor {
+        bottom: 26%;
+        right: -1%;
+        z-index: 6;
+    }
+    .sat-cursor .sat-in {
+        background: none;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        gap: 0;
+        align-items: flex-start;
+        animation-duration: 6.5s;
+        animation-delay: -0.5s;
+    }
+    .cur-svg {
+        width: 26px;
+        height: 26px;
+        fill: var(--cur);
+        filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.25));
+        transition: fill 0.3s ease;
+    }
+    .cur-tag {
+        background: var(--cur);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 9px;
+        border-radius: 7px;
+        margin: 18px 0 0 -6px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        white-space: nowrap;
+        transition: background 0.3s ease;
+    }
+
+    /* Barra de control */
+    .hero-toolbar {
+        position: relative;
+        z-index: 5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.75rem 1.1rem;
+        margin: clamp(1.4rem, 3vh, 2.2rem) auto 0;
+        padding: 0.6rem 1rem;
+        width: fit-content;
+        max-width: 100%;
+        background: rgba(255, 255, 255, 0.72);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-pill);
+        box-shadow: var(--shadow);
+    }
+    .tb-group {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    .tb-label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--muted);
+    }
+    .tb-row {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+    .tb-div {
+        width: 1px;
+        height: 22px;
+        background: var(--border);
+    }
+    .sw {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--c);
+        border: 2px solid transparent;
+        box-shadow: 0 0 0 1px var(--border);
+        transition: transform var(--dur-fast) var(--ease-out-quart);
+    }
+    .sw:active {
+        transform: scale(0.9);
+    }
+    .sw.is-on {
+        border-color: var(--bg);
+        box-shadow: 0 0 0 2px var(--c);
+    }
+    @media (hover: hover) and (pointer: fine) {
+        .sw:hover {
+            transform: scale(1.12);
+        }
+    }
+    .cz {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--fg);
+        padding: 0.32rem 0.7rem;
+        border-radius: var(--radius-pill);
+        border: 1px solid var(--border);
+        background: var(--bg);
+        transition:
+            transform var(--dur-fast) var(--ease-out-quart),
+            border-color var(--dur-mid) var(--ease-out-quart);
+    }
+    .cz i {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--c);
+    }
+    .cz:active {
+        transform: scale(0.96);
+    }
+    .cz.is-on {
+        border-color: var(--da);
+    }
+    .tb-reset {
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--muted);
+        padding: 0.32rem 0.7rem;
+        border-radius: var(--radius-pill);
+        transition: color var(--dur-mid) var(--ease-out-quart);
+    }
+    @media (hover: hover) and (pointer: fine) {
+        .tb-reset:hover {
+            color: var(--fg);
+        }
+    }
+
+    .hero-hint {
+        position: relative;
+        z-index: 5;
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--muted);
+        margin-top: 0.9rem;
+    }
+    .hero-hint b {
+        color: var(--da);
+        font-weight: 600;
+    }
+
+    /* Pre-ocultar (con red de seguridad en el script) */
+    html.js-motion .playground-section:not(.hero-loaded) .hero-eyebrow,
+    html.js-motion .playground-section:not(.hero-loaded) .hero-sub,
+    html.js-motion .playground-section:not(.hero-loaded) .stage {
+        opacity: 0;
+    }
+    html.js-motion .playground-section:not(.hero-loaded) .hero-title .line > span {
+        transform: translateY(118%);
+    }
+    html.js-motion .playground-section:not(.hero-loaded) .region,
+    html.js-motion .playground-section:not(.hero-loaded) .region > *:not(.tag),
+    html.js-motion .playground-section:not(.hero-loaded) .sat {
+        opacity: 0;
+    }
+
+    /* MÓVIL: mini-web apilada + 2 tarjetas */
+    @media (max-width: 880px) {
+        #device-group {
+            display: none;
+        }
+        #device-group + .tb-div {
+            display: none;
+        }
+        .playground-section {
+            padding-top: 88px;
+        }
+        .stage {
+            max-width: 440px;
+        }
+        .browser {
+            border-radius: 20px;
+        }
+        .mini {
+            grid-template-columns: 1fr;
+            grid-template-areas: 'header' 'main' 'aside' 'footer';
+        }
+        .mini-nav {
+            display: none;
+        }
+        .mini-herorow {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .mini-himg {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+        }
+        .sat-lead {
+            display: none;
+        }
+        .sat-cursor {
+            bottom: 20%;
+            right: -2%;
+        }
+        .sat-perf {
+            top: 2%;
+            left: -3%;
+            transform: scale(0.86);
+        }
+        .sat-review {
+            bottom: 7%;
+            left: -3%;
+            transform: scale(0.86);
+        }
+        .hero-grid {
+            background-size: 36px 36px;
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap, ScrollTrigger, reduceMotion } from '@/lib/motion.js'
+
+    const stage = document.getElementById('stage')
+
+    function forceShow() {
+        const hero = document.querySelector('.playground-section')
+        if (hero) hero.classList.add('hero-loaded')
+
+        try {
+            gsap.set(
+                [
+                    '.hero-eyebrow',
+                    '.hero-sub',
+                    '.stage',
+                    '.region',
+                    '.region > *',
+                ],
+                { clearProps: 'opacity,transform,visibility' },
+            )
+            gsap.set('.sat', { clearProps: 'opacity,visibility' })
+            gsap.set('.hero-title .line > span', { clearProps: 'transform' })
+        } catch (e) {
+            document
+                .querySelectorAll(
+                    '.hero-eyebrow,.hero-sub,.stage,.region,.region > *',
+                )
+                .forEach((el) => {
+                    el.style.opacity = '1'
+                    el.style.transform = 'none'
+                })
+            document.querySelectorAll('.sat').forEach((el) => {
+                el.style.opacity = '1'
+            })
+            document
+                .querySelectorAll('.hero-title .line > span')
+                .forEach((el) => {
+                    el.style.transform = 'none'
+                })
+        }
+    }
+
+    try {
+        /* ── INTERACTIVIDAD (siempre activa) ── */
+        // Color de marca
+        const swatches = document.getElementById('swatches')
+        swatches.addEventListener('click', (e) => {
+            const b = e.target.closest('.sw')
+            if (!b) return
+            stage.closest('.playground-section').style.setProperty('--da', b.dataset.color)
+            swatches
+                .querySelectorAll('.sw')
+                .forEach((s) => s.classList.toggle('is-on', s === b))
+        })
+        // Cursor
+        const cursors = document.getElementById('cursors')
+        const curTag = document.getElementById('curTag')
+        cursors.addEventListener('click', (e) => {
+            const b = e.target.closest('.cz')
+            if (!b) return
+            stage.closest('.playground-section').style.setProperty('--cur', b.dataset.cur)
+            curTag.textContent = b.dataset.name
+            cursors
+                .querySelectorAll('.cz')
+                .forEach((c) => c.classList.toggle('is-on', c === b))
+        })
+
+        const browserEl = document.querySelector('.browser')
+
+        // Tema
+        const themeToggles = document.getElementById('theme-toggles')
+        themeToggles?.addEventListener('click', (e) => {
+            const b = e.target.closest('.cz')
+            if (!b) return
+            if (b.dataset.theme === 'dark') {
+                browserEl.classList.add('is-dark')
+            } else {
+                browserEl.classList.remove('is-dark')
+            }
+            themeToggles
+                .querySelectorAll('.cz')
+                .forEach((c) => c.classList.toggle('is-on', c === b))
+        })
+
+        // Dispositivo
+        const deviceToggles = document.getElementById('device-toggles')
+        deviceToggles?.addEventListener('click', (e) => {
+            const b = e.target.closest('.cz')
+            if (!b) return
+            if (b.dataset.device === 'mobile') {
+                browserEl.classList.add('is-mobile')
+            } else {
+                browserEl.classList.remove('is-mobile')
+            }
+            deviceToggles
+                .querySelectorAll('.cz')
+                .forEach((c) => c.classList.toggle('is-on', c === b))
+        })
+
+        // Botón CTA (Confeti)
+        const ctaBtn = document.querySelector('.mini-cta')
+        ctaBtn?.addEventListener('click', (e) => {
+            const p = document.createElement('div')
+            p.textContent = '✨'
+            p.style.position = 'absolute'
+            p.style.left = e.offsetX + 'px'
+            p.style.top = e.offsetY + 'px'
+            p.style.pointerEvents = 'none'
+            p.style.fontSize = '24px'
+            p.style.zIndex = '100'
+            ctaBtn.appendChild(p)
+
+            gsap.to(p, {
+                y: -60,
+                x: 'random(-40, 40)',
+                opacity: 0,
+                rotation: 'random(-45, 45)',
+                duration: 1,
+                ease: 'power2.out',
+                onComplete: () => p.remove(),
+            })
+
+            gsap.fromTo(
+                ctaBtn,
+                { scale: 0.9 },
+                { scale: 1, duration: 0.3, ease: 'back.out(2)' },
+            )
+        })
+
+        // Estructura (Wireframe/SEO)
+        const wireToggles = document.getElementById('wireframe-toggles')
+        wireToggles?.addEventListener('click', (e) => {
+            const b = e.target.closest('.cz')
+            if (!b) return
+            if (b.dataset.wire === 'on') {
+                browserEl.classList.add('is-wireframe')
+            } else {
+                browserEl.classList.remove('is-wireframe')
+            }
+            wireToggles
+                .querySelectorAll('.cz')
+                .forEach((c) => c.classList.toggle('is-on', c === b))
+        })
+
+        // Calculadora de presupuesto
+        const calcCards = document.querySelectorAll('.mini-card')
+        const priceEl = document.getElementById('calc-price')
+        let currentPrice = 0
+
+        const updatePrice = () => {
+            let newPrice = 0
+            calcCards.forEach((c) => {
+                if (c.classList.contains('is-active')) {
+                    newPrice += parseInt(c.dataset.price || '0', 10)
+                }
+            })
+            gsap.to(
+                { val: currentPrice },
+                {
+                    val: newPrice,
+                    duration: 0.6,
+                    ease: 'power2.out',
+                    onUpdate: function () {
+                        if (priceEl)
+                            priceEl.textContent = Math.round(
+                                this.targets()[0].val,
+                            ).toLocaleString('es-ES')
+                    },
+                    onComplete: function () {
+                        currentPrice = newPrice
+                    },
+                },
+            )
+        }
+
+        calcCards.forEach((card) => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('is-active')
+                gsap.fromTo(
+                    card,
+                    { scale: 0.95 },
+                    { scale: 1, duration: 0.3, ease: 'back.out(2)' },
+                )
+                updatePrice()
+            })
+        })
+
+        if (calcCards[0]) {
+            calcCards[0].classList.add('is-active')
+            currentPrice = parseInt(calcCards[0].dataset.price || '0', 10)
+            if (priceEl)
+                priceEl.textContent = currentPrice.toLocaleString('es-ES')
+        }
+
+        // Arrastrar tarjetas
+        document.querySelectorAll('.sat').forEach((sat) => {
+            sat._dx = 0
+            sat._dy = 0
+            let drag = false,
+                sx = 0,
+                sy = 0
+            sat.addEventListener('pointerdown', (e) => {
+                drag = true
+                sat.setPointerCapture(e.pointerId)
+                sat.style.zIndex = 30
+                sat.querySelector('.sat-in').style.animationPlayState = 'paused'
+                sx = e.clientX - sat._dx
+                sy = e.clientY - sat._dy
+            })
+            sat.addEventListener('pointermove', (e) => {
+                if (!drag) return
+                sat._dx = e.clientX - sx
+                sat._dy = e.clientY - sy
+                sat.style.transform = `translate(${sat._dx}px, ${sat._dy}px)`
+            })
+            const end = () => {
+                drag = false
+            }
+            sat.addEventListener('pointerup', end)
+            sat.addEventListener('pointercancel', end)
+        })
+        // Reiniciar
+        document.getElementById('reset').addEventListener('click', () => {
+            const hero = stage.closest('.playground-section')
+            hero.style.setProperty('--da', '#0071e3')
+            hero.style.setProperty('--cur', '#0071e3')
+            curTag.textContent = 'Tú'
+
+            if (browserEl) {
+                browserEl.classList.remove(
+                    'is-dark',
+                    'is-mobile',
+                    'is-wireframe',
+                )
+            }
+
+            swatches
+                .querySelectorAll('.sw')
+                .forEach((s, i) => s.classList.toggle('is-on', i === 0))
+            cursors
+                .querySelectorAll('.cz')
+                .forEach((c, i) => c.classList.toggle('is-on', i === 0))
+            document
+                .getElementById('theme-toggles')
+                ?.querySelectorAll('.cz')
+                .forEach((c, i) => c.classList.toggle('is-on', i === 0))
+            document
+                .getElementById('device-toggles')
+                ?.querySelectorAll('.cz')
+                .forEach((c, i) => c.classList.toggle('is-on', i === 0))
+            document
+                .getElementById('wireframe-toggles')
+                ?.querySelectorAll('.cz')
+                .forEach((c, i) => c.classList.toggle('is-on', i === 0))
+
+            document.querySelectorAll('.mini-card').forEach((c, i) => {
+                c.classList.toggle('is-active', i === 0)
+            })
+            if (priceEl && calcCards[0]) {
+                currentPrice = parseInt(calcCards[0].dataset.price || '0', 10)
+                priceEl.textContent = currentPrice.toLocaleString('es-ES')
+            }
+
+            document.querySelectorAll('.sat').forEach((sat) => {
+                sat._dx = 0
+                sat._dy = 0
+                sat.style.transform = ''
+                sat.querySelector('.sat-in').style.animationPlayState = ''
+            })
+        })
+
+        /* ── ANIMACIÓN ── */
+        if (stage && !reduceMotion) {
+            const intro = gsap.timeline({ defaults: { ease: 'power3.out' } })
+            intro
+                .fromTo(
+                    '.hero-eyebrow',
+                    { y: 20, autoAlpha: 0 },
+                    { y: 0, autoAlpha: 1, duration: 0.6 },
+                )
+                .fromTo(
+                    '.hero-title .line > span',
+                    { yPercent: 118 },
+                    { yPercent: 0, duration: 0.9, stagger: 0.09 },
+                    '-=0.3',
+                )
+                .fromTo(
+                    '.hero-sub',
+                    { y: 16, autoAlpha: 0 },
+                    { y: 0, autoAlpha: 1, duration: 0.6 },
+                    '-=0.5',
+                )
+                .fromTo(
+                    '.stage',
+                    { y: 32, autoAlpha: 0, scale: 0.97 },
+                    { y: 0, autoAlpha: 1, scale: 1, duration: 0.9 },
+                    '-=0.4',
+                )
+
+            const build = gsap.timeline({ paused: true })
+            const region = (sel, fromY) => {
+                build
+                    .fromTo(
+                        sel,
+                        { autoAlpha: 0, y: fromY },
+                        {
+                            autoAlpha: 1,
+                            y: 0,
+                            duration: 0.5,
+                            ease: 'power3.out',
+                        },
+                    )
+                    .fromTo(
+                        sel + ' .tag',
+                        { autoAlpha: 0, y: -6 },
+                        { autoAlpha: 1, y: 0, duration: 0.3 },
+                        '<',
+                    )
+                    .fromTo(
+                        sel + ' > *:not(.tag)',
+                        { autoAlpha: 0, y: 12 },
+                        { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.06 },
+                        '-=0.15',
+                    )
+            }
+            region('.r-header', -24)
+            region('.r-main', 26)
+            region('.r-aside', 26)
+            region('.r-footer', 26)
+            build
+                .to(
+                    '.tag',
+                    {
+                        autoAlpha: 0,
+                        duration: 0.5,
+                        stagger: 0.04,
+                        ease: 'power2.inOut',
+                    },
+                    '+=0.4',
+                )
+                .fromTo(
+                    '.sat',
+                    { autoAlpha: 0, scale: 0.5, y: 16 },
+                    {
+                        autoAlpha: 1,
+                        scale: 1,
+                        y: 0,
+                        duration: 0.55,
+                        stagger: 0.12,
+                        ease: 'back.out(2.2)',
+                    },
+                    '-=0.3',
+                )
+
+            ScrollTrigger.create({
+                trigger: stage,
+                start: 'top 80%',
+                onEnter: () => build.restart(),
+                onEnterBack: () => build.restart(),
+            })
+        } else {
+            forceShow()
+        }
+
+        // Red de seguridad: pase lo que pase, a los 4s todo visible
+        setTimeout(forceShow, 4000)
+    } catch (err) {
+        forceShow()
+    }
+</script>

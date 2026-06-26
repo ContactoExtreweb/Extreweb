@@ -1,0 +1,265 @@
+---
+// src/components/Process.astro
+const steps = [
+    {
+        num: '01',
+        title: 'Auditoría y Estrategia',
+        desc: 'No escribimos una sola línea de código sin entender tu negocio. Analizamos tu competencia, tus objetivos y definimos la arquitectura tecnológica óptima para escalar.'
+    },
+    {
+        num: '02',
+        title: 'Diseño UI/UX (Pixel-Perfect)',
+        desc: 'Creamos experiencias visuales nivel Apple. Interfaces limpias, micro-interacciones inmersivas y un diseño que guía al usuario intuitivamente hacia la conversión.'
+    },
+    {
+        num: '03',
+        title: 'Desarrollo Nativo',
+        desc: 'Construimos a medida con tecnologías punteras (Astro, React, Edge). Evitamos los constructores visuales y el código basura para lograr un rendimiento (100/100) garantizado.'
+    },
+    {
+        num: '04',
+        title: 'Despliegue y Evolución',
+        desc: 'Lanzamos tu proyecto en infraestructuras globales para tiempos de carga instantáneos. Monitorizamos, analizamos datos y proponemos mejoras continuas mes a mes.'
+    }
+]
+---
+
+<section class='process' id='nosotros'>
+    <div class='container p-grid'>
+        
+        <!-- Columna Izquierda (Sticky) -->
+        <div class='p-left'>
+            <div class='sticky-content'>
+                <span class='eyebrow'>El Método Extreweb</span>
+                <h2>Ingeniería web.<br />Paso a paso.</h2>
+                <p>Un proceso estructurado, transparente y diseñado milimétricamente para entregar productos digitales de calidad mundial. Así convertimos ideas complejas en código impecable.</p>
+                
+                <!-- Opcional: Detalle decorativo -->
+                <div class='method-stats'>
+                    <div class='m-stat'>
+                        <strong>+35</strong>
+                        <span>Checklists por fase</span>
+                    </div>
+                    <div class='m-stat'>
+                        <strong>100%</strong>
+                        <span>Código a medida</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Columna Derecha (Pasos) -->
+        <div class='p-right'>
+            {steps.map((s, i) => (
+                <div class='step-card'>
+                    <div class='s-num'>{s.num}</div>
+                    <div class='s-info'>
+                        <h3>{s.title}</h3>
+                        <p>{s.desc}</p>
+                    </div>
+                </div>
+            ))}
+        </div>
+
+    </div>
+</section>
+
+<style>
+    .process {
+        padding: clamp(100px, 15vh, 160px) 0;
+        background: var(--bg);
+        position: relative;
+    }
+    .p-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: clamp(3rem, 6vw, 6rem);
+    }
+    
+    /* --- COLUMNA IZQUIERDA (STICKY) --- */
+    .p-left {
+        position: relative;
+    }
+    .sticky-content {
+        position: sticky;
+        top: clamp(100px, 20vh, 200px); /* Distancia al hacer scroll */
+    }
+    
+    .eyebrow {
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.95rem;
+        letter-spacing: 0.05em;
+        margin-bottom: 1rem;
+        display: block;
+        text-transform: uppercase;
+    }
+    .sticky-content h2 {
+        font-size: clamp(3rem, 5vw, 4.5rem);
+        font-weight: 600;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+        color: var(--fg);
+        margin-bottom: 1.5rem;
+    }
+    .sticky-content p {
+        font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+        color: #86868b;
+        line-height: 1.6;
+        max-width: 450px;
+        margin-bottom: 3rem;
+    }
+    
+    .method-stats {
+        display: flex;
+        gap: 3rem;
+        border-top: 1px solid var(--border);
+        padding-top: 2rem;
+        max-width: 400px;
+    }
+    .m-stat strong {
+        display: block;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--fg);
+        letter-spacing: -0.04em;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+    }
+    .m-stat span {
+        font-size: 0.9rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
+    }
+
+    /* --- COLUMNA DERECHA (PASOS) --- */
+    .p-right {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        padding-top: 30vh; /* Retrasa la aparición visualmente */
+        padding-bottom: 20vh;
+    }
+    
+    .step-card {
+        background: color-mix(in srgb, var(--surface) 60%, transparent);
+        border: 1px solid var(--border);
+        border-radius: 32px;
+        padding: clamp(2rem, 4vw, 3rem);
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+    }
+    html[data-theme='light'] .step-card {
+        background: rgba(255, 255, 255, 0.7);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+    }
+    
+    @media (hover: hover) {
+        .step-card:hover {
+            border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+            transform: translateX(-15px);
+            box-shadow: var(--shadow-lg);
+        }
+    }
+    
+    .s-num {
+        font-size: 1.3rem;
+        font-family: var(--font-mono, monospace);
+        font-weight: 700;
+        color: var(--accent);
+        background: color-mix(in srgb, var(--accent) 15%, transparent);
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 16px;
+        border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    
+    .s-info h3 {
+        font-size: clamp(1.6rem, 2vw, 2rem);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        color: var(--fg);
+        margin-bottom: 1rem;
+    }
+    .s-info p {
+        color: #86868b;
+        font-size: clamp(1.05rem, 1.5vw, 1.15rem);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* --- RESPONSIVE MOBILE --- */
+    @media (max-width: 900px) {
+        .p-grid {
+            grid-template-columns: 1fr;
+            gap: 4rem;
+        }
+        .sticky-content {
+            position: relative;
+            top: 0;
+        }
+        .method-stats {
+            margin: 0 auto;
+            justify-content: center;
+        }
+        .p-right {
+            padding-top: 0;
+            padding-bottom: 0;
+            gap: 1.5rem;
+        }
+        .step-card {
+            border-radius: 24px;
+        }
+        @media (hover: hover) {
+            .step-card:hover {
+                transform: translateY(-5px); /* Mejor movimiento en vertical en móvil si hay hover */
+            }
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap, ScrollTrigger, reduceMotion } from '@/lib/motion.js'
+
+    if (!reduceMotion) {
+        // Animación de aparición suave para cada tarjeta del proceso
+        const cards = gsap.utils.toArray('.step-card');
+        
+        cards.forEach((card) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 90%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 60,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+        });
+
+        // Pequeña animación para la cabecera
+        gsap.from('.sticky-content > *', {
+            scrollTrigger: {
+                trigger: '.p-left',
+                start: "top 80%",
+            },
+            y: 30,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power3.out"
+        });
+    }
+</script>

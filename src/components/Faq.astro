@@ -1,0 +1,245 @@
+---
+// src/components/Faq.astro
+const faqs = [
+    {
+        q: "¿Cuánto tiempo tardáis en desarrollar un proyecto?",
+        a: "Depende de la complejidad. Una web corporativa o landing page de alta gama suele estar lista en 3-4 semanas. Las plataformas e-commerce o aplicaciones web personalizadas (SaaS) pueden requerir de 8 a 12 semanas para garantizar una arquitectura y testeo perfectos."
+    },
+    {
+        q: "¿Utilizáis plantillas prefabricadas o WordPress?",
+        a: "No. Construimos absolutamente todo desde cero utilizando código nativo moderno (Astro, React, Tailwind). Esto nos permite garantizar una velocidad de carga extrema (100/100 en Google), una seguridad invulnerable contra hackeos típicos de CMS y total libertad para crear diseños únicos."
+    },
+    {
+        q: "¿El diseño estará 100% adaptado a dispositivos móviles?",
+        a: "Absolutamente. Adoptamos una filosofía 'Mobile-First'. Tu web no solo 'encajará' en móviles, sino que estará diseñada y programada específicamente para que la experiencia táctil sea fluida, rápida y natural, con gestos e interfaces que recuerdan a una app nativa."
+    },
+    {
+        q: "¿Ofrecéis soporte y mantenimiento tras el lanzamiento?",
+        a: "Sí, tu negocio no puede permitirse caídas. Ofrecemos planes de soporte continuo, monitorización de servidores 24/7, parches de seguridad y mejoras continuas evolutivas para que tu plataforma siga creciendo al ritmo de tus ventas."
+    },
+    {
+        q: "¿Me ayudaréis con el posicionamiento SEO en Google?",
+        a: "Todo nuestro código sale optimizado para SEO Técnico desde el primer día: tiempos de carga en milisegundos, Core Web Vitals en verde perfecto, microdatos semánticos implementados y una arquitectura de la información óptima para que Google indexe tu web inmediatamente."
+    }
+]
+---
+
+<section class='faq-section' id='faq'>
+    <div class='container'>
+        <div class='faq-grid'>
+            
+            <!-- Left Side: Header -->
+            <div class='faq-header'>
+                <span class='eyebrow'>Transparencia Total</span>
+                <h2>¿Tienes<br />preguntas?</h2>
+                <p>Resolvemos las dudas más comunes sobre nuestra metodología de trabajo, tiempos y tecnologías utilizadas.</p>
+                
+                <a href="/contacto" class="btn btn-accent mt-6">Contactar ahora</a>
+            </div>
+            
+            <!-- Right Side: Accordion -->
+            <div class='faq-list'>
+                {faqs.map((faq, i) => (
+                    <div class='faq-item'>
+                        <button class='faq-trigger' aria-expanded="false">
+                            <span class='faq-q'>{faq.q}</span>
+                            <span class='faq-icon'>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ico-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ico-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            </span>
+                        </button>
+                        <div class='faq-content'>
+                            <div class='faq-inner'>
+                                <p>{faq.a}</p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<style>
+    .faq-section {
+        padding: clamp(80px, 12vh, 140px) 0;
+        background: var(--bg);
+    }
+    .faq-grid {
+        display: grid;
+        grid-template-columns: 0.8fr 1.2fr;
+        gap: clamp(4rem, 8vw, 8rem);
+    }
+
+    /* --- HEADER (STICKY EN DESKTOP) --- */
+    .faq-header {
+        position: sticky;
+        top: clamp(100px, 20vh, 200px);
+        align-self: start;
+    }
+    .eyebrow {
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.95rem;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.8rem;
+        display: block;
+        text-transform: uppercase;
+    }
+    .faq-header h2 {
+        font-size: clamp(3rem, 5vw, 4.5rem);
+        font-weight: 600;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+        color: var(--fg);
+        margin-bottom: 1.5rem;
+    }
+    .faq-header p {
+        font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+        color: #86868b;
+        line-height: 1.6;
+        max-width: 400px;
+    }
+    .mt-6 {
+        margin-top: 2.5rem;
+        display: inline-flex;
+        padding: 0.9rem 2rem;
+        font-size: 1.05rem;
+    }
+
+    /* --- ACCORDION --- */
+    .faq-list {
+        display: flex;
+        flex-direction: column;
+        border-top: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+    }
+    .faq-item {
+        border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+        overflow: hidden;
+    }
+    
+    .faq-trigger {
+        width: 100%;
+        background: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2rem 0;
+        cursor: pointer;
+        text-align: left;
+        color: var(--fg);
+    }
+    .faq-q {
+        font-size: clamp(1.15rem, 1.5vw, 1.4rem);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        transition: color 0.3s ease;
+        padding-right: 1.5rem;
+    }
+    @media(hover:hover){
+        .faq-trigger:hover .faq-q { color: var(--accent); }
+    }
+    
+    .faq-icon {
+        position: relative;
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
+        color: var(--muted);
+        transition: color 0.3s ease;
+    }
+    .faq-trigger:hover .faq-icon { color: var(--accent); }
+    
+    /* Animación de los Iconos */
+    .ico-plus, .ico-minus {
+        position: absolute;
+        inset: 0;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    }
+    .ico-minus {
+        opacity: 0;
+        transform: rotate(-90deg) scale(0.5);
+    }
+    
+    .faq-item.is-open .ico-plus {
+        opacity: 0;
+        transform: rotate(90deg) scale(0.5);
+    }
+    .faq-item.is-open .ico-minus {
+        opacity: 1;
+        transform: rotate(0) scale(1);
+        color: var(--accent);
+    }
+    .faq-item.is-open .faq-q {
+        color: var(--accent);
+    }
+
+    /* Animación de altura pura con CSS Grid */
+    .faq-content {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .faq-item.is-open .faq-content {
+        grid-template-rows: 1fr;
+    }
+    .faq-inner {
+        overflow: hidden;
+    }
+    .faq-inner p {
+        padding-bottom: 2rem;
+        color: #86868b;
+        font-size: clamp(1rem, 1.2vw, 1.15rem);
+        line-height: 1.6;
+        padding-right: 2rem;
+        margin: 0;
+    }
+
+    /* --- RESPONSIVE MOBILE --- */
+    @media (max-width: 900px) {
+        .faq-grid {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+        .faq-header {
+            position: relative;
+            top: 0;
+        }
+        .faq-trigger {
+            padding: 1.5rem 0;
+        }
+        .faq-inner p {
+            padding-right: 0;
+        }
+    }
+</style>
+
+<script>
+    // Lógica del acordeón (se ejecuta en cliente)
+    document.addEventListener('DOMContentLoaded', () => {
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const trigger = item.querySelector('.faq-trigger');
+            
+            trigger.addEventListener('click', () => {
+                const isOpen = item.classList.contains('is-open');
+                
+                // Opción: Cerrar todos los demás antes de abrir el nuevo
+                faqItems.forEach(other => {
+                    other.classList.remove('is-open');
+                    const t = other.querySelector('.faq-trigger');
+                    if (t) t.setAttribute('aria-expanded', 'false');
+                });
+                
+                // Si estaba cerrado, lo abrimos. Si ya estaba abierto, se queda cerrado (por la acción anterior).
+                if (!isOpen) {
+                    item.classList.add('is-open');
+                    trigger.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,141 @@
+---
+// src/components/Stats.astro
+const stats = [
+    { count: 5, prefix: '+', label: 'Años de experiencia' },
+    { count: 4, label: 'Proyectos en producción' },
+    { count: 100, suffix: '%', label: 'Diseño a medida' },
+]
+---
+
+<section class='stats'>
+    <div class='container'>
+        <div class='stats-head'>
+            <span class='mono'>// por qué nosotros</span>
+            <h2>Sin plantillas.<br />Solo resultados.</h2>
+            <p class='stats-sub'>
+                Un equipo cercano de Extremadura que cuida cada detalle, del
+                diseño al servidor.
+            </p>
+        </div>
+
+        <div class='stats-grid'>
+            {
+                stats.map((s) => (
+                    <div class='stat'>
+                        <span
+                            class='stat-num'
+                            data-count={s.count}
+                            data-prefix={s.prefix ?? ''}
+                            data-suffix={s.suffix ?? ''}
+                        >
+                            {(s.prefix ?? '') + s.count + (s.suffix ?? '')}
+                        </span>
+                        <span class='stat-label'>{s.label}</span>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .stats {
+        background: var(--accent);
+        color: var(--accent-fg);
+        border-block: var(--border-w) solid var(--accent-fg);
+    }
+
+    .stats-head {
+        margin-bottom: clamp(2.5rem, 6vw, 4rem);
+    }
+    .stats-head h2 {
+        margin: 0.8rem 0;
+    }
+    .stats-sub {
+        font-size: 1.1rem;
+        max-width: 45ch;
+        color: rgba(10, 10, 10, 0.7);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+    .stat {
+        padding-left: 1.5rem;
+        border-left: var(--border-w) solid var(--accent-fg);
+    }
+    .stat-num {
+        display: block;
+        font-weight: 700;
+        font-size: clamp(3.5rem, 10vw, 6.5rem);
+        line-height: 0.9;
+        letter-spacing: -0.04em;
+    }
+    .stat-label {
+        display: block;
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.85rem;
+        margin-top: 0.6rem;
+    }
+
+    @media (max-width: 640px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        .stat {
+            padding-left: 0;
+            padding-top: 1.2rem;
+            border-left: none;
+            border-top: var(--border-w) solid var(--accent-fg);
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap } from 'gsap'
+    import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+    gsap.registerPlugin(ScrollTrigger)
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const nums = gsap.utils.toArray('.stat-num')
+
+    const fmt = (el, val) =>
+        (el.dataset.prefix || '') + Math.round(val) + (el.dataset.suffix || '')
+
+    if (reduce) {
+        // Sin animación: dejamos el valor final (ya está en el HTML)
+    } else {
+        // Cabecera
+        gsap.from('.stats-head > *', {
+            scrollTrigger: { trigger: '.stats', start: 'top 70%' },
+            y: 30,
+            autoAlpha: 0,
+            stagger: 0.12,
+            duration: 0.7,
+            ease: 'power3.out',
+        })
+
+        // Contadores: cuentan desde 0 al entrar en pantalla
+        nums.forEach((el) => {
+            const target = +el.dataset.count
+            const obj = { val: 0 }
+            el.textContent = fmt(el, 0)
+            gsap.to(obj, {
+                val: target,
+                duration: 1.6,
+                ease: 'power2.out',
+                scrollTrigger: { trigger: '.stats-grid', start: 'top 85%' },
+                onUpdate: () => {
+                    el.textContent = fmt(el, obj.val)
+                },
+            })
+        })
+    }
+</script>
