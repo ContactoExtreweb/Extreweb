@@ -1,0 +1,45 @@
+# robots.txt — extreweb
+
+# Buscadores tradicionales
+User-agent: *
+Allow: /
+
+# Bots de IA — PERMITIDOS explícitamente (para que puedan citarte)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+# No indexar el panel ni rutas internas (ajusta si hace falta)
+Disallow: /admin
+
+# Sitemap
+Sitemap: https://extreweb.es/sitemap-index.xml

@@ -1,6 +1,6 @@
 ---
 // src/components/Footer.astro
-const currentYear = new Date().getFullYear();
+const currentYear = new Date().getFullYear()
 ---
 
 <footer class='site-footer'>
@@ -8,22 +8,81 @@ const currentYear = new Date().getFullYear();
         <div class='f-top'>
             <!-- Brand -->
             <div class='f-brand'>
-                <a href="/" class="logo">
-                    <span class="logo-mark">
+                <a href='/' class='logo'>
+                    <span class='logo-mark'>
                         <!-- Icono Rayo Premium -->
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                        <svg
+                            width='24'
+                            height='24'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            stroke='currentColor'
+                            stroke-width='2'
+                            stroke-linecap='round'
+                            stroke-linejoin='round'
+                            ><polygon
+                                points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'
+                            ></polygon></svg
+                        >
                     </span>
-                    <span class="logo-text">Extreweb</span>
+                    <span class='logo-text'>Extreweb</span>
                 </a>
-                <p>Ingeniería digital premium desde Extremadura.<br />Diseñando el futuro de internet, una línea de código a la vez.</p>
-                
-                <div class="f-socials">
-                    <a href="#" aria-label="Twitter"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg></a>
-                    <a href="#" aria-label="Instagram"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
-                    <a href="#" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                <p>
+                    Ingeniería digital premium desde Extremadura.<br />Diseñando
+                    el futuro de internet, una línea de código a la vez.
+                </p>
+
+                <div class='f-socials'>
+                    <a href='#' aria-label='Twitter'
+                        ><svg
+                            width='20'
+                            height='20'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            stroke='currentColor'
+                            stroke-width='2'
+                            ><path
+                                d='M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z'
+                            ></path></svg
+                        ></a
+                    >
+                    <a href='#' aria-label='Instagram'
+                        ><svg
+                            width='20'
+                            height='20'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            stroke='currentColor'
+                            stroke-width='2'
+                            ><rect
+                                x='2'
+                                y='2'
+                                width='20'
+                                height='20'
+                                rx='5'
+                                ry='5'></rect><path
+                                d='M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z'
+                            ></path><line x1='17.5' y1='6.5' x2='17.51' y2='6.5'
+                            ></line></svg
+                        ></a
+                    >
+                    <a href='#' aria-label='LinkedIn'
+                        ><svg
+                            width='20'
+                            height='20'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            stroke='currentColor'
+                            stroke-width='2'
+                            ><path
+                                d='M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z'
+                            ></path><rect x='2' y='9' width='4' height='12'
+                            ></rect><circle cx='4' cy='4' r='2'></circle></svg
+                        ></a
+                    >
                 </div>
             </div>
-            
+
             <!-- Links -->
             <div class='f-links'>
                 <div class='f-col'>
@@ -32,41 +91,73 @@ const currentYear = new Date().getFullYear();
                         <li><a href='/'>Inicio</a></li>
                         <li><a href='/servicios'>Servicios</a></li>
                         <li><a href='/proyectos'>Proyectos</a></li>
+                        <li><a href='/proceso'>Proceso</a></li>
                         <li><a href='/nosotros'>Nosotros</a></li>
+                        <li><a href='/blog'>Blog</a></li>
                     </ul>
                 </div>
                 <div class='f-col'>
                     <h4>Expertise</h4>
                     <ul>
-                        <li><a href='#'>Diseño UI/UX</a></li>
-                        <li><a href='#'>Desarrollo Headless</a></li>
-                        <li><a href='#'>E-commerce Avanzado</a></li>
-                        <li><a href='#'>SEO Técnico</a></li>
+                        <li><a href='/servicios/diseno-web'>Diseño Web</a></li>
+                        <li>
+                            <a href='/servicios/seo'>Posicionamiento SEO</a>
+                        </li>
+                        <li>
+                            <a href='/servicios/redes-sociales'
+                                >Redes Sociales</a
+                            >
+                        </li>
+                        <li>
+                            <a href='/servicios/sistemas-soporte'
+                                >Sistemas y Soporte</a
+                            >
+                        </li>
                     </ul>
                 </div>
                 <div class='f-col'>
                     <h4>Contacto</h4>
                     <ul>
-                        <li><a href='mailto:hola@extreweb.es'>hola@extreweb.es</a></li>
-                        <li><a href='tel:+34600000000'>+34 600 000 000</a></li>
-                        <li><a href='/contacto' class='link-accent'>Agendar llamada &rarr;</a></li>
+                        <li>
+                            <a href='mailto:contacto@extreweb.es'
+                                >contacto@extreweb.es</a
+                            >
+                        </li>
+                        <li><a href='tel:+34628775619'>+34 628 775 619</a></li>
+                        <li>
+                            <a href='/contacto' class='link-accent'
+                                >Agendar llamada &rarr;</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+                <div class='f-col'>
+                    <h4>Extremadura</h4>
+                    <ul>
+                        <li>
+                            <a href='/diseno-web-villanueva-de-la-serena'
+                                >Villanueva de la Serena</a
+                            >
+                        </li>
+                        <li><a href='/diseno-web-don-benito'>Don Benito</a></li>
+                        <li><a href='/diseno-web-caceres'>Cáceres</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-        
+
         <!-- Big Typography Decoration -->
-        <div class="f-big-text">
+        <div class='f-big-text'>
             <span>EXTREWEB</span>
         </div>
-        
+
         <!-- Bottom / Legal -->
         <div class='f-bottom'>
             <p>&copy; {currentYear} Extreweb. Todos los derechos reservados.</p>
             <div class='f-legal'>
-                <a href='#'>Aviso Legal</a>
-                <a href='#'>Privacidad</a>
-                <a href='#'>Cookies</a>
+                <a href='/aviso-legal'>Aviso Legal</a>
+                <a href='/privacidad'>Privacidad</a>
+                <a href='/cookies'>Cookies</a>
             </div>
         </div>
     </div>
@@ -80,7 +171,7 @@ const currentYear = new Date().getFullYear();
         position: relative;
         border-top: 1px solid var(--border);
     }
-    
+
     .f-top {
         display: flex;
         justify-content: space-between;
@@ -88,7 +179,7 @@ const currentYear = new Date().getFullYear();
         flex-wrap: wrap;
         margin-bottom: clamp(4rem, 8vh, 6rem);
     }
-    
+
     /* --- BRAND --- */
     .f-brand {
         flex: 1;
@@ -144,7 +235,7 @@ const currentYear = new Date().getFullYear();
             transform: translateY(-3px);
         }
     }
-    
+
     /* --- LINKS --- */
     .f-links {
         display: flex;
@@ -184,7 +275,7 @@ const currentYear = new Date().getFullYear();
         color: var(--accent) !important;
         font-weight: 600;
     }
-    
+
     /* --- BIG TEXT --- */
     .f-big-text {
         text-align: center;
@@ -197,7 +288,11 @@ const currentYear = new Date().getFullYear();
         font-size: clamp(4rem, 15vw, 16rem);
         font-weight: 900;
         letter-spacing: -0.05em;
-        background: linear-gradient(180deg, color-mix(in srgb, var(--fg) 10%, transparent) 0%, transparent 100%);
+        background: linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--fg) 30%, transparent) 0%,
+            color-mix(in srgb, var(--fg) 2%, transparent) 100%
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }

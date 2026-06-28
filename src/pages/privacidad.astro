@@ -1,0 +1,89 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navbar from '@/components/Navbar.astro'
+import Footer from '@/components/Footer.astro'
+
+const seoTitle = 'Política de Privacidad — extreweb'
+---
+
+<BaseLayout title={seoTitle}>
+    <Navbar />
+    <main class='legal-main'>
+        <div class='container'>
+            <div class='legal-content'>
+                <h1>Política de Privacidad</h1>
+                <p>
+                    Tu privacidad es importante para nosotros. En esta Política
+                    de Privacidad explicamos cómo recopilamos, usamos,
+                    compartimos y protegemos tu información personal.
+                </p>
+
+                <h2>1. Responsable del tratamiento</h2>
+                <p>
+                    <strong>Identidad:</strong> extreweb<br />
+                    <strong>Contacto:</strong> contacto@extreweb.es<br />
+                    <strong>Finalidad:</strong> Responder a las consultas enviadas
+                    a través del formulario de contacto y enviar información relacionada
+                    con nuestros servicios si lo has solicitado explícitamente.
+                </p>
+
+                <h2>2. Conservación de datos</h2>
+                <p>
+                    Los datos proporcionados se conservarán mientras se mantenga
+                    la relación comercial o durante los años necesarios para
+                    cumplir con las obligaciones legales.
+                </p>
+
+                <h2>3. Legitimación y Derechos</h2>
+                <p>
+                    La base legal para el tratamiento de tus datos es el
+                    consentimiento que otorgas al contactar con nosotros. Tienes
+                    derecho a obtener confirmación sobre si en extreweb estamos
+                    tratando tus datos personales, por tanto tienes derecho a
+                    acceder a tus datos, rectificar los inexactos o solicitar su
+                    supresión cuando ya no sean necesarios escribiéndonos a
+                    nuestro email de contacto.
+                </p>
+
+                <h2>4. Seguridad</h2>
+                <p>
+                    Aplicamos las medidas de seguridad tecnológicas necesarias
+                    para evitar la alteración, pérdida, tratamiento o acceso no
+                    autorizado a los datos personales.
+                </p>
+            </div>
+        </div>
+    </main>
+    <Footer />
+</BaseLayout>
+
+<style>
+    .legal-main {
+        padding: clamp(150px, 20vh, 200px) 0 clamp(80px, 10vh, 120px);
+        background: var(--bg);
+    }
+    .legal-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .legal-content h1 {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        margin-bottom: 2rem;
+        color: var(--fg);
+    }
+    .legal-content h2 {
+        font-size: 1.5rem;
+        margin-top: 3rem;
+        margin-bottom: 1rem;
+        color: var(--fg);
+    }
+    .legal-content p {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: var(--muted);
+        margin-bottom: 1.5rem;
+    }
+    .legal-content strong {
+        color: var(--fg);
+    }
+</style>

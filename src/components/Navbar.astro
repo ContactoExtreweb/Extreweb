@@ -3,7 +3,9 @@
 const links = [
     { href: '/servicios', label: 'Servicios' },
     { href: '/proyectos', label: 'Proyectos' },
+    { href: '/proceso', label: 'Proceso' },
     { href: '/nosotros', label: 'Nosotros' },
+    { href: '/blog', label: 'Blog' },
 ]
 const path = Astro.url.pathname
 ---
@@ -110,7 +112,7 @@ const path = Astro.url.pathname
                 >Empezar proyecto</a
             >
             <div class='menu-contact'>
-                <p>hola@extreweb.es</p>
+                <p>contacto@extreweb.es</p>
                 <p>628 77 56 19</p>
             </div>
         </div>
@@ -185,6 +187,10 @@ const path = Astro.url.pathname
         color: var(--accent-fg);
         font-size: 1.05rem;
         font-weight: 700;
+        flex-shrink: 0;
+    }
+    .logo-text {
+        flex-shrink: 0;
     }
 
     .desktop-links {
@@ -349,16 +355,18 @@ const path = Astro.url.pathname
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         height: 100%;
-        padding: 100px var(--pad) 2rem; /* Espacio superior para no pisar la pastilla */
+        overflow-y: auto;
+        padding: clamp(90px, 12vh, 120px) var(--pad) 2rem;
     }
 
     .menu-links {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 2rem;
+        gap: clamp(1rem, 3vh, 2rem);
+        margin: auto 0; /* Centra verticalmente solo si sobra espacio */
     }
     .m-link {
         font-size: clamp(2rem, 6vw, 2.8rem); /* Tamaño ajustado y centrado */
@@ -395,7 +403,7 @@ const path = Astro.url.pathname
     }
 
     .menu-footer {
-        margin-top: 3.5rem;
+        margin-top: clamp(2rem, 5vh, 3.5rem);
         opacity: 0;
         transform: translateY(20px);
         transition: all 0.5s ease 0.3s;
@@ -404,7 +412,7 @@ const path = Astro.url.pathname
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1.5rem;
+        gap: 1rem;
     }
     .fullscreen-menu.is-open .menu-footer {
         opacity: 1;

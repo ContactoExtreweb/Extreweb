@@ -4,225 +4,287 @@ import Navbar from '@/components/Navbar.astro'
 import Cta from '@/components/Cta.astro'
 import Footer from '@/components/Footer.astro'
 
-const seoTitle = "Sobre nosotros — extreweb, agencia web en Extremadura";
-const seoDesc = "Somos extreweb, un equipo de Extremadura especializado en diseño y desarrollo web, SEO y soporte. Cercanía, trabajo real y webs que venden.";
-
-const schemaJSON = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "extreweb",
-  "url": "https://extreweb.es",
-  "logo": "https://extreweb.es/favicon.svg",
-  "description": seoDesc,
-  "address": {
-    "@type": "PostalAddress",
-    "addressRegion": "Extremadura",
-    "addressCountry": "ES"
-  },
-  "founders": [
-    {
-      "@type": "Person",
-      "name": "Saúl Correyero Pañero",
-      "jobTitle": "Desarrollador Web y Diseñador",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "extreweb"
-      }
-    },
-    {
-      "@type": "Person",
-      "name": "Pedro Fernández Sánchez",
-      "jobTitle": "Gestión, Sistemas y Redes",
-      "worksFor": {
-        "@type": "Organization",
-        "name": "extreweb"
-      }
-    }
-  ]
-};
+const seoTitle = 'Sobre nosotros — extreweb, agencia web en Extremadura'
+const seoDesc =
+    'Somos extreweb, un equipo de Extremadura especializado en diseño y desarrollo web, SEO y soporte. Cercanía, trabajo real y webs que venden.'
 ---
 
 <BaseLayout title={seoTitle} description={seoDesc}>
-    <!-- JSON-LD SEO Schema -->
-    <script type="application/ld+json" set:html={JSON.stringify(schemaJSON)} />
-
     <Navbar />
-    
-    <main class="page-main">
-        
+
+    <main class='page-main'>
         <!-- EFECTO DE FONDO ABSTRACTO (Dinamismo sutil) -->
-        <div class="ambient-glow g-1"></div>
-        <div class="ambient-glow g-2"></div>
+        <div class='ambient-glow g-1'></div>
+        <div class='ambient-glow g-2'></div>
 
         <!-- 1. HERO EQUILIBRADO (Split Screen) -->
-        <section class="dyn-hero">
-            <div class="container">
-                <span class="eyebrow gsap-fade">Sobre nosotros</span>
-                <div class="hero-split">
-                    <div class="h-left gsap-reveal">
-                        <h1>Cercanos como<br/>un vecino,<br/><span class="text-accent">exigentes como<br/>una gran agencia.</span></h1>
+        <section class='dyn-hero'>
+            <div class='container'>
+                <span class='eyebrow gsap-fade'>Sobre nosotros</span>
+                <div class='hero-split'>
+                    <div class='h-left gsap-reveal'>
+                        <h1>
+                            Cercanos como<br />un vecino,<br /><span
+                                class='text-accent'
+                                >exigentes como<br />una gran agencia.</span
+                            >
+                        </h1>
                     </div>
-                    <div class="h-right gsap-fade">
-                        <p>Diseñamos y desarrollamos webs a medida para negocios de Don Benito, Villanueva de la Serena, Cáceres y toda Extremadura. Sin plantillas, sin intermediarios: hablas directamente con quien hace tu web.</p>
+                    <div class='h-right gsap-fade'>
+                        <p>
+                            Diseñamos y desarrollamos webs a medida para
+                            negocios de Don Benito, Villanueva de la Serena,
+                            Cáceres y toda Extremadura. Sin plantillas, sin
+                            intermediarios: hablas directamente con quien hace
+                            tu web.
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- 2. HISTORIA EN BLOQUES LIGEROS -->
-        <section class="dyn-history">
-            <div class="container">
-                <div class="h-blocks">
-                    <div class="h-block gsap-up">
-                        <span class="h-year">2022</span>
-                        <p><strong>extreweb</strong> nace de la unión de dos apasionados de la tecnología de Villanueva de la Serena y Miajadas. Una inquietud compartida por crear y revolucionar los negocios locales.</p>
+        <section class='dyn-history'>
+            <div class='container'>
+                <div class='h-blocks'>
+                    <div class='h-block gsap-up'>
+                        <span class='h-year'>2022</span>
+                        <p>
+                            <strong>extreweb</strong> nace de la unión de dos apasionados
+                            de la tecnología de Villanueva de la Serena y Miajadas.
+                            Una inquietud compartida por crear y revolucionar los
+                            negocios locales.
+                        </p>
                     </div>
-                    <div class="h-block gsap-up" style="transition-delay: 0.1s;">
-                        <span class="h-year">La Diferencia</span>
-                        <p>Combinamos formación técnica (Desarrollo Web y Sistemas) con algo que no se aprende en ningún curso: <strong>el trato cercano y honesto de quien trabaja por su tierra.</strong></p>
+                    <div
+                        class='h-block gsap-up'
+                        style='transition-delay: 0.1s;'
+                    >
+                        <span class='h-year'>La Diferencia</span>
+                        <p>
+                            Combinamos formación técnica (Desarrollo Web y
+                            Sistemas) con algo que no se aprende en ningún
+                            curso: <strong
+                                >el trato cercano y honesto de quien trabaja por
+                                su tierra.</strong
+                            >
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- 3. EQUIPO (TARJETAS DINÁMICAS REVEAL) -->
-        <section class="dyn-team">
-            <div class="container">
-                <h2 class="sec-title gsap-fade text-center">Las caras detrás del código</h2>
-                <div class="team-grid">
-                    
+        <section class='dyn-team'>
+            <div class='container'>
+                <h2 class='sec-title gsap-fade text-center'>
+                    Las caras detrás del código
+                </h2>
+                <div class='team-grid'>
                     <!-- Tarjeta Saúl -->
-                    <div class="t-card gsap-up">
-                        <div class="t-card-inner">
-                            <div class="t-visible">
-                                <div class="photo-placeholder"><span class="initial">S</span></div>
+                    <div class='t-card gsap-up'>
+                        <div class='t-card-inner'>
+                            <div class='t-visible'>
+                                <div class='photo-placeholder'>
+                                    <span class='initial'>S</span>
+                                </div>
                                 <h3>Saúl Correyero Pañero</h3>
-                                <span class="t-role">Desarrollo Web & Diseño UI</span>
+                                <span class='t-role'
+                                    >Desarrollo Web & Diseño UI</span
+                                >
                             </div>
-                            <div class="t-hidden">
-                                <p class="t-bio">Grado Superior DAW. Me encargo de que tu web sea ultrarrápida, bonita y convierta visitas en clientes. Apasionado del motor y del código limpio.</p>
-                                <div class="t-skills">
-                                    <span>Astro</span><span>GSAP</span><span>Diseño UX</span>
+                            <div class='t-hidden'>
+                                <p class='t-bio'>
+                                    Grado Superior DAW. Me encargo de que tu web
+                                    sea ultrarrápida, bonita y convierta visitas
+                                    en clientes. Apasionado del motor y del
+                                    código limpio.
+                                </p>
+                                <div class='t-skills'>
+                                    <span>Astro</span><span>GSAP</span><span
+                                        >Diseño UX</span
+                                    >
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Tarjeta Pedro -->
-                    <div class="t-card gsap-up" style="transition-delay: 0.1s;">
-                        <div class="t-card-inner">
-                            <div class="t-visible">
-                                <div class="photo-placeholder"><span class="initial">P</span></div>
+                    <div class='t-card gsap-up' style='transition-delay: 0.1s;'>
+                        <div class='t-card-inner'>
+                            <div class='t-visible'>
+                                <div class='photo-placeholder'>
+                                    <span class='initial'>P</span>
+                                </div>
                                 <h3>Pedro Fernández Sánchez</h3>
-                                <span class="t-role">Gestión, Sistemas & Redes</span>
+                                <span class='t-role'
+                                    >Gestión, Sistemas & Redes</span
+                                >
                             </div>
-                            <div class="t-hidden">
-                                <p class="t-bio">Grado Superior en Gestión de Ventas y Sistemas. Me aseguro de que tu infraestructura técnica sea una roca y el trato sea 100% transparente.</p>
-                                <div class="t-skills">
-                                    <span>Sistemas</span><span>Redes</span><span>Ventas</span>
+                            <div class='t-hidden'>
+                                <p class='t-bio'>
+                                    Grado Superior en Gestión de Ventas y
+                                    Sistemas. Me aseguro de que tu
+                                    infraestructura técnica sea una roca y el
+                                    trato sea 100% transparente.
+                                </p>
+                                <div class='t-skills'>
+                                    <span>Sistemas</span><span>Redes</span><span
+                                        >Ventas</span
+                                    >
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
 
         <!-- 4. VALORES (ACORDEÓN INTERACTIVO) -->
-        <section class="dyn-values">
-            <div class="container">
-                <div class="values-split">
-                    <div class="v-left gsap-fade">
-                        <h2 class="sec-title">Nuestros<br/>Valores.</h2>
-                        <p class="v-desc">Pasa el ratón o toca para descubrir cómo trabajamos.</p>
+        <section class='dyn-values'>
+            <div class='container'>
+                <div class='values-split'>
+                    <div class='v-left gsap-fade'>
+                        <h2 class='sec-title'>Nuestros<br />Valores.</h2>
+                        <p class='v-desc'>
+                            Pasa el ratón o toca para descubrir cómo trabajamos.
+                        </p>
                     </div>
-                    <div class="v-right">
-                        
-                        <div class="v-accordion gsap-up">
-                            <div class="v-item is-active">
-                                <div class="v-header"><h3>Cercanía real</h3><span class="icon">+</span></div>
-                                <div class="v-content"><p>Hablas con nosotros, no con un comercial que te vende la moto. Te explicamos todo el proceso sin tecnicismos.</p></div>
-                            </div>
-                            
-                            <div class="v-item">
-                                <div class="v-header"><h3>Sin plantillas</h3><span class="icon">+</span></div>
-                                <div class="v-content"><p>Cada web se diseña y programa desde cero, pensada milimétricamente para tu negocio y tus clientes.</p></div>
+                    <div class='v-right'>
+                        <div class='v-accordion gsap-up'>
+                            <div class='v-item is-active'>
+                                <div class='v-header'>
+                                    <h3>Cercanía real</h3><span class='icon'
+                                        >+</span
+                                    >
+                                </div>
+                                <div class='v-content'>
+                                    <p>
+                                        Hablas con nosotros, no con un comercial
+                                        que te vende la moto. Te explicamos todo
+                                        el proceso sin tecnicismos.
+                                    </p>
+                                </div>
                             </div>
 
-                            <div class="v-item">
-                                <div class="v-header"><h3>Rápido y cuidado</h3><span class="icon">+</span></div>
-                                <div class="v-content"><p>Webs que cargan en menos de 2 segundos, hiper-optimizadas para SEO y perfectas en cualquier móvil.</p></div>
+                            <div class='v-item'>
+                                <div class='v-header'>
+                                    <h3>Sin plantillas</h3><span class='icon'
+                                        >+</span
+                                    >
+                                </div>
+                                <div class='v-content'>
+                                    <p>
+                                        Cada web se diseña y programa desde
+                                        cero, pensada milimétricamente para tu
+                                        negocio y tus clientes.
+                                    </p>
+                                </div>
                             </div>
 
-                            <div class="v-item">
-                                <div class="v-header"><h3>De aquí, para los de aquí</h3><span class="icon">+</span></div>
-                                <div class="v-content"><p>Conocemos Extremadura y a sus negocios. Que tú triunfes en internet es nuestra mejor carta de presentación.</p></div>
+                            <div class='v-item'>
+                                <div class='v-header'>
+                                    <h3>Rápido y cuidado</h3><span class='icon'
+                                        >+</span
+                                    >
+                                </div>
+                                <div class='v-content'>
+                                    <p>
+                                        Webs que cargan en menos de 2 segundos,
+                                        hiper-optimizadas para SEO y perfectas
+                                        en cualquier móvil.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class='v-item'>
+                                <div class='v-header'>
+                                    <h3>De aquí, para los de aquí</h3><span
+                                        class='icon'>+</span
+                                    >
+                                </div>
+                                <div class='v-content'>
+                                    <p>
+                                        Conocemos Extremadura y a sus negocios.
+                                        Que tú triunfes en internet es nuestra
+                                        mejor carta de presentación.
+                                    </p>
+                                </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- 5. ESTADÍSTICAS ANIMADAS Y SERVICIOS -->
-        <section class="dyn-stats-services">
-            <div class="container">
-                
+        <section class='dyn-stats-services'>
+            <div class='container'>
                 <!-- Contadores Dinámicos -->
-                <div class="stats-banner gsap-up">
-                    <div class="s-box">
-                        <span class="s-num"><span class="counter" data-target="6">0</span></span>
-                        <span class="s-text">Proyectos<br/>Entregados</span>
+                <div class='stats-banner gsap-up'>
+                    <div class='s-box'>
+                        <span class='s-num'
+                            ><span class='counter' data-target='6'>0</span
+                            ></span
+                        >
+                        <span class='s-text'>Proyectos<br />Entregados</span>
                     </div>
-                    <div class="s-box">
-                        <span class="s-num"><span class="counter" data-target="4">0</span>+</span>
-                        <span class="s-text">Años de<br/>Formación</span>
+                    <div class='s-box'>
+                        <span class='s-num'
+                            ><span class='counter' data-target='4'>0</span
+                            >+</span
+                        >
+                        <span class='s-text'>Años de<br />Formación</span>
                     </div>
-                    <div class="s-box">
-                        <span class="s-num"><span class="counter" data-target="100">0</span>%</span>
-                        <span class="s-text">Webs 100%<br/>a Medida</span>
+                    <div class='s-box'>
+                        <span class='s-num'
+                            ><span class='counter' data-target='100'>0</span
+                            >%</span
+                        >
+                        <span class='s-text'>Webs 100%<br />a Medida</span>
                     </div>
                 </div>
 
                 <!-- Servicios (Grid Limpio) -->
-                <div class="services-clean gsap-fade">
-                    <h2 class="text-center">Qué hacemos</h2>
-                    <div class="sc-grid">
-                        <a href="/servicios" class="sc-item">
+                <div class='services-clean gsap-fade'>
+                    <h2 class='text-center'>Qué hacemos</h2>
+                    <div class='sc-grid'>
+                        <a href='/servicios' class='sc-item'>
                             <h4>Diseño Web a Medida</h4>
                             <span>Saber más →</span>
                         </a>
-                        <a href="/servicios" class="sc-item">
+                        <a href='/servicios' class='sc-item'>
                             <h4>SEO Local</h4>
                             <span>Saber más →</span>
                         </a>
-                        <a href="/servicios" class="sc-item">
+                        <a href='/servicios' class='sc-item'>
                             <h4>Redes Sociales</h4>
                             <span>Saber más →</span>
                         </a>
-                        <a href="/servicios" class="sc-item">
+                        <a href='/servicios' class='sc-item'>
                             <h4>Sistemas y Redes</h4>
                             <span>Saber más →</span>
                         </a>
                     </div>
                 </div>
-
             </div>
         </section>
 
         <!-- 6. ZONA DE ACTUACIÓN (SEO Local) -->
-        <section class="dyn-local-seo">
-            <div class="container">
-                <div class="local-banner gsap-up">
-                    <p>Diseñamos para negocios de <strong>Villanueva de la Serena, Don Benito, Cáceres, Miajadas</strong> y toda Extremadura (o en remoto para toda España).</p>
+        <section class='dyn-local-seo'>
+            <div class='container'>
+                <div class='local-banner gsap-up'>
+                    <p>
+                        Diseñamos para negocios de <strong
+                            >Villanueva de la Serena, Don Benito, Cáceres,
+                            Miajadas</strong
+                        > y toda Extremadura (o en remoto para toda España).
+                    </p>
                 </div>
             </div>
         </section>
 
         <Cta />
-        
     </main>
     <Footer />
 </BaseLayout>
@@ -233,8 +295,10 @@ const schemaJSON = {
         overflow-x: hidden;
         position: relative;
     }
-    
-    .text-center { text-align: center; }
+
+    .text-center {
+        text-align: center;
+    }
 
     /* --- GLOBOS AMBIENTALES (Dinamismo estético) --- */
     .ambient-glow {
@@ -259,10 +323,15 @@ const schemaJSON = {
         top: 30vh;
         left: -200px;
     }
-    html[data-theme='light'] .ambient-glow { opacity: 0.08; }
+    html[data-theme='light'] .ambient-glow {
+        opacity: 0.08;
+    }
 
     /* Todas las secciones por encima del glow */
-    section { position: relative; z-index: 10; }
+    section {
+        position: relative;
+        z-index: 10;
+    }
 
     /* --- HERO SPLIT --- */
     .dyn-hero {
@@ -328,7 +397,9 @@ const schemaJSON = {
         color: var(--muted);
         margin: 0;
     }
-    .h-block strong { color: var(--fg); }
+    .h-block strong {
+        color: var(--fg);
+    }
 
     /* --- EQUIPO INTERACTIVO --- */
     .sec-title {
@@ -355,18 +426,22 @@ const schemaJSON = {
         padding: 2.5rem;
         position: relative;
         overflow: hidden;
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+        transition:
+            transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+            border-color 0.4s ease,
+            box-shadow 0.4s ease;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
-    
+
     /* Hover state de la tarjeta */
     .t-card:hover .t-card-inner {
         transform: translateY(-8px);
         border-color: var(--accent);
-        box-shadow: 0 20px 40px color-mix(in srgb, var(--accent) 5%, transparent);
+        box-shadow: 0 20px 40px
+            color-mix(in srgb, var(--accent) 5%, transparent);
     }
 
     .t-visible {
@@ -374,7 +449,9 @@ const schemaJSON = {
         flex-direction: column;
         align-items: center;
         text-align: center;
-        transition: opacity 0.3s ease, transform 0.4s ease;
+        transition:
+            opacity 0.3s ease,
+            transform 0.4s ease;
     }
     .photo-placeholder {
         width: 120px;
@@ -466,7 +543,7 @@ const schemaJSON = {
         color: var(--muted);
         margin-top: 1rem;
     }
-    
+
     .v-accordion {
         display: flex;
         flex-direction: column;
@@ -513,7 +590,7 @@ const schemaJSON = {
         margin: 0;
         padding-bottom: 1.5rem;
     }
-    
+
     /* Estado activo del acordeón */
     .v-item.is-active {
         border-color: var(--accent);
@@ -578,7 +655,9 @@ const schemaJSON = {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
-        transition: transform 0.3s ease, border-color 0.3s ease;
+        transition:
+            transform 0.3s ease,
+            border-color 0.3s ease;
     }
     .sc-item:hover {
         transform: translateY(-5px);
@@ -618,12 +697,17 @@ const schemaJSON = {
 
     /* --- RESPONSIVE MOBILE --- */
     @media (max-width: 900px) {
-        .hero-split, .h-blocks, .team-grid, .values-split {
+        .hero-split,
+        .h-blocks,
+        .team-grid,
+        .values-split {
             grid-template-columns: 1fr;
             gap: 2rem;
         }
-        .h-left h1 { font-size: 2.8rem; }
-        
+        .h-left h1 {
+            font-size: 2.8rem;
+        }
+
         .stats-banner {
             flex-direction: column;
             gap: 3rem;
@@ -632,11 +716,13 @@ const schemaJSON = {
         .sc-grid {
             grid-template-columns: 1fr 1fr;
         }
-        
+
         /* En móvil el Hover del equipo no funciona bien, así que lo hacemos al hacer tap */
     }
     @media (max-width: 500px) {
-        .sc-grid { grid-template-columns: 1fr; }
+        .sc-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 
@@ -644,66 +730,79 @@ const schemaJSON = {
     // @ts-nocheck
     import { gsap, ScrollTrigger } from '@/lib/motion.js'
 
-    document.addEventListener('DOMContentLoaded', initDynNosotros);
-    initDynNosotros();
+    document.addEventListener('DOMContentLoaded', initDynNosotros)
+    initDynNosotros()
 
     function initDynNosotros() {
-        if (window.__dyn_nosotros_inited) return;
-        window.__dyn_nosotros_inited = true;
+        if (window.__dyn_nosotros_inited) return
+        window.__dyn_nosotros_inited = true
 
         // 1. Hero Animations
-        gsap.from(".gsap-reveal", { y: 40, opacity: 0, duration: 1, ease: "power4.out", delay: 0.1 });
-        gsap.from(".gsap-fade", { y: 20, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out", delay: 0.3 });
+        gsap.from('.gsap-reveal', {
+            y: 40,
+            opacity: 0,
+            duration: 1,
+            ease: 'power4.out',
+            delay: 0.1,
+        })
+        gsap.from('.gsap-fade', {
+            y: 20,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: 'power3.out',
+            delay: 0.3,
+        })
 
         // 2. Scroll Reveals Generales (Fade Up suave)
         gsap.utils.toArray('.gsap-up').forEach((el, i) => {
             gsap.from(el, {
-                scrollTrigger: { trigger: el, start: "top 85%" },
+                scrollTrigger: { trigger: el, start: 'top 85%' },
                 y: 40,
                 opacity: 0,
                 duration: 0.8,
-                ease: "power3.out"
-            });
-        });
+                ease: 'power3.out',
+            })
+        })
 
         // 3. Lógica del Acordeón de Valores (Hover en PC, Clic en Móvil)
-        const accItems = document.querySelectorAll('.v-item');
-        const isMobile = window.matchMedia("(max-width: 900px)").matches;
+        const accItems = document.querySelectorAll('.v-item')
+        const isMobile = window.matchMedia('(max-width: 900px)').matches
 
-        accItems.forEach(item => {
+        accItems.forEach((item) => {
             if (!isMobile) {
                 // Interacción rápida con el ratón en escritorio
                 item.addEventListener('mouseenter', () => {
-                    accItems.forEach(i => i.classList.remove('is-active'));
-                    item.classList.add('is-active');
-                });
+                    accItems.forEach((i) => i.classList.remove('is-active'))
+                    item.classList.add('is-active')
+                })
             } else {
                 // Toque en móvil
                 item.addEventListener('click', () => {
-                    const wasActive = item.classList.contains('is-active');
-                    accItems.forEach(i => i.classList.remove('is-active'));
-                    if (!wasActive) item.classList.add('is-active');
-                });
+                    const wasActive = item.classList.contains('is-active')
+                    accItems.forEach((i) => i.classList.remove('is-active'))
+                    if (!wasActive) item.classList.add('is-active')
+                })
             }
-        });
+        })
 
         // 4. Animación de Contadores Numéricos (GSAP)
-        const counters = document.querySelectorAll('.counter');
-        counters.forEach(counter => {
-            const target = parseInt(counter.getAttribute('data-target'));
+        const counters = document.querySelectorAll('.counter')
+        counters.forEach((counter) => {
+            const target = parseInt(counter.getAttribute('data-target'))
             ScrollTrigger.create({
                 trigger: counter,
-                start: "top 90%",
+                start: 'top 90%',
                 once: true,
                 onEnter: () => {
                     gsap.to(counter, {
                         innerHTML: target,
                         duration: 2.5,
-                        snap: { innerHTML: 1 }, 
-                        ease: "power3.out"
-                    });
-                }
-            });
-        });
+                        snap: { innerHTML: 1 },
+                        ease: 'power3.out',
+                    })
+                },
+            })
+        })
     }
 </script>

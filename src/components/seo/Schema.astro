@@ -1,0 +1,54 @@
+---
+// src/components/seo/Schema.astro
+import { SITE } from '@/lib/site.js'
+
+const org = {
+    '@type': 'Organization',
+    '@id': SITE.url + '/#organization',
+    name: SITE.name,
+    url: SITE.url,
+    logo: SITE.url + '/favicon.svg',
+    description: SITE.description,
+    founder: SITE.founders.map((f) => ({
+        '@type': 'Person',
+        name: f.name,
+        jobTitle: f.jobTitle,
+    })),
+    ...(SITE.email ? { email: SITE.email } : {}),
+    ...(SITE.telephone ? { telephone: SITE.telephone } : {}),
+    ...(SITE.sameAs.length ? { sameAs: SITE.sameAs } : {}),
+}
+
+const business = {
+    '@type': 'ProfessionalService',
+    '@id': SITE.url + '/#business',
+    name: SITE.name,
+    url: SITE.url,
+    image: SITE.url + SITE.ogImage,
+    description: SITE.description,
+    priceRange: '€€',
+    areaServed: SITE.areaServed.map((a) => ({ '@type': 'City', name: a })),
+    address: {
+        '@type': 'PostalAddress',
+        addressRegion: SITE.region,
+        addressCountry: SITE.country,
+    },
+    ...(SITE.telephone ? { telephone: SITE.telephone } : {}),
+}
+
+const website = {
+    '@type': 'WebSite',
+    '@id': SITE.url + '/#website',
+    url: SITE.url,
+    name: SITE.name,
+    inLanguage: 'es-ES',
+    publisher: { '@id': SITE.url + '/#organization' },
+}
+
+const graph = {
+    '@context': 'https://schema.org',
+    '@graph': [org, business, website],
+}
+---
+
+<script type='application/ld+json' set:html={JSON.stringify(graph)} />

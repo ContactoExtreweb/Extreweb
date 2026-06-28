@@ -1,0 +1,206 @@
+---
+// src/components/Areas.astro
+const zonas = [
+    {
+        ciudad: 'Don Benito',
+        desc: 'Webs para negocios de Don Benito y las Vegas Altas.',
+        href: '/diseno-web-don-benito',
+    },
+    {
+        ciudad: 'Villanueva de la Serena',
+        desc: 'Diseño y desarrollo web en Villanueva de la Serena.',
+        href: '/diseno-web-villanueva-de-la-serena',
+    },
+    {
+        ciudad: 'Cáceres',
+        desc: 'Agencia web para toda la provincia de Cáceres.',
+        href: '/diseno-web-caceres',
+    },
+]
+---
+
+<section class='zonas'>
+    <div class='container'>
+        <div class='zonas-head'>
+            <span class='eyebrow'>Zonas</span>
+            <h2>Diseño web <span class='text-accent'>cerca de ti</span>.</h2>
+            <p class='zonas-sub'>
+                Somos de aquí. Trabajamos codo con codo con negocios de toda
+                Extremadura — y en remoto para el resto de España.
+            </p>
+        </div>
+
+        <div class='zonas-grid'>
+            {
+                zonas.map((z) => (
+                    <a href={z.href} class='zona-card'>
+                        <div class='zona-top'>
+                            <span class='zona-pin' aria-hidden='true'>
+                                <svg
+                                    width='20'
+                                    height='20'
+                                    viewBox='0 0 24 24'
+                                    fill='none'
+                                    stroke='currentColor'
+                                    stroke-width='2'
+                                    stroke-linecap='round'
+                                    stroke-linejoin='round'
+                                >
+                                    <>
+                                        <path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z' />
+                                        <circle cx='12' cy='10' r='3' />
+                                    </>
+                                </svg>
+                            </span>
+                            <h3>{z.ciudad}</h3>
+                        </div>
+                        <p>{z.desc}</p>
+                        <span class='zona-link'>
+                            Ver más <span aria-hidden='true'>→</span>
+                        </span>
+                    </a>
+                ))
+            }
+        </div>
+
+        <p class='zonas-foot'>
+            ¿Tu pueblo no está en la lista? <a href='/contacto'
+                >Escríbenos igualmente</a
+            > — trabajamos en remoto.
+        </p>
+    </div>
+</section>
+
+<style>
+    .zonas {
+        padding-block: clamp(4rem, 11vh, 8rem);
+    }
+    .zonas-head {
+        max-width: 640px;
+        margin-bottom: clamp(2.2rem, 5vw, 3.5rem);
+    }
+    .zonas-head .eyebrow {
+        display: inline-block;
+        margin-bottom: 0.8rem;
+    }
+    .zonas-head h2 {
+        margin-bottom: 0.8rem;
+    }
+    .zonas-sub {
+        color: var(--muted);
+        font-size: 1.1rem;
+    }
+
+    .zonas-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.2rem;
+    }
+    .zona-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        padding: clamp(1.4rem, 2.5vw, 1.9rem);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        background: var(--surface);
+        color: var(--fg);
+        transition:
+            transform var(--dur-mid) var(--ease-out-quart),
+            box-shadow var(--dur-mid) var(--ease-out-quart),
+            border-color var(--dur-mid) var(--ease-out-quart);
+    }
+    .zona-card:active {
+        transform: scale(0.98);
+    }
+    @media (hover: hover) and (pointer: fine) {
+        .zona-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+        .zona-card:hover .zona-link span {
+            transform: translateX(4px);
+        }
+    }
+    .zona-top {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+    .zona-pin {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: var(--bg);
+        color: var(--accent);
+        border: 1px solid var(--border);
+        flex-shrink: 0;
+    }
+    .zona-card h3 {
+        font-size: 1.25rem;
+    }
+    .zona-card p {
+        color: var(--muted);
+        font-size: 0.96rem;
+        flex: 1;
+    }
+    .zona-link {
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--accent);
+        display: inline-flex;
+        gap: 0.35rem;
+    }
+    .zona-link span {
+        transition: transform var(--dur-mid) var(--ease-out-quart);
+    }
+
+    .zonas-foot {
+        margin-top: 2rem;
+        color: var(--muted);
+        font-size: 0.95rem;
+    }
+    .zonas-foot a {
+        color: var(--accent);
+        font-weight: 500;
+    }
+    @media (hover: hover) and (pointer: fine) {
+        .zonas-foot a:hover {
+            text-decoration: underline;
+        }
+    }
+
+    @media (max-width: 860px) {
+        .zonas-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap, ScrollTrigger } from '@/lib/motion.js'
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (!reduce) {
+        gsap.from('.zonas-head > *', {
+            scrollTrigger: { trigger: '.zonas', start: 'top 78%' },
+            y: 26,
+            autoAlpha: 0,
+            stagger: 0.1,
+            duration: 0.7,
+            ease: 'power3.out',
+        })
+        gsap.from('.zona-card', {
+            scrollTrigger: { trigger: '.zonas-grid', start: 'top 84%' },
+            y: 30,
+            autoAlpha: 0,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: 'power3.out',
+        })
+    }
+</script>

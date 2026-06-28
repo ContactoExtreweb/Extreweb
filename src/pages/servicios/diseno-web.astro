@@ -1,0 +1,224 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navbar from '@/components/Navbar.astro'
+import Cta from '@/components/Cta.astro'
+import Footer from '@/components/Footer.astro'
+
+const seoTitle = 'Diseño Web a Medida en Extremadura — extreweb'
+const seoDesc =
+    'Creamos páginas web ultrarrápidas y orientadas a ventas. Olvídate de plantillas lentas: diseñamos a medida para tu negocio.'
+import ServiceSchema from '@/components/seo/ServiceSchema.astro'
+---
+
+<BaseLayout title={seoTitle} description={seoDesc}>
+    <ServiceSchema
+        name='Diseño y desarrollo web'
+        description={seoDesc}
+        slug='/servicios/diseno-web'
+    />
+    <Navbar />
+
+    <main class='page-main'>
+        <div class='ambient-glow g-1'></div>
+
+        <section class='svc-hero text-center'>
+            <div class='container'>
+                <a href='/servicios' class='back-link gsap-fade'
+                    >← Todos los servicios</a
+                >
+                <h1 class='gsap-reveal'>
+                    Diseño Web a<br /><span class='text-accent'>Medida.</span>
+                </h1>
+                <p class='hero-desc gsap-fade'>
+                    Tu escaparate digital 24/7. Diseñamos y programamos desde
+                    cero webs que no solo son visualmente espectaculares, sino
+                    que están construidas para cargar en milisegundos y
+                    conseguir clientes reales.
+                </p>
+            </div>
+        </section>
+
+        <section class='svc-features'>
+            <div class='container'>
+                <div class='feat-grid'>
+                    <div class='feat-card gsap-up'>
+                        <div class='f-icon'>🚀</div>
+                        <h3>Velocidad Extrema</h3>
+                        <p>
+                            Usamos Astro y tecnologías punteras para que tu web
+                            cargue en menos de 1 segundo. Google premia la
+                            velocidad, y tus clientes también.
+                        </p>
+                    </div>
+
+                    <div
+                        class='feat-card gsap-up'
+                        style='transition-delay: 0.1s;'
+                    >
+                        <div class='f-icon'>🎨</div>
+                        <h3>Cero Plantillas</h3>
+                        <p>
+                            No usamos WordPress ni temas pre-comprados. Todo se
+                            diseña pixel a pixel pensando exclusivamente en la
+                            identidad de tu negocio.
+                        </p>
+                    </div>
+
+                    <div
+                        class='feat-card gsap-up'
+                        style='transition-delay: 0.2s;'
+                    >
+                        <div class='f-icon'>📱</div>
+                        <h3>100% Mobile-First</h3>
+                        <p>
+                            Más del 80% del tráfico es móvil. Tu web se verá y
+                            funcionará a la perfección en cualquier pantalla,
+                            garantizado.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <Cta />
+    </main>
+    <Footer />
+</BaseLayout>
+
+<style>
+    .page-main {
+        background: var(--bg);
+        overflow-x: hidden;
+        position: relative;
+    }
+    .text-center {
+        text-align: center;
+    }
+
+    .ambient-glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.15;
+        z-index: 0;
+        pointer-events: none;
+    }
+    .g-1 {
+        width: 600px;
+        height: 600px;
+        background: var(--accent);
+        top: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    html[data-theme='light'] .ambient-glow {
+        opacity: 0.08;
+    }
+
+    .svc-hero {
+        padding: clamp(160px, 20vh, 220px) 0 clamp(60px, 10vh, 100px);
+        position: relative;
+        z-index: 10;
+    }
+    .back-link {
+        color: var(--muted);
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-block;
+        margin-bottom: 2rem;
+        transition: color 0.3s;
+    }
+    .back-link:hover {
+        color: var(--accent);
+    }
+    .svc-hero h1 {
+        font-size: clamp(3rem, 6vw, 5.5rem);
+        font-weight: 800;
+        line-height: 1.05;
+        margin-bottom: 2rem;
+        color: var(--fg);
+    }
+    .hero-desc {
+        font-size: clamp(1.2rem, 2vw, 1.4rem);
+        line-height: 1.6;
+        color: var(--muted);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .svc-features {
+        padding-bottom: clamp(100px, 15vh, 150px);
+        position: relative;
+        z-index: 10;
+    }
+    .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2.5rem;
+    }
+    .feat-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 3rem 2rem;
+        text-align: center;
+        transition:
+            transform 0.3s ease,
+            border-color 0.3s ease;
+    }
+    .feat-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent);
+    }
+    .f-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+    }
+    .feat-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: var(--fg);
+    }
+    .feat-card p {
+        font-size: 1.1rem;
+        color: var(--muted);
+        line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+        .feat-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap } from '@/lib/motion.js'
+    document.addEventListener('DOMContentLoaded', () => {
+        gsap.from('.gsap-reveal', {
+            y: 40,
+            opacity: 0,
+            duration: 1,
+            ease: 'power4.out',
+            delay: 0.1,
+        })
+        gsap.from('.gsap-fade', {
+            y: 20,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.15,
+            ease: 'power3.out',
+            delay: 0.2,
+        })
+        gsap.utils.toArray('.gsap-up').forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: { trigger: el, start: 'top 85%' },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                ease: 'power3.out',
+            })
+        })
+    })
+</script>

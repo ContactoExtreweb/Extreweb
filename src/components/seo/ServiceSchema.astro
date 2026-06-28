@@ -1,0 +1,41 @@
+---
+// src/components/seo/ServiceSchema.astro
+import { SITE } from '@/lib/site.js'
+
+interface Props {
+    name: string
+    description: string
+    slug: string
+}
+const { name, description, slug } = Astro.props
+const url = SITE.url + slug
+
+const service = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name,
+    description,
+    url,
+    serviceType: name,
+    provider: { '@id': SITE.url + '/#organization' },
+    areaServed: SITE.areaServed.map((a) => ({ '@type': 'City', name: a })),
+}
+
+const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE.url },
+        {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Servicios',
+            item: SITE.url + '/servicios',
+        },
+        { '@type': 'ListItem', position: 3, name, item: url },
+    ],
+}
+---
+
+<script type='application/ld+json' set:html={JSON.stringify(service)} />
+<script type='application/ld+json' set:html={JSON.stringify(breadcrumb)} />

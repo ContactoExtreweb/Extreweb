@@ -2,6 +2,8 @@
 // src/layouts/BaseLayout.astro
 import '@fontsource-variable/inter'
 import '@/styles/global.css'
+import Schema from '@/components/seo/Schema.astro'
+import { SITE } from '@/lib/site.js'
 
 interface Props {
     title?: string
@@ -10,12 +12,13 @@ interface Props {
 }
 const {
     title = 'extreweb — Diseño y desarrollo web en Extremadura',
-    description = 'Agencia de diseño, desarrollo web, SEO y soporte técnico en Don Benito, Villanueva de la Serena y Cáceres.',
+    description = SITE.description,
     canonical,
 } = Astro.props
 
 const canonicalURL =
-    canonical ?? new URL(Astro.url.pathname, Astro.site ?? Astro.url).href
+    canonical ?? new URL(Astro.url.pathname, Astro.site ?? SITE.url).href
+const ogImage = new URL(SITE.ogImage, SITE.url).href
 ---
 
 <!doctype html>
@@ -49,7 +52,17 @@ const canonicalURL =
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
         <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
         <meta name='generator' content={Astro.generator} />
-        <meta name='theme-color' content='#ffffff' />
+        <meta
+            name='theme-color'
+            content='#ffffff'
+            media='(prefers-color-scheme: light)'
+        />
+        <meta
+            name='theme-color'
+            content='#000000'
+            media='(prefers-color-scheme: dark)'
+        />
+        <meta name='robots' content='index, follow' />
 
         <title>{title}</title>
         <meta name='description' content={description} />
@@ -59,55 +72,20 @@ const canonicalURL =
         <meta property='og:title' content={title} />
         <meta property='og:description' content={description} />
         <meta property='og:url' content={canonicalURL} />
+        <meta property='og:image' content={ogImage} />
         <meta property='og:locale' content='es_ES' />
+        <meta property='og:site_name' content='extreweb' />
         <meta name='twitter:card' content='summary_large_image' />
+        <meta name='twitter:image' content={ogImage} />
+
+        <Schema />
     </head>
     <body>
-        <!-- Custom Cursor -->
-        <div class="custom-cursor" id="custom-cursor" aria-hidden="true"></div>
         <slot />
 
         <script>
             // @ts-nocheck
-            import { spring } from '@/lib/motion.js'
             import '@/lib/motion.js'
-
-            // --- Lógica del Cursor Personalizado ---
-            const cursor = document.getElementById('custom-cursor');
-            
-            // Solo activamos en dispositivos con ratón preciso
-            if (window.matchMedia('(pointer: fine)').matches && cursor) {
-                // Instanciamos el resorte físico para X e Y
-                const cursorX = spring((v) => { cursor.style.left = `${v}px` }, { stiffness: 0.15, damping: 0.75 });
-                const cursorY = spring((v) => { cursor.style.top = `${v}px` }, { stiffness: 0.15, damping: 0.75 });
-                
-                let isInit = false;
-                
-                window.addEventListener('mousemove', (e) => {
-                    if (!isInit) {
-                        cursor.style.opacity = '1';
-                        // Posición inicial instantánea para evitar que vuele desde la esquina 0,0
-                        cursor.style.left = `${e.clientX}px`;
-                        cursor.style.top = `${e.clientY}px`;
-                        isInit = true;
-                    }
-                    // Le decimos al resorte cuál es el nuevo objetivo
-                    cursorX.set(e.clientX);
-                    cursorY.set(e.clientY);
-                });
-
-                // Detectar interactividad (enlaces, botones) usando event delegation
-                document.addEventListener('mouseover', (e) => {
-                    if (e.target.closest('a, button, input, textarea, select, [role="button"]')) {
-                        cursor.classList.add('is-hovering');
-                    }
-                });
-                document.addEventListener('mouseout', (e) => {
-                    if (e.target.closest('a, button, input, textarea, select, [role="button"]')) {
-                        cursor.classList.remove('is-hovering');
-                    }
-                });
-            }
         </script>
     </body>
 </html>

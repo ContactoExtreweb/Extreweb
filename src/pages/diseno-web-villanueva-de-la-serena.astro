@@ -1,0 +1,124 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navbar from '@/components/Navbar.astro'
+import Cta from '@/components/Cta.astro'
+import Footer from '@/components/Footer.astro'
+
+const seoTitle = "Diseño Web en Villanueva de la Serena | extreweb";
+const seoDesc = "¿Buscas una agencia de diseño web en Villanueva de la Serena? Creamos páginas web a medida, rápidas y optimizadas para negocios locales.";
+---
+
+<BaseLayout title={seoTitle} description={seoDesc}>
+    <Navbar />
+    <main class="page-main">
+        <div class="ambient-glow g-1"></div>
+
+        <section class="local-hero text-center">
+            <div class="container">
+                <span class="eyebrow gsap-fade">Tu agencia cercana</span>
+                <h1 class="gsap-reveal">Diseño Web en<br/><span class="text-accent">Villanueva de la Serena.</span></h1>
+                <p class="hero-desc gsap-fade">
+                    Impulsa tu negocio local con una página web profesional. Somos de aquí, entendemos el mercado de Villanueva de la Serena y diseñamos plataformas que convierten visitas en clientes reales.
+                </p>
+                <div class="hero-actions gsap-fade" style="margin-top: 2rem;">
+                    <a href="/contacto" class="btn btn-accent">Hablemos de tu proyecto</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="local-benefits">
+            <div class="container">
+                <div class="b-grid">
+                    <div class="b-card gsap-up">
+                        <div class="b-icon">📍</div>
+                        <h3>Trato Cercano</h3>
+                        <p>Nos podemos tomar un café en Villanueva. Nada de call-centers lejanos ni intermediarios; hablas directamente con los desarrolladores.</p>
+                    </div>
+                    <div class="b-card gsap-up" style="transition-delay: 0.1s;">
+                        <div class="b-icon">🚀</div>
+                        <h3>Velocidad Local</h3>
+                        <p>Optimizamos el SEO Local (Google Business, mapas, palabras clave) para que cuando alguien en Villanueva busque tus servicios, tú aparezcas el primero.</p>
+                    </div>
+                    <div class="b-card gsap-up" style="transition-delay: 0.2s;">
+                        <div class="b-icon">💎</div>
+                        <h3>Calidad Premium</h3>
+                        <p>No usamos plantillas lentas. Programamos tu web a medida desde cero para que la experiencia de usuario sea perfecta y destaque en el sector.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <Cta />
+    </main>
+    <Footer />
+</BaseLayout>
+
+<style>
+    .page-main { background: var(--bg); overflow-x: hidden; position: relative; }
+    .text-center { text-align: center; }
+
+    .ambient-glow {
+        position: absolute; border-radius: 50%; filter: blur(120px);
+        opacity: 0.15; z-index: 0; pointer-events: none;
+    }
+    .g-1 {
+        width: 600px; height: 600px; background: var(--accent);
+        top: -100px; left: 50%; transform: translateX(-50%);
+    }
+    html[data-theme='light'] .ambient-glow { opacity: 0.08; }
+
+    .local-hero {
+        padding: clamp(160px, 20vh, 220px) 0 clamp(60px, 10vh, 100px);
+        position: relative; z-index: 10;
+    }
+    .eyebrow {
+        color: var(--accent); font-weight: 600; letter-spacing: 0.1em;
+        text-transform: uppercase; display: block; margin-bottom: 2rem;
+    }
+    .local-hero h1 {
+        font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800;
+        line-height: 1.05; margin-bottom: 2rem; color: var(--fg);
+    }
+    .hero-desc {
+        font-size: clamp(1.2rem, 2vw, 1.4rem); line-height: 1.6;
+        color: var(--muted); max-width: 700px; margin: 0 auto;
+    }
+
+    .local-benefits {
+        padding-bottom: clamp(100px, 15vh, 150px);
+        position: relative; z-index: 10;
+    }
+    .b-grid {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;
+    }
+    .b-card {
+        background: var(--surface); border: 1px solid var(--border);
+        border-radius: 24px; padding: 3rem 2rem; text-align: center;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .b-card:hover {
+        transform: translateY(-5px); border-color: var(--accent);
+    }
+    .b-icon { font-size: 3rem; margin-bottom: 1.5rem; }
+    .b-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--fg); }
+    .b-card p { font-size: 1.1rem; color: var(--muted); line-height: 1.6; }
+
+    @media (max-width: 900px) {
+        .b-grid { grid-template-columns: 1fr; }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap } from '@/lib/motion.js'
+    document.addEventListener('DOMContentLoaded', () => {
+        gsap.from(".gsap-reveal", { y: 40, opacity: 0, duration: 1, ease: "power4.out", delay: 0.1 });
+        gsap.from(".gsap-fade", { y: 20, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.2 });
+        gsap.utils.toArray('.gsap-up').forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: { trigger: el, start: "top 85%" },
+                y: 50, opacity: 0, duration: 0.8, ease: "power3.out"
+            });
+        });
+    });
+</script>

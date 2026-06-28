@@ -6,223 +6,356 @@ import Footer from '@/components/Footer.astro'
 
 const services = [
     {
-        title: "Desarrollo Nativo",
-        desc: "Arquitecturas ultra-rápidas basadas en Astro y React. Adiós a las plantillas pesadas.",
-        link: "/servicios/diseno-web",
-        img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80"
+        title: 'Diseño Web a Medida',
+        desc: 'Páginas web ultrarrápidas y orientadas a ventas. Cero plantillas pesadas.',
+        link: '/servicios/diseno-web',
+        img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80',
     },
     {
-        title: "Comercio Electrónico",
-        desc: "Tiendas Headless de alta conversión. Cero fricción en el checkout.",
-        link: "#",
-        img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1000&q=80"
+        title: 'Posicionamiento SEO',
+        desc: 'Domina las búsquedas en Extremadura. SEO local, técnico y de contenido.',
+        link: '/servicios/seo',
+        img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80',
     },
     {
-        title: "SEO Técnico Profundo",
-        desc: "Auditorías de código, optimización WPO y marcado semántico perfecto para escalar en Google.",
-        link: "/servicios/seo",
-        img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80"
+        title: 'Redes Sociales',
+        desc: 'Atrae, conecta y fideliza a tu audiencia con estrategias reales y Social Ads.',
+        link: '/servicios/redes-sociales',
+        img: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1000&q=80',
     },
     {
-        title: "Mantenimiento Crítico",
-        desc: "Tu negocio no duerme. Monitorización 24/7 y despliegues continuos sin caídas.",
-        link: "/servicios/sistemas-soporte",
-        img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80"
-    }
+        title: 'Sistemas y Soporte',
+        desc: 'Mantenimiento informático, redes y seguridad para que tu empresa nunca pare.',
+        link: '/servicios/sistemas-soporte',
+        img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80',
+    },
 ]
 
 // Usamos SVGs simples inline para el tech stack
 const techStack = [
-    { name: "Astro", svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.986 9.47c-.07-.464-.325-.853-.726-1.1L12.753.257a1.44 1.44 0 0 0-1.506 0L2.738 8.37a1.36 1.36 0 0 0-.726 1.1c-.04.469.155.932.534 1.258l7.25 6.33a3.52 3.52 0 0 0 2.204.793 3.52 3.52 0 0 0 2.204-.793l7.25-6.33a1.6 1.6 0 0 0 .532-1.258z"/></svg>' },
-    { name: "React", svg: '<svg viewBox="-11.5 -10.23174 23 20.46348" fill="currentColor"><circle cx="0" cy="0" r="2.05"/><g stroke="currentColor" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>' },
-    { name: "Node.js", svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>' },
-    { name: "Figma", svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a5 5 0 0 0-5 5v10a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z"/></svg>' },
-    { name: "Vercel", svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 22.525H0l12-21.05 12 21.05z"/></svg>' },
-    { name: "Tailwind", svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z"/></svg>' }
+    {
+        name: 'Astro',
+        svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.986 9.47c-.07-.464-.325-.853-.726-1.1L12.753.257a1.44 1.44 0 0 0-1.506 0L2.738 8.37a1.36 1.36 0 0 0-.726 1.1c-.04.469.155.932.534 1.258l7.25 6.33a3.52 3.52 0 0 0 2.204.793 3.52 3.52 0 0 0 2.204-.793l7.25-6.33a1.6 1.6 0 0 0 .532-1.258z"/></svg>',
+    },
+    {
+        name: 'React',
+        svg: '<svg viewBox="-11.5 -10.23174 23 20.46348" fill="currentColor"><circle cx="0" cy="0" r="2.05"/><g stroke="currentColor" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>',
+    },
+    {
+        name: 'Node.js',
+        svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
+    },
+    {
+        name: 'Figma',
+        svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a5 5 0 0 0-5 5v10a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z"/></svg>',
+    },
+    {
+        name: 'Vercel',
+        svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 22.525H0l12-21.05 12 21.05z"/></svg>',
+    },
+    {
+        name: 'Tailwind',
+        svg: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z"/></svg>',
+    },
 ]
 ---
 
-<BaseLayout 
-    title="Servicios Premium | Extreweb" 
-    description="Descubre nuestro catálogo de soluciones digitales. Ingeniería de alto rendimiento y diseño vanguardista."
+<BaseLayout
+    title='Servicios Premium | Extreweb'
+    description='Descubre nuestro catálogo de soluciones digitales. Ingeniería de alto rendimiento y diseño vanguardista.'
 >
     <Navbar />
-    
-    <main class="page-main">
+
+    <main class='page-main'>
         <!-- HERO MONUMENTAL -->
         <section class='s-hero'>
             <div class='container s-hero-inner'>
-                <h1 class="h-title gsap-reveal">Más que código.<br/><span class="text-accent">Ingeniería pura.</span></h1>
-                <p class="h-desc gsap-reveal">Diseñamos y desarrollamos ecosistemas digitales de alto rendimiento. Arquitecturas preparadas para escalar que transforman visitas en ingresos reales, dejando a tu competencia obsoleta.</p>
+                <h1 class='h-title gsap-reveal'>
+                    Más que código.<br /><span class='text-accent'
+                        >Ingeniería pura.</span>
+                </h1>
+                <p class='h-desc gsap-reveal'>
+                    Diseñamos y desarrollamos ecosistemas digitales de alto
+                    rendimiento. Arquitecturas preparadas para escalar que
+                    transforman visitas en ingresos reales, dejando a tu
+                    competencia obsoleta.
+                </p>
             </div>
-            
+
             <!-- Barra de Métricas (Ribbon) -->
-            <div class="metrics-ribbon gsap-reveal">
-                <div class="m-item">
-                    <span class="m-val">100/100</span>
-                    <span class="m-lbl">Lighthouse</span>
+            <div class='metrics-ribbon gsap-reveal'>
+                <div class='m-item'>
+                    <span class='m-val'>100/100</span>
+                    <span class='m-lbl'>Lighthouse</span>
                 </div>
-                <div class="m-item">
-                    <span class="m-val">&lt;0.8s</span>
-                    <span class="m-lbl">Carga Total</span>
+                <div class='m-item'>
+                    <span class='m-val'>&lt;0.8s</span>
+                    <span class='m-lbl'>Carga Total</span>
                 </div>
-                <div class="m-item">
-                    <span class="m-val">99.9%</span>
-                    <span class="m-lbl">Uptime</span>
+                <div class='m-item'>
+                    <span class='m-val'>99.9%</span>
+                    <span class='m-lbl'>Uptime</span>
                 </div>
-                <div class="m-item">
-                    <span class="m-val">24/7</span>
-                    <span class="m-lbl">Soporte</span>
+                <div class='m-item'>
+                    <span class='m-val'>24/7</span>
+                    <span class='m-lbl'>Soporte</span>
                 </div>
             </div>
-            
-            <div class="hero-bg-blur"></div>
+
+            <div class='hero-bg-blur'></div>
         </section>
 
         <!-- TECH STACK -->
-        <section class="tech-marquee-sec">
-            <div class="tech-track">
-                <div class="tech-content">
-                    {techStack.map(tech => (
-                        <div class="tech-item">
-                            <div class="tech-icon" set:html={tech.svg} />
-                            <span>{tech.name}</span>
-                        </div>
-                    ))}
+        <section class='tech-marquee-sec'>
+            <div class='tech-track'>
+                <div class='tech-content'>
+                    {
+                        techStack.map((tech) => (
+                            <div class='tech-item'>
+                                <div class='tech-icon' set:html={tech.svg} />
+                                <span>{tech.name}</span>
+                            </div>
+                        ))
+                    }
                 </div>
-                <div class="tech-content" aria-hidden="true">
-                    {techStack.map(tech => (
-                        <div class="tech-item">
-                            <div class="tech-icon" set:html={tech.svg} />
-                            <span>{tech.name}</span>
-                        </div>
-                    ))}
+                <div class='tech-content' aria-hidden='true'>
+                    {
+                        techStack.map((tech) => (
+                            <div class='tech-item'>
+                                <div class='tech-icon' set:html={tech.svg} />
+                                <span>{tech.name}</span>
+                            </div>
+                        ))
+                    }
                 </div>
             </div>
         </section>
 
         <!-- LISTA INTERACTIVA (HOVER REVEAL) -->
-        <section class="services-list-sec">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="gsap-up">Nuestras Capacidades.</h2>
+        <section class='services-list-sec'>
+            <div class='container'>
+                <div class='section-header'>
+                    <h2 class='gsap-up'>Nuestras Capacidades.</h2>
                 </div>
-                <div class="s-list">
-                    {services.map((s, index) => (
-                        <a href={s.link} class="s-row gsap-row" data-img={s.img}>
-                            <div class="s-row-main">
-                                <span class="s-num">0{index + 1}</span>
-                                <h3 class="s-title">{s.title}</h3>
-                            </div>
-                            <div class="s-row-desc">
-                                <p>{s.desc}</p>
-                            </div>
-                            <div class="s-row-arrow">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                            </div>
-                        </a>
-                    ))}
+                <div class='s-list'>
+                    {
+                        services.map((s, index) => (
+                            <a
+                                href={s.link}
+                                class='s-row gsap-row'
+                                data-img={s.img}
+                            >
+                                <div class='s-row-main'>
+                                    <span class='s-num'>0{index + 1}</span>
+                                    <h3 class='s-title'>{s.title}</h3>
+                                </div>
+                                <div class='s-row-desc'>
+                                    <p>{s.desc}</p>
+                                </div>
+                                <div class='s-row-arrow'>
+                                    <svg
+                                        width='40'
+                                        height='40'
+                                        viewBox='0 0 24 24'
+                                        fill='none'
+                                        stroke='currentColor'
+                                        stroke-width='1.5'
+                                        stroke-linecap='round'
+                                        stroke-linejoin='round'
+                                    >
+                                        <>
+                                            <line
+                                                x1='5'
+                                                y1='12'
+                                                x2='19'
+                                                y2='12'
+                                            />
+                                            <polyline points='12 5 19 12 12 19' />
+                                        </>
+                                    </svg>
+                                </div>
+                            </a>
+                        ))
+                    }
                 </div>
             </div>
-            
-            <div class="hover-image-tracker" id="img-tracker" aria-hidden="true">
-                <div class="tracker-inner">
-                    <img src="" alt="Vista previa del servicio" id="tracker-img" />
+
+            <div
+                class='hover-image-tracker'
+                id='img-tracker'
+                aria-hidden='true'
+            >
+                <div class='tracker-inner'>
+                    <img
+                        src=''
+                        alt='Vista previa del servicio'
+                        id='tracker-img'
+                    />
                 </div>
             </div>
         </section>
 
         <!-- TABS INTERACTIVOS DE ARQUITECTURA -->
-        <section class="interactive-features">
-            <div class="container">
-                <div class="section-header center">
-                    <h2 class="gsap-up">Arquitectura sin fisuras.</h2>
-                    <p class="gsap-up">Diseñamos cada capa de tu proyecto pensando en la conversión y la velocidad extrema.</p>
+        <section class='interactive-features'>
+            <div class='container'>
+                <div class='section-header center'>
+                    <h2 class='gsap-up'>Arquitectura sin fisuras.</h2>
+                    <p class='gsap-up'>
+                        Diseñamos cada capa de tu proyecto pensando en la
+                        conversión y la velocidad extrema.
+                    </p>
                 </div>
-                
-                <div class="if-layout">
+
+                <div class='if-layout'>
                     <!-- Columna Izquierda: Botones -->
-                    <div class="if-tabs gsap-up">
-                        <button class="if-tab is-active" data-index="0">
-                            <div class="if-tab-content">
+                    <div class='if-tabs gsap-up'>
+                        <button class='if-tab is-active' data-index='0'>
+                            <div class='if-tab-content'>
                                 <h3>Velocidad Absoluta</h3>
-                                <p>Desarrollamos arquitecturas Headless que cargan de forma instantánea, eliminando la tasa de rebote.</p>
+                                <p>
+                                    Desarrollamos arquitecturas Headless que
+                                    cargan de forma instantánea, eliminando la
+                                    tasa de rebote.
+                                </p>
                             </div>
-                            <div class="if-progress"><div class="if-progress-bar"></div></div>
+                            <div class='if-progress'>
+                                <div class='if-progress-bar'></div>
+                            </div>
                         </button>
-                        
-                        <button class="if-tab" data-index="1">
-                            <div class="if-tab-content">
+
+                        <button class='if-tab' data-index='1'>
+                            <div class='if-tab-content'>
                                 <h3>Mobile-First Real</h3>
-                                <p>No encogemos la web. Diseñamos experiencias nativas pensadas para gestos táctiles.</p>
+                                <p>
+                                    No encogemos la web. Diseñamos experiencias
+                                    nativas pensadas para gestos táctiles.
+                                </p>
                             </div>
-                            <div class="if-progress"><div class="if-progress-bar"></div></div>
+                            <div class='if-progress'>
+                                <div class='if-progress-bar'></div>
+                            </div>
                         </button>
-                        
-                        <button class="if-tab" data-index="2">
-                            <div class="if-tab-content">
+
+                        <button class='if-tab' data-index='2'>
+                            <div class='if-tab-content'>
                                 <h3>Seguridad Infranqueable</h3>
-                                <p>Al no usar CMS tradicionales, tu plataforma es matemáticamente inmune a hackeos masivos.</p>
+                                <p>
+                                    Al no usar CMS tradicionales, tu plataforma
+                                    es matemáticamente inmune a hackeos masivos.
+                                </p>
                             </div>
-                            <div class="if-progress"><div class="if-progress-bar"></div></div>
+                            <div class='if-progress'>
+                                <div class='if-progress-bar'></div>
+                            </div>
                         </button>
-                        
-                        <button class="if-tab" data-index="3">
-                            <div class="if-tab-content">
+
+                        <button class='if-tab' data-index='3'>
+                            <div class='if-tab-content'>
                                 <h3>SEO en el ADN</h3>
-                                <p>Código fuente estructurado semánticamente para que Google te priorice desde el primer día.</p>
+                                <p>
+                                    Código fuente estructurado semánticamente
+                                    para que Google te priorice desde el primer
+                                    día.
+                                </p>
                             </div>
-                            <div class="if-progress"><div class="if-progress-bar"></div></div>
+                            <div class='if-progress'>
+                                <div class='if-progress-bar'></div>
+                            </div>
                         </button>
                     </div>
-                    
+
                     <!-- Columna Derecha: Visuales -->
-                    <div class="if-display gsap-up">
+                    <div class='if-display gsap-up'>
                         <!-- Panel 1: Velocidad -->
-                        <div class="if-panel is-active" data-index="0">
-                            <div class="if-visual-speed">
-                                <div class="speed-meter">
-                                    <svg viewBox="0 0 100 50" class="speed-arc">
-                                        <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="color-mix(in srgb, var(--border) 50%, transparent)" stroke-width="10" stroke-linecap="round"/>
-                                        <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="var(--accent)" stroke-width="10" stroke-linecap="round" class="speed-arc-fill" stroke-dasharray="125" stroke-dashoffset="125"/>
+                        <div class='if-panel is-active' data-index='0'>
+                            <div class='if-visual-speed'>
+                                <div class='speed-meter'>
+                                    <svg viewBox='0 0 100 50' class='speed-arc'>
+                                        <path
+                                            d='M 10 50 A 40 40 0 0 1 90 50'
+                                            fill='none'
+                                            stroke='color-mix(in srgb, var(--border) 50%, transparent)'
+                                            stroke-width='10'
+                                            stroke-linecap='round'></path>
+                                        <path
+                                            d='M 10 50 A 40 40 0 0 1 90 50'
+                                            fill='none'
+                                            stroke='var(--accent)'
+                                            stroke-width='10'
+                                            stroke-linecap='round'
+                                            class='speed-arc-fill'
+                                            stroke-dasharray='125'
+                                            stroke-dashoffset='125'></path>
                                     </svg>
-                                    <div class="speed-score">100</div>
+                                    <div class='speed-score'>100</div>
                                 </div>
-                                <div class="speed-text">Lighthouse Performance</div>
+                                <div class='speed-text'>
+                                    Lighthouse Performance
+                                </div>
                             </div>
                         </div>
-                        
+
                         <!-- Panel 2: Mobile -->
-                        <div class="if-panel" data-index="1">
-                            <div class="if-visual-mobile">
-                                <div class="mockup-phone">
-                                    <div class="mockup-screen">
-                                        <div class="m-header"></div>
-                                        <div class="m-hero"></div>
-                                        <div class="m-grid"><div class="m-card"></div><div class="m-card"></div></div>
+                        <div class='if-panel' data-index='1'>
+                            <div class='if-visual-mobile'>
+                                <div class='mockup-phone'>
+                                    <div class='mockup-screen'>
+                                        <div class='m-header'></div>
+                                        <div class='m-hero'></div>
+                                        <div class='m-grid'>
+                                            <div class='m-card'></div><div
+                                                class='m-card'
+                                            >
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Panel 3: Seguridad -->
-                        <div class="if-panel" data-index="2">
-                            <div class="if-visual-security">
-                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="shield-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                                <div class="sec-pulse"></div>
-                                <div class="sec-pulse delay"></div>
+                        <div class='if-panel' data-index='2'>
+                            <div class='if-visual-security'>
+                                <svg
+                                    width='80'
+                                    height='80'
+                                    viewBox='0 0 24 24'
+                                    fill='none'
+                                    stroke='var(--accent)'
+                                    stroke-width='1.5'
+                                    stroke-linecap='round'
+                                    stroke-linejoin='round'
+                                    class='shield-icon'
+                                    ><path
+                                        d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'
+                                    ></path></svg
+                                >
+                                <div class='sec-pulse'></div>
+                                <div class='sec-pulse delay'></div>
                             </div>
                         </div>
-                        
+
                         <!-- Panel 4: SEO -->
-                        <div class="if-panel" data-index="3">
-                            <div class="if-visual-seo">
-                                <svg viewBox="0 0 100 40" class="seo-chart">
-                                    <path d="M0 40 L10 35 L30 38 L50 20 L70 25 L90 5 L100 0" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="seo-line-anim"/>
-                                    <circle cx="90" cy="5" r="3" fill="var(--accent)" />
+                        <div class='if-panel' data-index='3'>
+                            <div class='if-visual-seo'>
+                                <svg viewBox='0 0 100 40' class='seo-chart'>
+                                    <path
+                                        d='M0 40 L10 35 L30 38 L50 20 L70 25 L90 5 L100 0'
+                                        fill='none'
+                                        stroke='var(--accent)'
+                                        stroke-width='3'
+                                        stroke-linecap='round'
+                                        stroke-linejoin='round'
+                                        class='seo-line-anim'></path>
+                                    <circle
+                                        cx='90'
+                                        cy='5'
+                                        r='3'
+                                        fill='var(--accent)'></circle>
                                 </svg>
-                                <div class="seo-nodes">
-                                    <span>{'<title>'}</span><span>{'<h1>'}</span><span>{'<meta>'}</span>
+                                <div class='seo-nodes'>
+                                    <span>{'<title>'}</span><span>{'<h1>'}</span
+                                    ><span>{'<meta>'}</span>
                                 </div>
                             </div>
                         </div>
@@ -239,7 +372,9 @@ const techStack = [
 </BaseLayout>
 
 <style>
-    .page-main { overflow-x: hidden; }
+    .page-main {
+        overflow-x: hidden;
+    }
 
     /* --- HERO MONUMENTAL --- */
     .s-hero {
@@ -275,7 +410,11 @@ const techStack = [
         transform: translateX(-50%);
         width: 80vw;
         height: 60vh;
-        background: radial-gradient(circle, color-mix(in srgb, var(--accent) 15%, transparent) 0%, transparent 70%);
+        background: radial-gradient(
+            circle,
+            color-mix(in srgb, var(--accent) 15%, transparent) 0%,
+            transparent 70%
+        );
         filter: blur(100px);
         z-index: 1;
         pointer-events: none;
@@ -358,8 +497,12 @@ const techStack = [
         letter-spacing: -0.02em;
     }
     @keyframes techScroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
     }
 
     /* --- HOVER REVEAL LIST --- */
@@ -399,7 +542,9 @@ const techStack = [
         border-bottom: 1px solid var(--border);
         text-decoration: none;
         color: var(--fg);
-        transition: padding 0.5s var(--ease-out-quart), background 0.3s ease;
+        transition:
+            padding 0.5s var(--ease-out-quart),
+            background 0.3s ease;
         position: relative;
     }
     .s-row-main {
@@ -432,7 +577,9 @@ const techStack = [
     }
     .s-row-arrow svg {
         color: var(--muted);
-        transition: transform 0.5s var(--ease-out-quart), color 0.3s ease;
+        transition:
+            transform 0.5s var(--ease-out-quart),
+            color 0.3s ease;
     }
 
     @media (hover: hover) {
@@ -441,8 +588,13 @@ const techStack = [
             padding-right: 2rem;
             background: color-mix(in srgb, var(--surface) 20%, transparent);
         }
-        .s-row:hover .s-num, .s-row:hover .s-title { color: var(--accent); }
-        .s-row:hover .s-row-desc p { opacity: 1; }
+        .s-row:hover .s-num,
+        .s-row:hover .s-title {
+            color: var(--accent);
+        }
+        .s-row:hover .s-row-desc p {
+            opacity: 1;
+        }
         .s-row:hover .s-row-arrow svg {
             color: var(--accent);
             transform: translateX(15px) rotate(45deg); /* Dynamic arrow turn */
@@ -451,27 +603,32 @@ const techStack = [
 
     .hover-image-tracker {
         position: fixed;
-        top: 0; left: 0;
+        top: 0;
+        left: 0;
         width: 450px;
         height: 300px;
         pointer-events: none;
         z-index: 100;
         opacity: 0;
         transform: translate(-50%, -50%) scale(0.7);
-        transition: opacity 0.4s ease, transform 0.6s var(--ease-out-quart);
+        transition:
+            opacity 0.4s ease,
+            transform 0.6s var(--ease-out-quart);
     }
     .hover-image-tracker.is-active {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1);
     }
     .tracker-inner {
-        width: 100%; height: 100%;
+        width: 100%;
+        height: 100%;
         border-radius: 24px;
         overflow: hidden;
-        box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
     }
     .tracker-inner img {
-        width: 100%; height: 100%;
+        width: 100%;
+        height: 100%;
         object-fit: cover;
     }
 
@@ -490,7 +647,7 @@ const techStack = [
         border-radius: 32px;
         padding: clamp(2rem, 5vw, 4rem);
     }
-    
+
     .if-tabs {
         display: flex;
         flex-direction: column;
@@ -526,11 +683,13 @@ const techStack = [
     .if-tab.is-active h3 {
         color: var(--accent);
     }
-    
+
     .if-progress {
         position: absolute;
-        bottom: 0; left: 0;
-        width: 100%; height: 3px;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
         background: transparent;
     }
     .if-progress-bar {
@@ -546,7 +705,7 @@ const techStack = [
         border: 1px solid var(--border);
         border-radius: 24px;
         overflow: hidden;
-        box-shadow: inset 0 0 40px rgba(0,0,0,0.02);
+        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.02);
     }
     .if-panel {
         position: absolute;
@@ -562,63 +721,184 @@ const techStack = [
         opacity: 1;
         visibility: visible;
     }
-    
+
     /* Visual: Speed */
-    .if-visual-speed { text-align: center; }
-    .speed-meter { position: relative; width: 250px; height: 125px; margin: 0 auto 2rem; overflow: hidden; }
-    .speed-arc { width: 100%; height: 200%; }
+    .if-visual-speed {
+        text-align: center;
+    }
+    .speed-meter {
+        position: relative;
+        width: 250px;
+        height: 125px;
+        margin: 0 auto 2rem;
+        overflow: hidden;
+    }
+    .speed-arc {
+        width: 100%;
+        height: 200%;
+    }
     .speed-score {
-        position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-        font-size: 4rem; font-weight: 800; font-family: var(--font-mono, monospace); line-height: 1; color: var(--fg);
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 4rem;
+        font-weight: 800;
+        font-family: var(--font-mono, monospace);
+        line-height: 1;
+        color: var(--fg);
     }
-    .speed-text { font-size: 1.2rem; color: var(--muted); font-weight: 500; }
-    
+    .speed-text {
+        font-size: 1.2rem;
+        color: var(--muted);
+        font-weight: 500;
+    }
+
     /* Visual: Mobile */
-    .if-visual-mobile { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%); }
-    .mockup-phone {
-        width: 220px; height: 440px; border: 8px solid var(--fg); border-radius: 36px; padding: 6px; background: var(--bg);
-        box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+    .if-visual-mobile {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(
+            circle,
+            color-mix(in srgb, var(--accent) 10%, transparent),
+            transparent 60%
+        );
     }
-    .mockup-screen { width: 100%; height: 100%; border-radius: 24px; background: color-mix(in srgb, var(--surface) 60%, transparent); overflow: hidden; display: flex; flex-direction: column; gap: 10px; padding: 15px; }
-    .m-header { width: 100%; height: 20px; border-radius: 10px; background: color-mix(in srgb, var(--border) 60%, transparent); }
-    .m-hero { width: 100%; height: 120px; border-radius: 12px; background: color-mix(in srgb, var(--accent) 20%, transparent); }
-    .m-grid { display: flex; gap: 10px; flex: 1; }
-    .m-card { flex: 1; background: var(--bg); border-radius: 10px; }
+    .mockup-phone {
+        width: 220px;
+        height: 440px;
+        border: 8px solid var(--fg);
+        border-radius: 36px;
+        padding: 6px;
+        background: var(--bg);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+    }
+    .mockup-screen {
+        width: 100%;
+        height: 100%;
+        border-radius: 24px;
+        background: color-mix(in srgb, var(--surface) 60%, transparent);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+    .m-header {
+        width: 100%;
+        height: 20px;
+        border-radius: 10px;
+        background: color-mix(in srgb, var(--border) 60%, transparent);
+    }
+    .m-hero {
+        width: 100%;
+        height: 120px;
+        border-radius: 12px;
+        background: color-mix(in srgb, var(--accent) 20%, transparent);
+    }
+    .m-grid {
+        display: flex;
+        gap: 10px;
+        flex: 1;
+    }
+    .m-card {
+        flex: 1;
+        background: var(--bg);
+        border-radius: 10px;
+    }
 
     /* Visual: Security */
-    .if-visual-security { position: relative; display: flex; align-items: center; justify-content: center; }
-    .shield-icon { position: relative; z-index: 2; }
+    .if-visual-security {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .shield-icon {
+        position: relative;
+        z-index: 2;
+    }
     .sec-pulse {
-        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-        width: 100px; height: 100px; border-radius: 50%;
-        border: 2px solid var(--accent); opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 2px solid var(--accent);
+        opacity: 0;
     }
 
     /* Visual: SEO */
-    .if-visual-seo { width: 80%; }
-    .seo-chart { width: 100%; height: 150px; overflow: visible; margin-bottom: 2rem; }
-    .seo-nodes { display: flex; justify-content: space-between; font-family: var(--font-mono, monospace); color: var(--muted); font-size: 0.9rem; }
+    .if-visual-seo {
+        width: 80%;
+    }
+    .seo-chart {
+        width: 100%;
+        height: 150px;
+        overflow: visible;
+        margin-bottom: 2rem;
+    }
+    .seo-nodes {
+        display: flex;
+        justify-content: space-between;
+        font-family: var(--font-mono, monospace);
+        color: var(--muted);
+        font-size: 0.9rem;
+    }
 
     /* --- RESPONSIVE --- */
     @media (max-width: 1000px) {
-        .if-layout { grid-template-columns: 1fr; padding: 1.5rem; }
-        .if-display { height: 350px; order: -1; } /* El display visual va arriba en móvil */
+        .if-layout {
+            grid-template-columns: 1fr;
+            padding: 1.5rem;
+        }
+        .if-display {
+            height: 350px;
+            order: -1;
+        } /* El display visual va arriba en móvil */
 
         .s-row {
             grid-template-columns: 1fr;
             gap: 1rem;
             padding: 2.5rem 0;
         }
-        .s-row-main { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
-        .s-row-arrow { display: none; }
-        .hover-image-tracker { display: none !important; }
-        
-        .bento-grid { grid-template-columns: 1fr; }
-        .b-large, .b-medium, .b-wide { grid-column: span 1; }
-        .b-wide { grid-template-columns: 1fr; gap: 2rem; }
-        
-        .metrics-ribbon { padding: 2rem 0; gap: 2rem 1rem; }
-        .m-item { width: 45%; }
+        .s-row-main {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+        .s-row-arrow {
+            display: none;
+        }
+        .hover-image-tracker {
+            display: none !important;
+        }
+
+        .bento-grid {
+            grid-template-columns: 1fr;
+        }
+        .b-large,
+        .b-medium,
+        .b-wide {
+            grid-column: span 1;
+        }
+        .b-wide {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .metrics-ribbon {
+            padding: 2rem 0;
+            gap: 2rem 1rem;
+        }
+        .m-item {
+            width: 45%;
+        }
     }
 </style>
 
@@ -626,169 +906,215 @@ const techStack = [
     // @ts-nocheck
     import { gsap, ScrollTrigger } from '@/lib/motion.js'
 
-    document.addEventListener('DOMContentLoaded', initComplexServices);
-    initComplexServices();
+    document.addEventListener('DOMContentLoaded', initComplexServices)
+    initComplexServices()
 
     function initComplexServices() {
-        if (window.__complex_services_inited) return;
-        window.__complex_services_inited = true;
+        if (window.__complex_services_inited) return
+        window.__complex_services_inited = true
 
         // 1. Hero Reveal
-        gsap.from(".gsap-reveal", {
+        gsap.from('.gsap-reveal', {
             y: 50,
             opacity: 0,
             duration: 1.2,
             stagger: 0.2,
-            ease: "power3.out",
-            delay: 0.1
-        });
+            ease: 'power3.out',
+            delay: 0.1,
+        })
 
         // 2. Sections Reveal
         gsap.utils.toArray('.gsap-up').forEach((el) => {
             gsap.from(el, {
-                scrollTrigger: { trigger: el, start: "top 85%" },
-                y: 40, opacity: 0, duration: 0.8, ease: "power3.out"
-            });
-        });
+                scrollTrigger: { trigger: el, start: 'top 85%' },
+                y: 40,
+                opacity: 0,
+                duration: 0.8,
+                ease: 'power3.out',
+            })
+        })
 
         // 3. Hover List Reveal
         gsap.utils.toArray('.gsap-row').forEach((row) => {
             gsap.from(row, {
-                scrollTrigger: { trigger: row, start: "top 90%" },
-                y: 60, opacity: 0, duration: 0.8, ease: "power3.out"
-            });
-        });
+                scrollTrigger: { trigger: row, start: 'top 90%' },
+                y: 60,
+                opacity: 0,
+                duration: 0.8,
+                ease: 'power3.out',
+            })
+        })
 
         // 4. Lógica de Pestañas Interactivas (Reemplazo Bento)
-        const tabs = document.querySelectorAll('.if-tab');
-        const panels = document.querySelectorAll('.if-panel');
-        let currentTab = 0;
-        let tabInterval;
-        let progressTween;
+        const tabs = document.querySelectorAll('.if-tab')
+        const panels = document.querySelectorAll('.if-panel')
+        let currentTab = 0
+        let tabInterval
+        let progressTween
 
         function resetPanelAnimations(panel) {
             // Reiniciar estado CSS de animaciones dentro del panel
-            const speedFill = panel.querySelector('.speed-arc-fill');
-            const pulses = panel.querySelectorAll('.sec-pulse');
-            const seoLine = panel.querySelector('.seo-line-anim');
-            
-            if(speedFill) {
-                gsap.set(speedFill, { strokeDashoffset: 125 });
+            const speedFill = panel.querySelector('.speed-arc-fill')
+            const pulses = panel.querySelectorAll('.sec-pulse')
+            const seoLine = panel.querySelector('.seo-line-anim')
+
+            if (speedFill) {
+                gsap.set(speedFill, { strokeDashoffset: 125 })
             }
-            if(pulses.length) {
-                gsap.killTweensOf(pulses);
-                gsap.set(pulses, { scale: 0.5, opacity: 0 });
+            if (pulses.length) {
+                gsap.killTweensOf(pulses)
+                gsap.set(pulses, { scale: 0.5, opacity: 0 })
             }
-            if(seoLine) {
-                gsap.set(seoLine, { strokeDasharray: 300, strokeDashoffset: 300 });
+            if (seoLine) {
+                gsap.set(seoLine, {
+                    strokeDasharray: 300,
+                    strokeDashoffset: 300,
+                })
             }
         }
 
         function playPanelAnimation(panel) {
-            const index = panel.getAttribute('data-index');
-            
-            if(index === "0") {
-                gsap.to(panel.querySelector('.speed-arc-fill'), { strokeDashoffset: 0, duration: 1.5, ease: "power2.out", delay: 0.2 });
-            }
-            else if(index === "1") {
-                gsap.fromTo(panel.querySelector('.mockup-phone'), { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "back.out(1.5)" });
-            }
-            else if(index === "2") {
+            const index = panel.getAttribute('data-index')
+
+            if (index === '0') {
+                gsap.to(panel.querySelector('.speed-arc-fill'), {
+                    strokeDashoffset: 0,
+                    duration: 1.5,
+                    ease: 'power2.out',
+                    delay: 0.2,
+                })
+            } else if (index === '1') {
+                gsap.fromTo(
+                    panel.querySelector('.mockup-phone'),
+                    { y: 30, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.5)' },
+                )
+            } else if (index === '2') {
                 gsap.to(panel.querySelectorAll('.sec-pulse'), {
-                    scale: 2.5, opacity: 0, duration: 2, stagger: 1, repeat: -1, ease: "power1.out",
-                    onStart: function() { gsap.set(this.targets(), {opacity: 0.5}) }
-                });
-            }
-            else if(index === "3") {
-                gsap.to(panel.querySelector('.seo-line-anim'), { strokeDashoffset: 0, duration: 2, ease: "power2.out", delay: 0.2 });
+                    scale: 2.5,
+                    opacity: 0,
+                    duration: 2,
+                    stagger: 1,
+                    repeat: -1,
+                    ease: 'power1.out',
+                    onStart: function () {
+                        gsap.set(this.targets(), { opacity: 0.5 })
+                    },
+                })
+            } else if (index === '3') {
+                gsap.to(panel.querySelector('.seo-line-anim'), {
+                    strokeDashoffset: 0,
+                    duration: 2,
+                    ease: 'power2.out',
+                    delay: 0.2,
+                })
             }
         }
 
         function goToTab(index, manual = false) {
-            if(progressTween) progressTween.kill();
-            
+            if (progressTween) progressTween.kill()
+
             // UI de Pestañas
-            tabs.forEach(t => {
-                t.classList.remove('is-active');
-                gsap.set(t.querySelector('.if-progress-bar'), { width: "0%" });
-            });
-            tabs[index].classList.add('is-active');
+            tabs.forEach((t) => {
+                t.classList.remove('is-active')
+                gsap.set(t.querySelector('.if-progress-bar'), { width: '0%' })
+            })
+            tabs[index].classList.add('is-active')
 
             // UI de Paneles (GSAP Crossfade)
-            const oldPanel = document.querySelector('.if-panel.is-active');
-            const newPanel = Array.from(panels).find(p => p.getAttribute('data-index') == index);
-            
-            if (oldPanel && oldPanel !== newPanel) {
-                gsap.to(oldPanel, { opacity: 0, duration: 0.3, onComplete: () => {
-                    oldPanel.classList.remove('is-active');
-                    resetPanelAnimations(oldPanel);
-                }});
-            }
-            
-            newPanel.classList.add('is-active');
-            gsap.fromTo(newPanel, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out", delay: 0.1 });
-            playPanelAnimation(newPanel);
+            const oldPanel = document.querySelector('.if-panel.is-active')
+            const newPanel = Array.from(panels).find(
+                (p) => p.getAttribute('data-index') == index,
+            )
 
-            currentTab = index;
+            if (oldPanel && oldPanel !== newPanel) {
+                gsap.to(oldPanel, {
+                    opacity: 0,
+                    duration: 0.3,
+                    onComplete: () => {
+                        oldPanel.classList.remove('is-active')
+                        resetPanelAnimations(oldPanel)
+                    },
+                })
+            }
+
+            newPanel.classList.add('is-active')
+            gsap.fromTo(
+                newPanel,
+                { opacity: 0, scale: 0.95 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.5,
+                    ease: 'power2.out',
+                    delay: 0.1,
+                },
+            )
+            playPanelAnimation(newPanel)
+
+            currentTab = index
 
             // Animar progreso
-            if(!manual) {
-                progressTween = gsap.to(tabs[index].querySelector('.if-progress-bar'), {
-                    width: "100%",
-                    duration: 5,
-                    ease: "none",
-                    onComplete: () => {
-                        let next = (currentTab + 1) % tabs.length;
-                        goToTab(next);
-                    }
-                });
+            if (!manual) {
+                progressTween = gsap.to(
+                    tabs[index].querySelector('.if-progress-bar'),
+                    {
+                        width: '100%',
+                        duration: 5,
+                        ease: 'none',
+                        onComplete: () => {
+                            let next = (currentTab + 1) % tabs.length
+                            goToTab(next)
+                        },
+                    },
+                )
             }
         }
 
         // Iniciar Observer para que empiece cuando la sección esté visible
         ScrollTrigger.create({
-            trigger: ".interactive-features",
-            start: "top 60%",
+            trigger: '.interactive-features',
+            start: 'top 60%',
             once: true,
-            onEnter: () => goToTab(0)
-        });
+            onEnter: () => goToTab(0),
+        })
 
         // Eventos Click manual
         tabs.forEach((tab, i) => {
             tab.addEventListener('click', () => {
-                goToTab(i, true); // True detiene el auto-play
-            });
-        });
+                goToTab(i, true) // True detiene el auto-play
+            })
+        })
 
         // 5. Hover Tracker Logic
         if (window.matchMedia('(pointer: fine)').matches) {
-            const tracker = document.getElementById('img-tracker');
-            const trackerImg = document.getElementById('tracker-img');
-            const rows = document.querySelectorAll('.s-row');
-            
+            const tracker = document.getElementById('img-tracker')
+            const trackerImg = document.getElementById('tracker-img')
+            const rows = document.querySelectorAll('.s-row')
+
             window.addEventListener('mousemove', (e) => {
-                if(tracker) {
+                if (tracker) {
                     gsap.to(tracker, {
                         x: e.clientX,
                         y: e.clientY,
                         duration: 0.6,
-                        ease: "power3.out"
-                    });
+                        ease: 'power3.out',
+                    })
                 }
-            });
+            })
 
-            rows.forEach(row => {
+            rows.forEach((row) => {
                 row.addEventListener('mouseenter', () => {
-                    const imgSrc = row.getAttribute('data-img');
+                    const imgSrc = row.getAttribute('data-img')
                     if (trackerImg && imgSrc) {
-                        trackerImg.src = imgSrc;
+                        trackerImg.src = imgSrc
                     }
-                    tracker?.classList.add('is-active');
-                });
+                    tracker?.classList.add('is-active')
+                })
                 row.addEventListener('mouseleave', () => {
-                    tracker?.classList.remove('is-active');
-                });
-            });
+                    tracker?.classList.remove('is-active')
+                })
+            })
         }
     }
 </script>

@@ -1,0 +1,372 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navbar from '@/components/Navbar.astro'
+import Cta from '@/components/Cta.astro'
+import Footer from '@/components/Footer.astro'
+
+const seoTitle = "Nuestro Proceso — extreweb, agencia web";
+const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página web rápida, bonita y lista para conseguir clientes.";
+---
+
+<BaseLayout title={seoTitle} description={seoDesc}>
+    <Navbar />
+    
+    <main class="page-main">
+        
+        <div class="ambient-glow g-1"></div>
+
+        <!-- HERO PROCESO -->
+        <section class="process-hero text-center">
+            <div class="container">
+                <span class="eyebrow gsap-fade">Cómo trabajamos</span>
+                <h1 class="gsap-reveal">Del caos a la<br/><span class="text-accent">claridad.</span></h1>
+                <p class="hero-desc gsap-fade">
+                    Crear una web no debería ser un dolor de cabeza. Hemos diseñado un proceso de 4 fases donde nosotros nos encargamos de la parte técnica y tú del control de tu negocio.
+                </p>
+            </div>
+        </section>
+
+        <!-- TIMELINE SECTION -->
+        <section class="timeline-sec">
+            <div class="container">
+                
+                <div class="timeline-wrapper">
+                    <!-- Línea central que se dibuja con scroll -->
+                    <div class="timeline-line">
+                        <div class="timeline-line-progress" id="tl-progress"></div>
+                    </div>
+
+                    <!-- FASE 1 -->
+                    <div class="tl-step tl-left">
+                        <div class="tl-dot">1</div>
+                        <div class="tl-content gsap-up">
+                            <h3>Discovery & Estrategia</h3>
+                            <p>Nos sentamos contigo (física o virtualmente) para entender tu negocio a la perfección. Analizamos a tu competencia, definimos a tu cliente ideal y trazamos la arquitectura de la web.</p>
+                            <ul class="tl-list">
+                                <li>Auditoría de tu situación actual</li>
+                                <li>Definición de objetivos</li>
+                                <li>Arquitectura de la información</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- FASE 2 -->
+                    <div class="tl-step tl-right">
+                        <div class="tl-dot">2</div>
+                        <div class="tl-content gsap-up">
+                            <h3>Diseño UI y Textos</h3>
+                            <p>Creamos un diseño visual a medida, sin plantillas, que encaje perfectamente con tu marca. Al mismo tiempo, redactamos o perfilamos los textos para que convenzan y vendan, no solo para rellenar huecos.</p>
+                            <ul class="tl-list">
+                                <li>Wireframes y prototipos</li>
+                                <li>Diseño visual de alta fidelidad</li>
+                                <li>Optimización de copy (textos)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- FASE 3 -->
+                    <div class="tl-step tl-left">
+                        <div class="tl-dot">3</div>
+                        <div class="tl-content gsap-up">
+                            <h3>Desarrollo y Código</h3>
+                            <p>Convertimos el diseño en una web real y ultrarrápida utilizando tecnologías de vanguardia como Astro. Nos aseguramos de que el SEO técnico sea perfecto desde el primer minuto.</p>
+                            <ul class="tl-list">
+                                <li>Programación limpia y moderna</li>
+                                <li>Animaciones e interactividad (GSAP)</li>
+                                <li>Optimización de velocidad de carga</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- FASE 4 -->
+                    <div class="tl-step tl-right">
+                        <div class="tl-dot">4</div>
+                        <div class="tl-content gsap-up">
+                            <h3>Lanzamiento y Soporte</h3>
+                            <p>Hacemos las pruebas finales, conectamos tu dominio y la lanzamos al mundo. Pero no nos vamos: te ofrecemos un mantenimiento continuo para que tu web sea una roca frente a hackeos o caídas.</p>
+                            <ul class="tl-list">
+                                <li>Testing multiplataforma</li>
+                                <li>Despliegue seguro</li>
+                                <li>Mantenimiento técnico proactivo</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <Cta />
+        
+    </main>
+    <Footer />
+</BaseLayout>
+
+<style>
+    .page-main {
+        background: var(--bg);
+        overflow-x: hidden;
+        position: relative;
+    }
+    
+    .text-center { text-align: center; }
+
+    .ambient-glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.15;
+        z-index: 0;
+        pointer-events: none;
+    }
+    .g-1 {
+        width: 700px;
+        height: 700px;
+        background: var(--accent);
+        top: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    html[data-theme='light'] .ambient-glow { opacity: 0.08; }
+
+    /* --- HERO --- */
+    .process-hero {
+        padding: clamp(160px, 20vh, 220px) 0 clamp(60px, 10vh, 100px);
+        position: relative;
+        z-index: 10;
+    }
+    .eyebrow {
+        color: var(--accent);
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        display: block;
+        margin-bottom: 2rem;
+    }
+    .process-hero h1 {
+        font-size: clamp(3rem, 6vw, 5.5rem);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+        margin-bottom: 2rem;
+        color: var(--fg);
+    }
+    .hero-desc {
+        font-size: clamp(1.2rem, 2vw, 1.4rem);
+        line-height: 1.6;
+        color: var(--muted);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* --- TIMELINE --- */
+    .timeline-sec {
+        padding-bottom: clamp(100px, 15vh, 150px);
+        position: relative;
+        z-index: 10;
+    }
+    .timeline-wrapper {
+        position: relative;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    /* La línea vertical base */
+    .timeline-line {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--border);
+        transform: translateX(-50%);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    /* La línea de progreso que se pinta encima */
+    .timeline-line-progress {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 0%; /* Animado por GSAP */
+        background: var(--accent);
+    }
+
+    .tl-step {
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 50%;
+        position: relative;
+        margin-bottom: 4rem;
+        width: 100%;
+    }
+    .tl-step:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Nodos numerados */
+    .tl-dot {
+        position: absolute;
+        left: 50%;
+        top: 0; /* Align top with content */
+        transform: translate(-50%, 0);
+        width: 50px;
+        height: 50px;
+        background: var(--surface);
+        border: 4px solid var(--border);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--fg);
+        z-index: 2;
+        transition: border-color 0.4s ease, color 0.4s ease;
+        box-shadow: 0 0 0 10px var(--bg); /* To clear the line around the dot */
+    }
+    
+    /* El estado iluminado del nodo cuando pasamos por él */
+    .tl-dot.is-active {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--bg);
+    }
+
+    .tl-right {
+        justify-content: flex-start;
+        padding-right: 0;
+        padding-left: 50%;
+    }
+
+    /* El contenido (tarjeta) */
+    .tl-content {
+        width: 85%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 3rem;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+    .tl-content:hover {
+        transform: translateY(-5px);
+        border-color: var(--accent);
+    }
+
+    .tl-left .tl-content {
+        margin-right: auto;
+    }
+    .tl-right .tl-content {
+        margin-left: auto;
+    }
+
+    .tl-content h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--fg);
+        letter-spacing: -0.02em;
+    }
+    .tl-content p {
+        font-size: 1.1rem;
+        color: var(--muted);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+    .tl-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+    .tl-list li {
+        position: relative;
+        padding-left: 1.5rem;
+        font-size: 1.05rem;
+        font-weight: 500;
+        color: var(--fg);
+    }
+    .tl-list li::before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+        font-weight: 800;
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 900px) {
+        .timeline-line {
+            left: 30px; /* Mover línea a la izquierda */
+        }
+        .tl-step {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: 70px; /* Dejar hueco para la línea */
+            margin-bottom: 3rem;
+        }
+        .tl-right {
+            padding-left: 70px;
+        }
+        .tl-dot {
+            left: 30px;
+        }
+        .tl-content {
+            width: 100%;
+            padding: 2rem;
+        }
+    }
+</style>
+
+<script>
+    // @ts-nocheck
+    import { gsap, ScrollTrigger } from '@/lib/motion.js'
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Hero
+        gsap.from(".gsap-reveal", { y: 40, opacity: 0, duration: 1, ease: "power4.out", delay: 0.1 });
+        gsap.from(".gsap-fade", { y: 20, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.2 });
+
+        // Scroll reveals for cards
+        gsap.utils.toArray('.gsap-up').forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: { trigger: el, start: "top 85%" },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+        });
+
+        // Timeline Line Progress & Dot Activation
+        const tlWrapper = document.querySelector('.timeline-wrapper');
+        const tlProgress = document.getElementById('tl-progress');
+        const dots = document.querySelectorAll('.tl-dot');
+
+        if (tlWrapper && tlProgress) {
+            // Animar el alto de la línea en función del scroll dentro del wrapper
+            gsap.to(tlProgress, {
+                scrollTrigger: {
+                    trigger: tlWrapper,
+                    start: "top 50%", // Empieza cuando el top del wrapper llega al medio de la pantalla
+                    end: "bottom 50%", // Termina cuando el final del wrapper llega al medio
+                    scrub: 0.5, // Smooth scrubbing
+                },
+                height: "100%",
+                ease: "none"
+            });
+
+            // Activar visualmente los nodos (dots) cuando la línea (scroll) pasa por ellos
+            dots.forEach((dot) => {
+                ScrollTrigger.create({
+                    trigger: dot,
+                    start: "top 50%", // Cuando el dot cruza la mitad de la pantalla
+                    onEnter: () => dot.classList.add('is-active'),
+                    onLeaveBack: () => dot.classList.remove('is-active'),
+                });
+            });
+        }
+    });
+</script>

@@ -1,0 +1,63 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navbar from '@/components/Navbar.astro'
+import Footer from '@/components/Footer.astro'
+
+const seoTitle = "Política de Cookies — extreweb";
+---
+
+<BaseLayout title={seoTitle}>
+    <Navbar />
+    <main class="legal-main">
+        <div class="container">
+            <div class="legal-content">
+                <h1>Política de Cookies</h1>
+                <p>Este sitio web utiliza cookies para mejorar la experiencia del usuario y analizar el tráfico de la web.</p>
+                
+                <h2>1. ¿Qué son las cookies?</h2>
+                <p>Una cookie es un fichero que se descarga en su ordenador al acceder a determinadas páginas web. Las cookies permiten a una página web, entre otras cosas, almacenar y recuperar información sobre los hábitos de navegación de un usuario o de su equipo y, dependiendo de la información que contengan, pueden utilizarse para reconocer al usuario.</p>
+
+                <h2>2. ¿Qué tipos de cookies utiliza esta web?</h2>
+                <p>
+                    <strong>Cookies técnicas:</strong> Son aquellas necesarias para la navegación y el buen funcionamiento de nuestra página web.<br>
+                    <strong>Cookies de análisis:</strong> Son aquellas que nos permiten cuantificar el número de usuarios y realizar la medición y análisis estadístico del uso que hacen los usuarios del servicio ofertado (ej. Google Analytics).
+                </p>
+
+                <h2>3. ¿Cómo desactivar las cookies?</h2>
+                <p>Puede usted permitir, bloquear o eliminar las cookies instaladas en su equipo mediante la configuración de las opciones del navegador instalado en su ordenador. Consulte las opciones y manuales de su navegador para ampliar esta información.</p>
+            </div>
+        </div>
+    </main>
+    <Footer />
+</BaseLayout>
+
+<style>
+    .legal-main {
+        padding: clamp(150px, 20vh, 200px) 0 clamp(80px, 10vh, 120px);
+        background: var(--bg);
+    }
+    .legal-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .legal-content h1 {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        margin-bottom: 2rem;
+        color: var(--fg);
+    }
+    .legal-content h2 {
+        font-size: 1.5rem;
+        margin-top: 3rem;
+        margin-bottom: 1rem;
+        color: var(--fg);
+    }
+    .legal-content p {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: var(--muted);
+        margin-bottom: 1.5rem;
+    }
+    .legal-content strong {
+        color: var(--fg);
+    }
+</style>
