@@ -224,21 +224,21 @@ const seoDesc =
                 <div class='stats-banner gsap-up'>
                     <div class='s-box'>
                         <span class='s-num'
-                            ><span class='counter' data-target='6'>0</span
+                            ><span class='counter' data-target='6'>6</span
                             ></span
                         >
                         <span class='s-text'>Proyectos<br />Entregados</span>
                     </div>
                     <div class='s-box'>
                         <span class='s-num'
-                            ><span class='counter' data-target='4'>0</span
+                            ><span class='counter' data-target='4'>4</span
                             >+</span
                         >
                         <span class='s-text'>Años de<br />Formación</span>
                     </div>
                     <div class='s-box'>
                         <span class='s-num'
-                            ><span class='counter' data-target='100'>0</span
+                            ><span class='counter' data-target='100'>100</span
                             >%</span
                         >
                         <span class='s-text'>Webs 100%<br />a Medida</span>
@@ -249,19 +249,19 @@ const seoDesc =
                 <div class='services-clean gsap-fade'>
                     <h2 class='text-center'>Qué hacemos</h2>
                     <div class='sc-grid'>
-                        <a href='/servicios' class='sc-item'>
+                        <a href='/servicios/' class='sc-item'>
                             <h4>Diseño Web a Medida</h4>
                             <span>Saber más →</span>
                         </a>
-                        <a href='/servicios' class='sc-item'>
+                        <a href='/servicios/' class='sc-item'>
                             <h4>SEO Local</h4>
                             <span>Saber más →</span>
                         </a>
-                        <a href='/servicios' class='sc-item'>
+                        <a href='/servicios/' class='sc-item'>
                             <h4>Redes Sociales</h4>
                             <span>Saber más →</span>
                         </a>
-                        <a href='/servicios' class='sc-item'>
+                        <a href='/servicios/' class='sc-item'>
                             <h4>Sistemas y Redes</h4>
                             <span>Saber más →</span>
                         </a>
@@ -728,7 +728,7 @@ const seoDesc =
 
 <script>
     // @ts-nocheck
-    import { gsap, ScrollTrigger } from '@/lib/motion.js'
+    import { gsap, ScrollTrigger, reduceMotion } from '@/lib/motion.js'
 
     document.addEventListener('DOMContentLoaded', initDynNosotros)
     initDynNosotros()
@@ -787,7 +787,9 @@ const seoDesc =
         })
 
         // 4. Animación de Contadores Numéricos (GSAP)
-        const counters = document.querySelectorAll('.counter')
+        // El HTML ya trae el número final (lo que ven Google y quien no tenga JS);
+        // aquí solo se anima desde 0 al entrar en pantalla.
+        const counters = reduceMotion ? [] : document.querySelectorAll('.counter')
         counters.forEach((counter) => {
             const target = parseInt(counter.getAttribute('data-target'))
             ScrollTrigger.create({
@@ -795,7 +797,7 @@ const seoDesc =
                 start: 'top 90%',
                 once: true,
                 onEnter: () => {
-                    gsap.to(counter, {
+                    gsap.fromTo(counter, { innerHTML: 0 }, {
                         innerHTML: target,
                         duration: 2.5,
                         snap: { innerHTML: 1 },

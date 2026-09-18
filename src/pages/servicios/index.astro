@@ -8,25 +8,25 @@ const services = [
     {
         title: 'Diseño Web a Medida',
         desc: 'Páginas web ultrarrápidas y orientadas a ventas. Cero plantillas pesadas.',
-        link: '/servicios/diseno-web',
+        link: '/servicios/diseno-web/',
         img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80',
     },
     {
         title: 'Posicionamiento SEO',
         desc: 'Domina las búsquedas en Extremadura. SEO local, técnico y de contenido.',
-        link: '/servicios/seo',
+        link: '/servicios/seo/',
         img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80',
     },
     {
         title: 'Redes Sociales',
         desc: 'Atrae, conecta y fideliza a tu audiencia con estrategias reales y Social Ads.',
-        link: '/servicios/redes-sociales',
+        link: '/servicios/redes-sociales/',
         img: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1000&q=80',
     },
     {
         title: 'Sistemas y Soporte',
         desc: 'Mantenimiento informático, redes y seguridad para que tu empresa nunca pare.',
-        link: '/servicios/sistemas-soporte',
+        link: '/servicios/sistemas-soporte/',
         img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80',
     },
 ]
@@ -61,8 +61,8 @@ const techStack = [
 ---
 
 <BaseLayout
-    title='Servicios Premium | Extreweb'
-    description='Descubre nuestro catálogo de soluciones digitales. Ingeniería de alto rendimiento y diseño vanguardista.'
+    title='Servicios de diseño web, SEO y soporte — extreweb'
+    description='Diseño y desarrollo web a medida, posicionamiento SEO, redes sociales y soporte técnico para negocios de Extremadura. Cuéntanos qué necesitas.'
 >
     <Navbar />
 
@@ -186,11 +186,9 @@ const techStack = [
                 aria-hidden='true'
             >
                 <div class='tracker-inner'>
-                    <img
-                        src=''
-                        alt='Vista previa del servicio'
-                        id='tracker-img'
-                    />
+                    <!-- Sin src: se rellena al pasar el ratón por un servicio
+                         (un src vacío cuenta como imagen rota) -->
+                    <img alt='' id='tracker-img' decoding='async' />
                 </div>
             </div>
         </section>
@@ -567,7 +565,7 @@ const techStack = [
         transition: color 0.3s ease;
     }
     .s-row-desc p {
-        color: #86868b;
+        color: var(--muted);
         font-size: 1.2rem;
         max-width: 400px;
         line-height: 1.5;

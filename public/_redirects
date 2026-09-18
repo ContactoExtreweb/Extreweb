@@ -1,0 +1,4 @@
+# Redirecciones de Netlify (se copia tal cual a dist/)
+# El blog se quitó el 18/09/2026: lo que Google tuviera indexado va a la home.
+/blog     /  301
+/blog/*   /  301

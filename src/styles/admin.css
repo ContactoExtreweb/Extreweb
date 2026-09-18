@@ -968,5 +968,6 @@ button.a-stat { cursor: pointer; }
 /* Móvil: la fecha de la reunión baja bajo el título en vez de estrujarlo */
 @media (max-width: 560px) {
   .a-reu-row { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
-  .a-reu-row .a-badge { margin-left: calc(9px + 0.7rem); }
+  /* Solo se sangra si hay puntito delante (Próximas); en Pasadas va pegada a la izquierda */
+  .a-reu-row .a-reu-item + .a-badge { margin-left: calc(9px + 0.7rem); }
 }

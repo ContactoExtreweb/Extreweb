@@ -1,6 +1,6 @@
 ---
 // src/components/seo/ServiceSchema.astro
-import { SITE } from '@/lib/site.js'
+import { SITE, areaServedSchema } from '@/lib/site.js'
 
 interface Props {
     name: string
@@ -8,7 +8,8 @@ interface Props {
     slug: string
 }
 const { name, description, slug } = Astro.props
-const url = SITE.url + slug
+// Con barra final, igual que la URL canónica de la página
+const url = SITE.url + slug.replace(/\/?$/, '/')
 
 const service = {
     '@context': 'https://schema.org',
@@ -18,19 +19,19 @@ const service = {
     url,
     serviceType: name,
     provider: { '@id': SITE.url + '/#organization' },
-    areaServed: SITE.areaServed.map((a) => ({ '@type': 'City', name: a })),
+    areaServed: areaServedSchema,
 }
 
 const breadcrumb = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE.url },
+        { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE.url + '/' },
         {
             '@type': 'ListItem',
             position: 2,
             name: 'Servicios',
-            item: SITE.url + '/servicios',
+            item: SITE.url + '/servicios/',
         },
         { '@type': 'ListItem', position: 3, name, item: url },
     ],

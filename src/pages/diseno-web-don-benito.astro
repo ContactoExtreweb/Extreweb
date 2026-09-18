@@ -1,124 +1,61 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro'
-import Navbar from '@/components/Navbar.astro'
-import Cta from '@/components/Cta.astro'
-import Footer from '@/components/Footer.astro'
-
-const seoTitle = "Diseño Web en Don Benito | extreweb";
-const seoDesc = "¿Buscas una agencia de diseño web en Don Benito? Creamos páginas web a medida, rápidas y optimizadas para negocios de las Vegas Altas.";
+// Página local: Don Benito. El diseño está en LocalLanding.astro;
+// aquí solo va el contenido, que tiene que ser propio de esta ciudad.
+import LocalLanding from '@/components/LocalLanding.astro'
 ---
 
-<BaseLayout title={seoTitle} description={seoDesc}>
-    <Navbar />
-    <main class="page-main">
-        <div class="ambient-glow g-1"></div>
-
-        <section class="local-hero text-center">
-            <div class="container">
-                <span class="eyebrow gsap-fade">Digitalizando las Vegas Altas</span>
-                <h1 class="gsap-reveal">Diseño Web en<br/><span class="text-accent">Don Benito.</span></h1>
-                <p class="hero-desc gsap-fade">
-                    Potencia tu presencia en Don Benito y su comarca con una página web profesional. Diseñamos plataformas que destacan tu negocio y convierten visitas en clientes reales.
-                </p>
-                <div class="hero-actions gsap-fade" style="margin-top: 2rem;">
-                    <a href="/contacto" class="btn btn-accent">Solicitar Presupuesto</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="local-benefits">
-            <div class="container">
-                <div class="b-grid">
-                    <div class="b-card gsap-up">
-                        <div class="b-icon">🤝</div>
-                        <h3>Agencia de Confianza</h3>
-                        <p>Trabajamos mano a mano con las empresas de Don Benito. Trato cercano, reuniones sin compromiso y seguimiento constante de tu proyecto.</p>
-                    </div>
-                    <div class="b-card gsap-up" style="transition-delay: 0.1s;">
-                        <div class="b-icon">📈</div>
-                        <h3>Estrategia Local</h3>
-                        <p>Nos aseguramos de que tu empresa domine Google en Don Benito. Optimizamos tu ficha de negocio y el SEO local de tu web al milímetro.</p>
-                    </div>
-                    <div class="b-card gsap-up" style="transition-delay: 0.2s;">
-                        <div class="b-icon">⚡</div>
-                        <h3>Máximo Rendimiento</h3>
-                        <p>Desarrollamos páginas web ultrarrápidas y seguras. Nada de plantillas lentas que hacen perder clientes por tiempos de carga interminables.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <Cta />
-    </main>
-    <Footer />
-</BaseLayout>
-
-<style>
-    .page-main { background: var(--bg); overflow-x: hidden; position: relative; }
-    .text-center { text-align: center; }
-
-    .ambient-glow {
-        position: absolute; border-radius: 50%; filter: blur(120px);
-        opacity: 0.15; z-index: 0; pointer-events: none;
-    }
-    .g-1 {
-        width: 600px; height: 600px; background: var(--accent);
-        top: -100px; left: 50%; transform: translateX(-50%);
-    }
-    html[data-theme='light'] .ambient-glow { opacity: 0.08; }
-
-    .local-hero {
-        padding: clamp(160px, 20vh, 220px) 0 clamp(60px, 10vh, 100px);
-        position: relative; z-index: 10;
-    }
-    .eyebrow {
-        color: var(--accent); font-weight: 600; letter-spacing: 0.1em;
-        text-transform: uppercase; display: block; margin-bottom: 2rem;
-    }
-    .local-hero h1 {
-        font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800;
-        line-height: 1.05; margin-bottom: 2rem; color: var(--fg);
-    }
-    .hero-desc {
-        font-size: clamp(1.2rem, 2vw, 1.4rem); line-height: 1.6;
-        color: var(--muted); max-width: 700px; margin: 0 auto;
-    }
-
-    .local-benefits {
-        padding-bottom: clamp(100px, 15vh, 150px);
-        position: relative; z-index: 10;
-    }
-    .b-grid {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;
-    }
-    .b-card {
-        background: var(--surface); border: 1px solid var(--border);
-        border-radius: 24px; padding: 3rem 2rem; text-align: center;
-        transition: transform 0.3s ease, border-color 0.3s ease;
-    }
-    .b-card:hover {
-        transform: translateY(-5px); border-color: var(--accent);
-    }
-    .b-icon { font-size: 3rem; margin-bottom: 1.5rem; }
-    .b-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--fg); }
-    .b-card p { font-size: 1.1rem; color: var(--muted); line-height: 1.6; }
-
-    @media (max-width: 900px) {
-        .b-grid { grid-template-columns: 1fr; }
-    }
-</style>
-
-<script>
-    // @ts-nocheck
-    import { gsap } from '@/lib/motion.js'
-    document.addEventListener('DOMContentLoaded', () => {
-        gsap.from(".gsap-reveal", { y: 40, opacity: 0, duration: 1, ease: "power4.out", delay: 0.1 });
-        gsap.from(".gsap-fade", { y: 20, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.2 });
-        gsap.utils.toArray('.gsap-up').forEach((el) => {
-            gsap.from(el, {
-                scrollTrigger: { trigger: el, start: "top 85%" },
-                y: 50, opacity: 0, duration: 0.8, ease: "power3.out"
-            });
-        });
-    });
-</script>
+<LocalLanding
+    ciudad='Don Benito'
+    provincia='Badajoz'
+    slug='/diseno-web-don-benito/'
+    title='Diseño web en Don Benito — Páginas web a medida | extreweb'
+    description='Páginas web a medida para negocios de Don Benito y las Vegas Altas. Estamos a 6 km, en Villanueva: reuniones en persona y soporte cercano. Pide presupuesto.'
+    eyebrow='Vegas Altas del Guadiana'
+    intro='Diseñamos y programamos páginas web para comercios, talleres, restaurantes, empresas agrícolas y profesionales de Don Benito. Webs rápidas, fáciles de usar desde el móvil y preparadas para que te encuentren en Google.'
+    proyectosTitulo='A 6 km: webs que hemos hecho en la comarca'
+    proyectosIntro='Trabajamos desde Villanueva, al lado de Don Benito. Estas son dos webs reales de negocios de la zona; ábrelas y juzga tú mismo.'
+    proyectos={[
+        {
+            nombre: 'GuadiCar Multimarcas',
+            sector: 'Concesionario',
+            lugar: 'Villanueva de la Serena',
+            img: '/proyectos/Guadicar.webp',
+            url: 'https://guadicar.es',
+            texto: 'Concesionario de coches de ocasión con catálogo propio: el equipo sube y edita los vehículos desde un panel sencillo y los clientes reciben un aviso cuando entra un coche que les interesa.',
+        },
+        {
+            nombre: 'Cristalería y Toldos Pallares',
+            sector: 'Toldos, pérgolas y cristalería',
+            lugar: 'Villanueva de la Serena',
+            img: '/proyectos/Toldos-Pallares.webp',
+            url: 'https://toldospallares.com',
+            texto: 'Web de una empresa de instalación: cada línea de producto con su página, fotos de trabajos terminados y peticiones de presupuesto de toda la comarca.',
+        },
+    ]}
+    contextoTitulo='Don Benito compra por internet antes de salir de casa'
+    contexto={[
+        'Don Benito es la ciudad de referencia de las Vegas Altas: aquí vienen a comprar, a comer o a buscar un servicio vecinos de Medellín, Guareña, Santa Amalia, Mengabril y del resto de pueblos de alrededor. Casi todos, antes de hacer el viaje, han buscado en el móvil a quién ir.',
+        'Eso vale igual para una tienda del centro que para una empresa del sector agrícola o una nave del polígono: si tu web no aparece, carga lenta o no se entiende en el móvil, el cliente llama al siguiente resultado. Y para los negocios que venden fuera, en ferias como las de FEVAL o a otras provincias, la web es muchas veces lo primero que ve un comprador.',
+        'Nuestro trabajo es que, cuando busquen lo que haces con «Don Benito», salgas tú, y que la web convenza en pocos segundos: qué haces, dónde estás, cuánto tardas y cómo contactarte.',
+    ]}
+    cercaniaTitulo='Cerca de verdad, no solo en la web'
+    cercania='Villanueva y Don Benito están pegadas, así que nos vemos en tu negocio sin problema. Te explicamos todo sin tecnicismos, te enseñamos la web mientras la hacemos y, una vez publicada, seguimos a un WhatsApp de distancia.'
+    faqs={[
+        {
+            q: 'Estáis en Villanueva, ¿trabajáis igual con negocios de Don Benito?',
+            a: 'Sí, igual. Son seis kilómetros: vamos a tu negocio para la primera reunión y para lo que haga falta. Para el día a día usamos WhatsApp y teléfono, que es lo más cómodo para todos.',
+        },
+        {
+            q: '¿Podéis hacer que salga en Google cuando buscan en Don Benito y los pueblos de alrededor?',
+            a: 'Trabajamos para eso: web rápida, textos que responden a lo que busca la gente de la zona, ficha de Google bien configurada y reseñas de tus clientes. Nadie honrado puede garantizarte el primer puesto, pero sí hacer todo lo que depende de la web para que Google te tenga en cuenta.',
+        },
+        {
+            q: '¿Podré cambiar yo los textos, precios o fotos de mi web?',
+            a: 'Si lo necesitas, sí. Hay negocios que cambian cosas cada semana (un catálogo, una carta, ofertas) y para ellos preparamos un panel sencillo, como el del concesionario GuadiCar. Si prefieres no tocar nada, nos escribes y lo cambiamos nosotros.',
+        },
+        {
+            q: '¿Cuánto se tarda en tener la web publicada?',
+            a: 'Una web de empresa con varias secciones suele estar lista en tres o cuatro semanas desde que tenemos tus textos y fotos. Si necesitas tienda online, reservas o algo a medida, te damos un plazo cerrado antes de empezar.',
+        },
+    ]}
+/>

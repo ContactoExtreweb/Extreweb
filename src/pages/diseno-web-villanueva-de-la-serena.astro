@@ -1,124 +1,61 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro'
-import Navbar from '@/components/Navbar.astro'
-import Cta from '@/components/Cta.astro'
-import Footer from '@/components/Footer.astro'
-
-const seoTitle = "Diseño Web en Villanueva de la Serena | extreweb";
-const seoDesc = "¿Buscas una agencia de diseño web en Villanueva de la Serena? Creamos páginas web a medida, rápidas y optimizadas para negocios locales.";
+// Página local: Villanueva de la Serena. El diseño está en LocalLanding.astro;
+// aquí solo va el contenido, que tiene que ser propio de esta ciudad.
+import LocalLanding from '@/components/LocalLanding.astro'
 ---
 
-<BaseLayout title={seoTitle} description={seoDesc}>
-    <Navbar />
-    <main class="page-main">
-        <div class="ambient-glow g-1"></div>
-
-        <section class="local-hero text-center">
-            <div class="container">
-                <span class="eyebrow gsap-fade">Tu agencia cercana</span>
-                <h1 class="gsap-reveal">Diseño Web en<br/><span class="text-accent">Villanueva de la Serena.</span></h1>
-                <p class="hero-desc gsap-fade">
-                    Impulsa tu negocio local con una página web profesional. Somos de aquí, entendemos el mercado de Villanueva de la Serena y diseñamos plataformas que convierten visitas en clientes reales.
-                </p>
-                <div class="hero-actions gsap-fade" style="margin-top: 2rem;">
-                    <a href="/contacto" class="btn btn-accent">Hablemos de tu proyecto</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="local-benefits">
-            <div class="container">
-                <div class="b-grid">
-                    <div class="b-card gsap-up">
-                        <div class="b-icon">📍</div>
-                        <h3>Trato Cercano</h3>
-                        <p>Nos podemos tomar un café en Villanueva. Nada de call-centers lejanos ni intermediarios; hablas directamente con los desarrolladores.</p>
-                    </div>
-                    <div class="b-card gsap-up" style="transition-delay: 0.1s;">
-                        <div class="b-icon">🚀</div>
-                        <h3>Velocidad Local</h3>
-                        <p>Optimizamos el SEO Local (Google Business, mapas, palabras clave) para que cuando alguien en Villanueva busque tus servicios, tú aparezcas el primero.</p>
-                    </div>
-                    <div class="b-card gsap-up" style="transition-delay: 0.2s;">
-                        <div class="b-icon">💎</div>
-                        <h3>Calidad Premium</h3>
-                        <p>No usamos plantillas lentas. Programamos tu web a medida desde cero para que la experiencia de usuario sea perfecta y destaque en el sector.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <Cta />
-    </main>
-    <Footer />
-</BaseLayout>
-
-<style>
-    .page-main { background: var(--bg); overflow-x: hidden; position: relative; }
-    .text-center { text-align: center; }
-
-    .ambient-glow {
-        position: absolute; border-radius: 50%; filter: blur(120px);
-        opacity: 0.15; z-index: 0; pointer-events: none;
-    }
-    .g-1 {
-        width: 600px; height: 600px; background: var(--accent);
-        top: -100px; left: 50%; transform: translateX(-50%);
-    }
-    html[data-theme='light'] .ambient-glow { opacity: 0.08; }
-
-    .local-hero {
-        padding: clamp(160px, 20vh, 220px) 0 clamp(60px, 10vh, 100px);
-        position: relative; z-index: 10;
-    }
-    .eyebrow {
-        color: var(--accent); font-weight: 600; letter-spacing: 0.1em;
-        text-transform: uppercase; display: block; margin-bottom: 2rem;
-    }
-    .local-hero h1 {
-        font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800;
-        line-height: 1.05; margin-bottom: 2rem; color: var(--fg);
-    }
-    .hero-desc {
-        font-size: clamp(1.2rem, 2vw, 1.4rem); line-height: 1.6;
-        color: var(--muted); max-width: 700px; margin: 0 auto;
-    }
-
-    .local-benefits {
-        padding-bottom: clamp(100px, 15vh, 150px);
-        position: relative; z-index: 10;
-    }
-    .b-grid {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;
-    }
-    .b-card {
-        background: var(--surface); border: 1px solid var(--border);
-        border-radius: 24px; padding: 3rem 2rem; text-align: center;
-        transition: transform 0.3s ease, border-color 0.3s ease;
-    }
-    .b-card:hover {
-        transform: translateY(-5px); border-color: var(--accent);
-    }
-    .b-icon { font-size: 3rem; margin-bottom: 1.5rem; }
-    .b-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--fg); }
-    .b-card p { font-size: 1.1rem; color: var(--muted); line-height: 1.6; }
-
-    @media (max-width: 900px) {
-        .b-grid { grid-template-columns: 1fr; }
-    }
-</style>
-
-<script>
-    // @ts-nocheck
-    import { gsap } from '@/lib/motion.js'
-    document.addEventListener('DOMContentLoaded', () => {
-        gsap.from(".gsap-reveal", { y: 40, opacity: 0, duration: 1, ease: "power4.out", delay: 0.1 });
-        gsap.from(".gsap-fade", { y: 20, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.2 });
-        gsap.utils.toArray('.gsap-up').forEach((el) => {
-            gsap.from(el, {
-                scrollTrigger: { trigger: el, start: "top 85%" },
-                y: 50, opacity: 0, duration: 0.8, ease: "power3.out"
-            });
-        });
-    });
-</script>
+<LocalLanding
+    ciudad='Villanueva de la Serena'
+    provincia='Badajoz'
+    slug='/diseno-web-villanueva-de-la-serena/'
+    title='Diseño web en Villanueva de la Serena | extreweb'
+    description='Páginas web a medida en Villanueva de la Serena. Somos de aquí y hemos hecho las webs de GuadiCar y Toldos Pallares. Pide presupuesto sin compromiso.'
+    eyebrow='Somos de aquí'
+    intro='Hacemos páginas web a medida para comercios, talleres y empresas de Villanueva de la Serena: rápidas, cómodas de usar desde el móvil y preparadas para que te encuentren en Google cuando alguien del pueblo busca lo que vendes.'
+    proyectosTitulo='Webs que ya funcionan en Villanueva'
+    proyectosIntro='No te enseñamos plantillas: estas son webs reales de negocios de Villanueva que puedes abrir ahora mismo.'
+    proyectos={[
+        {
+            nombre: 'GuadiCar Multimarcas',
+            sector: 'Concesionario',
+            lugar: 'Villanueva de la Serena',
+            img: '/proyectos/Guadicar.webp',
+            url: 'https://guadicar.es',
+            texto: 'Catálogo de coches de ocasión que el propio concesionario gestiona desde su panel, fichas de cada vehículo pensadas para salir en Google, avisos por email a los suscriptores cuando entra un coche o baja de precio y solicitudes de «coche a la carta».',
+        },
+        {
+            nombre: 'Cristalería y Toldos Pallares',
+            sector: 'Toldos, pérgolas y cristalería',
+            lugar: 'Villanueva de la Serena',
+            img: '/proyectos/Toldos-Pallares.webp',
+            url: 'https://toldospallares.com',
+            texto: 'Web con su catálogo de toldos, pérgolas, techos y cortinas de vidrio, fotos de instalaciones reales y contacto directo por WhatsApp para que los clientes de la zona pidan presupuesto desde el móvil.',
+        },
+    ]}
+    contextoTitulo='Por qué tu negocio de Villanueva necesita una web propia'
+    contexto={[
+        'Villanueva y Don Benito forman el mayor núcleo comercial de las Vegas Altas, y la mayoría de la gente busca en el móvil antes de acercarse a una tienda, pedir cita en un taller o llamar a un profesional. Si al buscar tu sector con «Villanueva» no apareces, ese cliente se va a otro.',
+        'Una página de Facebook o una ficha en Google ayudan, pero no son tuyas ni cuentan todo lo que haces. Una web propia sí: explica tus servicios con calma, enseña tus trabajos, recoge presupuestos y trabaja para ti a cualquier hora, también el domingo por la noche.',
+        'Por eso cada web que hacemos empieza por tu negocio y por cómo te buscan tus clientes, no por una plantilla. Y la hacemos para que cargue rápido incluso con la cobertura justa, porque la mayoría de tus visitas llegarán desde un móvil.',
+    ]}
+    cercaniaTitulo='Hablas con quien hace tu web'
+    cercania='Estamos en Villanueva, así que las reuniones pueden ser en tu negocio o tomando un café. Ves cómo avanza la web semana a semana, sin intermediarios ni comerciales, y cuando está publicada sigues teniendo a quién llamar si necesitas un cambio.'
+    faqs={[
+        {
+            q: '¿Podemos vernos en persona en Villanueva?',
+            a: 'Sí. Somos de aquí, así que la primera reunión suele ser en tu negocio: vemos qué haces, cómo te llegan hoy los clientes y qué necesitas que haga la web. Si te viene mejor, también lo hablamos por teléfono, WhatsApp o videollamada.',
+        },
+        {
+            q: '¿Os encargáis también de la ficha de Google de mi negocio?',
+            a: 'Sí. La ficha de Google (Google Business Profile) es lo que aparece en el mapa cuando alguien busca, por ejemplo, «taller en Villanueva». La creamos o la revisamos, la enlazamos con tu web y te explicamos cómo conseguir reseñas de tus clientes, que es lo que más pesa en el mapa.',
+        },
+        {
+            q: 'Tengo un negocio pequeño, ¿de verdad me compensa una web?',
+            a: 'Depende de cómo te lleguen los clientes, y te lo diremos con sinceridad. Si casi todo es boca a boca y no quieres crecer, quizá con una buena ficha de Google te baste. Si quieres que te encuentre gente nueva o dejar de explicar lo mismo por teléfono diez veces al día, una web sencilla se amortiza rápido.',
+        },
+        {
+            q: 'Ya tengo una web hecha por otra empresa, ¿podéis mejorarla?',
+            a: 'Sí. Primero la revisamos y te decimos qué falla (velocidad, móvil, Google, textos). Si merece la pena rehacerla, lo hacemos redirigiendo las direcciones antiguas para no perder lo que Google ya tenga de tu negocio.',
+        },
+    ]}
+/>

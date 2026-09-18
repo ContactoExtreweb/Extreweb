@@ -5,19 +5,37 @@ export const SITE = {
   description:
     'Agencia de diseño y desarrollo web, SEO y soporte técnico en Don Benito, Villanueva de la Serena y Cáceres. Webs a medida, rápidas y pensadas para vender.',
 
-  // ⚠️ RELLENA estos cuando los tengáis (déjalos vacíos si aún no):
   email: 'contactoextreweb@gmail.com',
   telephone: '+34628775619',   // formato internacional (lo pide el schema de Google)
-  sameAs: ['https://instagram.com/extreweb', 'https://extreweb.es', 'https://extreweb.es/blog'],         // ej. ['https://instagram.com/extreweb', 'https://linkedin.com/company/extreweb']
+  instagram: 'https://instagram.com/extreweb',
+  // Perfiles EXTERNOS de la marca (Instagram, LinkedIn, Google Business…), nunca la propia web
+  sameAs: ['https://instagram.com/extreweb'],
 
+  locality: 'Villanueva de la Serena',
   region: 'Extremadura',
   country: 'ES',
-  areaServed: ['Don Benito', 'Villanueva de la Serena', 'Cáceres', 'Miajadas', 'Extremadura', 'Badajoz', 'Mérida', 'Plasencia', 'Navalmoral de la Mata', 'Coria', 'Zafra', 'Almendralejo', 'Arroyo de la Plata', 'Trujillo'],
+  // Ciudades (en el schema van como City; Extremadura se añade aparte como región)
+  areaServed: ['Villanueva de la Serena', 'Don Benito', 'Cáceres', 'Miajadas', 'Badajoz', 'Mérida', 'Plasencia', 'Trujillo', 'Navalmoral de la Mata', 'Coria', 'Zafra', 'Almendralejo'],
 
+  founded: '2022',
   founders: [
-    { name: 'Saúl Correyero Pañero', jobTitle: 'Desarrollo web y diseño' },
+    { name: 'Saúl Correyero Pañero', jobTitle: 'Desarrollo web y diseño', url: 'https://sauldev.es' },
     { name: 'Pedro Fernández Sánchez', jobTitle: 'Gestión, sistemas y redes' },
   ],
 
-  ogImage: '/og-portada.jpg', // crea esta imagen (1200×630) en public/
+  // Catálogo de servicios (schema OfferCatalog). URLs con barra final.
+  services: [
+    { name: 'Diseño y desarrollo web', path: '/servicios/diseno-web/' },
+    { name: 'Posicionamiento SEO', path: '/servicios/seo/' },
+    { name: 'Gestión de redes sociales', path: '/servicios/redes-sociales/' },
+    { name: 'Sistemas y soporte técnico', path: '/servicios/sistemas-soporte/' },
+  ],
+
+  ogImage: '/og-portada.jpg', // 1200×630, en public/
 };
+
+// Zona de servicio lista para JSON-LD: cada ciudad como City + Extremadura como región
+export const areaServedSchema = [
+  ...SITE.areaServed.map((name) => ({ '@type': 'City', name })),
+  { '@type': 'State', name: 'Extremadura' },
+];

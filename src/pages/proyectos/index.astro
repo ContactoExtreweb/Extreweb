@@ -31,11 +31,11 @@ const projects = [
     },
     {
         title: 'Taller M. Guzmán',
-        category: 'Automoción',
+        category: 'Chapa y pintura',
         image: '/proyectos/Guzman.webp',
         link: 'https://project-r5m3o.vercel.app/',
         color: '#10b981',
-        desc: 'Web corporativa con sistema de cita previa para automatizar el taller.'
+        desc: 'Web del taller con galería de trabajos y presupuesto por formulario o WhatsApp.'
     },
     {
         title: 'Toldos Pallares',
@@ -49,8 +49,8 @@ const projects = [
 ---
 
 <BaseLayout 
-    title="Portfolio | Extreweb" 
-    description="Descubre nuestros proyectos destacados. Diseño web de alto rendimiento."
+    title="Proyectos de diseño web en Extremadura — extreweb"
+    description="Webs reales que hemos diseñado y desarrollado: concesionarios, talleres, SaaS y más. Entra y pruébalas en vivo."
 >
     <Navbar />
     
@@ -75,7 +75,7 @@ const projects = [
                         
                         <!-- Contenedor de la foto -->
                         <div class="card-img-wrap">
-                            <img src={p.image} alt={p.title} loading="lazy" />
+                            <img src={p.image} alt={`Web de ${p.title}`} width="1905" height="953" loading="lazy" decoding="async" />
                             <div class="card-overlay"></div>
                         </div>
 

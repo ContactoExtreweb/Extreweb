@@ -1,114 +1,135 @@
 ---
-// src/components/Showcase.astro
+// src/components/Showcase.astro — "Anatomía de una web que vende"
+// La web real de GuadiCar se abre en tres capas al hacer scroll y se vuelve a
+// montar al final: 1) lo que ve el cliente, 2) lo que lee Google, 3) la velocidad.
+//
+// Sin JS o con "reducir movimiento": texto como lista normal, sin scroll largo
+// y con la captura plana (la clase html.js-motion la pone BaseLayout).
+// Los datos de la capa de Google son los REALES de guadicar.es (título,
+// descripción y tipo de schema). No inventar métricas ni reseñas aquí.
+
+const pasos = [
+    {
+        eyebrow: 'Por dentro',
+        titulo: 'Una web que vende tiene tres capas.',
+        texto: 'Esta es la web que hicimos para GuadiCar, un concesionario de Villanueva de la Serena. Desliza y te la abrimos por dentro.',
+    },
+    {
+        eyebrow: 'Capa 1 · Lo que ve tu cliente',
+        titulo: 'Un diseño que lleva a la acción.',
+        texto: 'Cada foto, botón y texto está donde tiene que estar para que el cliente llame, pida cita o compre. Y se diseña primero para el móvil, que es desde donde te van a mirar.',
+    },
+    {
+        eyebrow: 'Capa 2 · Lo que lee Google',
+        titulo: 'Una estructura que Google entiende.',
+        texto: 'Título, descripción y los datos del negocio (qué es, dónde está, a qué hora abre) en el formato que lee Google. Así sabe qué vendes y te enseña cuando alguien lo busca.',
+    },
+    {
+        eyebrow: 'Capa 3 · Lo que no se ve',
+        titulo: 'Rápida, también con poca cobertura.',
+        texto: 'Código ligero, imágenes optimizadas y servidores repartidos por el mundo. La web carga al momento y no se cae cuando más visitas tienes.',
+    },
+    {
+        eyebrow: 'Todo junto',
+        titulo: 'Tres capas, una web que trabaja por ti.',
+        texto: 'Por fuera, una web bonita. Por dentro, una herramienta que te trae clientes cada día.',
+    },
+]
+
+const barras = [
+    { label: 'Página', x: 0, w: 0.26 },
+    { label: 'Estilos', x: 0.1, w: 0.16 },
+    { label: 'Fuentes', x: 0.16, w: 0.14 },
+    { label: 'Imágenes', x: 0.22, w: 0.32 },
+    { label: 'Mapa y extras', x: 0.46, w: 0.18 },
+]
 ---
 
-<section class='anatomy-scroll-section' id='anatomyPin'>
-    <div class='container grid-wrap'>
-        <!-- TEXTO QUE CAMBIA CON EL SCROLL -->
-        <div class='text-content' id='textFlow'>
-            <div class='step active' data-step='0'>
-                <p class='eyebrow'>Arquitectura a medida</p>
-                <h2>Desarmamos el rendimiento.</h2>
-                <p>
-                    Desliza hacia abajo para entender qué hay detrás de nuestras
-                    webs. Cada capa es vital.
-                </p>
-            </div>
-            <div class='step future' data-step='1'>
-                <p class='eyebrow'>Infraestructura</p>
-                <h2>1. Servidor Edge</h2>
-                <p>
-                    Desplegamos en infraestructuras globales (Netlify/Supabase)
-                    para que la carga sea instantánea en cualquier lugar.
-                </p>
-            </div>
-            <div class='step future' data-step='2'>
-                <p class='eyebrow'>Código</p>
-                <h2>2. Estructura SEO</h2>
-                <p>
-                    Escribimos código semántico limpio. Facilitamos a Google la
-                    lectura de tu negocio.
-                </p>
-            </div>
-            <div class='step future' data-step='3'>
-                <p class='eyebrow'>Experiencia</p>
-                <h2>3. Diseño UI Premium</h2>
-                <p>
-                    Estética impecable, limpia y centrada en convertir a tu
-                    visitante en cliente.
-                </p>
-            </div>
-        </div>
+<section class='anatomy' id='anatomia' aria-labelledby='anatomia-title'>
+    <div class='an-sticky'>
+        <div class='container an-grid'>
+            <!-- ===== TEXTO ===== -->
+            <div class='an-copy'>
+                <ol class='an-rail' aria-hidden='true'>
+                    {pasos.map((_, i) => <li class:list={{ 'is-on': i === 0 }} />)}
+                </ol>
 
-        <!-- ESCENARIO 3D: EFECTO ACORDEÓN OPTIMIZADO -->
-        <div class='sticky-stage'>
-            <!-- Fondo copiado del Playground -->
-            <div class='showcase-bg' aria-hidden='true'>
-                <div class='showcase-aurora'></div>
-                <div class='showcase-grid'></div>
+                <div class='an-steps'>
+                    {
+                        pasos.map((p, i) => (
+                            <article class:list={['an-step', `an-step-${i}`, { 'is-active': i === 0 }]} data-step={i}>
+                                <p class='an-eyebrow'>{p.eyebrow}</p>
+                                {i === 0 ? <h2 id='anatomia-title'>{p.titulo}</h2> : <h3>{p.titulo}</h3>}
+                                <p class='an-text'>{p.texto}</p>
+                                {i === pasos.length - 1 && (
+                                    <a class='an-link' href='https://guadicar.es' target='_blank' rel='noopener'>
+                                        Ver la web de GuadiCar <span aria-hidden='true'>↗</span>
+                                    </a>
+                                )}
+                            </article>
+                        ))
+                    }
+                </div>
             </div>
 
-            <div
-                class='scene'
-                id='anatomyScene'
-                style='--exp: 0; --p1: 0; --p2: 0; --p3: 0;'
-            >
-                <!-- Capa 1: Servidor -->
-                <div class='layer black-layer' id='layer-server'>
-                    <div class='server-grid'></div>
-                    <div class='b-content'>
-                        <div class='b-title'>1. Servidor Edge</div>
-                        <div class='b-nodes'>
-                            <div class='b-node' style='animation-delay: 0s'>
+            <!-- ===== CAPAS 3D (decorativo: el significado está en el texto) ===== -->
+            <div class='an-stage' aria-hidden='true'>
+                <div class='an-glow'></div>
+                <div class='an-scene' data-activo='0' style='--t: 0; --s: 0;'>
+                    <!-- Capa 3 (abajo): velocidad -->
+                    <div class='an-layer an-l3'>
+                        <span class='an-tag'><b>3</b> Velocidad</span>
+                        <div class='an-speed'>
+                            <div class='an-speed-head'>
+                                <span>Carga de la página</span>
+                                <span class='an-ok'>✓ Lista</span>
                             </div>
-                            <div class='b-node' style='animation-delay: 0.5s'>
-                            </div>
-                            <div class='b-node' style='animation-delay: 1s'>
-                            </div>
+                            <ul class='an-bars'>
+                                {
+                                    barras.map((b, i) => (
+                                        <li>
+                                            <span>{b.label}</span>
+                                            <i style={`--x:${b.x};--w:${b.w};--d:${i * 90}ms`} />
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                            <div class='an-axis'><span></span><span></span><span></span><span></span></div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Capa 2: Estructura SEO (Código HTML) -->
-                <div class='layer black-layer' id='layer-seo'>
-                    <div class='code-bg'>
-                        &lt;html lang="es"&gt; &lt;head&gt; &lt;title&gt;Premium
-                        SEO&lt;/title&gt; &lt;meta name="viewport"
-                        content="width=device-width"&gt; &lt;script
-                        type="module" src="/core.js"&gt;&lt;/script&gt;
-                        &lt;/head&gt; &lt;body class="dark-theme"&gt; &lt;header
-                        class="nav-bar"&gt;&lt;/header&gt; &lt;main id="app"&gt;
-                        &lt;h1&gt;Rendimiento Extremo&lt;/h1&gt;
-                        &lt;p&gt;Arquitectura al milímetro...&lt;/p&gt;
-                        &lt;/main&gt; &lt;/body&gt; &lt;/html&gt;
-                    </div>
-                    <div class='b-content'>
-                        <div class='b-title' style='color: #4ade80;'>
-                            2. Estructura SEO
+                    <!-- Capa 2 (medio): lo que lee Google — datos reales de guadicar.es -->
+                    <div class='an-layer an-l2'>
+                        <span class='an-tag'><b>2</b> Google</span>
+                        <div class='an-serp'>
+                            <div class='an-search'>
+                                <svg viewBox='0 0 24 24'><circle cx='11' cy='11' r='7'></circle><path d='m20 20-3.5-3.5'></path></svg>
+                                <span>concesionario coches villanueva de la serena</span>
+                            </div>
+                            <div class='an-result'>
+                                <span class='an-site'><i>G</i><span>guadicar.es</span></span>
+                                <b>GuadiCar Multimarcas — Coches de Ocasión y Km0 en Villanueva de la Serena (Badajoz)</b>
+                                <p>Concesionario multimarca en Villanueva de la Serena (Badajoz). Vehículos de ocasión, Km0 y nuevos con garantía y financiación.</p>
+                            </div>
+                            <pre class='an-code'><span class='k'>"@type"</span>: <span class='v'>"AutoDealer"</span>,
+<span class='k'>"address"</span>: {'{'} <span class='k'>"addressLocality"</span>: <span class='v'>"Villanueva de la Serena"</span> {'}'},
+<span class='k'>"geo"</span>: {'{'} … {'}'},  <span class='k'>"openingHoursSpecification"</span>: [ … ]</pre>
                         </div>
                     </div>
-                </div>
 
-                <!-- Capa 3: UI Base (Wireframes) -->
-                <div class='layer black-layer' id='layer-ui'>
-                    <div class='wire-layout'>
-                        <div class='wire-box header-box'></div>
-                        <div class='wire-box hero-box'></div>
-                        <div class='wire-box card-box c1'></div>
-                        <div class='wire-box card-box c2'></div>
+                    <!-- Capa 1 (arriba): la web terminada -->
+                    <div class='an-layer an-l1'>
+                        <span class='an-tag'><b>1</b> Diseño</span>
+                        <img
+                            src='/proyectos/Guadicar.webp'
+                            alt=''
+                            width='1904'
+                            height='951'
+                            loading='lazy'
+                            decoding='async'
+                        />
+                        <span class='an-live'><i></i>En producción · guadicar.es</span>
                     </div>
-                    <div class='b-content'>
-                        <div class='b-title' style='color: #fff;'>
-                            3. Diseño UI Base
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Capa Principal: La Imagen (Siempre arriba) -->
-                <div class='layer layer-image'>
-                    <img src='/proyectos/Guadicar.webp' alt='UI' />
-                    <!-- Glare Frontal ligero -->
-                    <div class='layer-fx'></div>
                 </div>
             </div>
         </div>
@@ -116,454 +137,636 @@
 </section>
 
 <style>
-    .anatomy-scroll-section {
-        position: relative;
-        height: 500vh;
-        background: var(--bg);
-        overflow-x: clip; /* Fix lateral scroll */
+    /* Cuánto se apartan las capas de ENCIMA de la activa (para que no la tapen).
+       Registradas con @property para que se animen solas con una transición,
+       sin retrasar el movimiento que va pegado al scroll. */
+    @property --an-up1 {
+        syntax: '<length>';
+        inherits: true;
+        initial-value: 0px;
+    }
+    @property --an-up2 {
+        syntax: '<length>';
+        inherits: true;
+        initial-value: 0px;
     }
 
-    .grid-wrap {
-        display: grid;
-        grid-template-columns: 0.8fr 1.2fr;
-        gap: 4rem;
-        height: 100vh;
+    /* ================= ESTRUCTURA DEL SCROLL ================= */
+    .anatomy {
+        --c1: var(--accent); /* diseño */
+        --c2: #30b35b; /* google */
+        --c3: #7c5cff; /* velocidad */
+        position: relative;
+        background: var(--bg);
+        height: 420vh;
+    }
+    .an-sticky {
         position: sticky;
         top: 0;
+        height: 100vh;
+        height: 100svh;
+        display: flex;
         align-items: center;
-        padding-top: 0;
+        overflow: clip;
     }
-
-    /* --- TEXTOS (ESTILO APPLE) --- */
-    .text-content {
-        position: relative;
-        height: 350px;
-        z-index: 10;
-    }
-
-    .step {
-        position: absolute;
-        top: 50%;
-        left: 0;
+    .an-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+        align-items: center;
+        gap: clamp(2rem, 5vw, 5rem);
         width: 100%;
-        pointer-events: none;
-        /* Transición hiper suave tipo Apple (cubic-bezier) */
+    }
+
+    /* ================= TEXTO ================= */
+    .an-copy {
+        display: flex;
+        gap: 1.6rem;
+        align-items: center;
+    }
+    .an-rail {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        flex-shrink: 0;
+    }
+    .an-rail li {
+        width: 6px;
+        height: 6px;
+        border-radius: 99px;
+        background: var(--border);
         transition:
-            opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-            transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            height var(--dur-slow) var(--ease-out-quart),
+            background var(--dur-slow) var(--ease-out-quart);
     }
-    .step.future {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    .step.active {
-        opacity: 1;
-        transform: translateY(-50%);
-        pointer-events: auto;
-    }
-    .step.past {
-        opacity: 0;
-        transform: translateY(-100px);
-    }
-
-    .eyebrow {
-        color: var(--accent);
-        font-weight: 600;
-        font-size: 0.95rem;
-        letter-spacing: 0.01em;
-        margin-bottom: 0.6rem;
-        display: block;
-    }
-    .step h2 {
-        font-size: clamp(2.2rem, 4vw, 3.5rem);
-        font-weight: 600;
-        letter-spacing: -0.04em; /* Tracking negativo característico de Apple */
-        line-height: 1.1;
-        margin-bottom: 1rem;
-        color: var(--fg);
-    }
-    .step p {
-        font-size: clamp(1.05rem, 1.5vw, 1.25rem);
-        color: #86868b; /* Gris característico de Apple */
-        line-height: 1.5;
-        max-width: 420px;
-    }
-
-    /* --- CONTENEDOR 3D --- */
-    .sticky-stage {
-        position: relative;
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        perspective: 1200px;
-    }
-
-    /* Fondo copiado del Playground */
-    .showcase-bg {
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        pointer-events: none;
-    }
-    .showcase-aurora {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: min(1100px, 130%);
-        height: 760px;
-        background:
-            radial-gradient(
-                40% 50% at 50% 50%,
-                color-mix(in srgb, var(--accent) 18%, transparent),
-                transparent 70%
-            ),
-            radial-gradient(
-                35% 45% at 72% 40%,
-                rgba(120, 90, 255, 0.12),
-                transparent 70%
-            ),
-            radial-gradient(
-                35% 45% at 28% 60%,
-                rgba(0, 200, 220, 0.1),
-                transparent 70%
-            );
-        filter: blur(60px);
-        opacity: calc(0.3 + (var(--exp) * 0.7));
-    }
-    .showcase-grid {
-        position: absolute;
-        inset: 0;
-        background-image:
-            linear-gradient(var(--border) 1px, transparent 1px),
-            linear-gradient(90deg, var(--border) 1px, transparent 1px);
-        background-size: 46px 46px;
-        -webkit-mask: radial-gradient(circle at 50% 50%, #000, transparent 70%);
-        mask: radial-gradient(circle at 50% 50%, #000, transparent 70%);
-        opacity: 0.32;
-    }
-
-    /* --- EL MOTOR 3D --- */
-    .scene {
-        width: 110%;
-        max-width: 900px;
-        aspect-ratio: 16/10;
-        transform-style: preserve-3d;
-        transform: rotateX(calc(var(--exp) * 60deg))
-            rotateZ(calc(var(--exp) * -20deg))
-            scale(calc(1 - (var(--exp) * 0.05)));
-        will-change: transform;
-    }
-
-    .layer {
-        position: absolute;
-        inset: 0;
-        border-radius: var(--radius-lg);
-        will-change: transform;
-        backface-visibility: hidden;
-    }
-
-    /* --- LAS CAPAS PERSONALIZADAS --- */
-    .black-layer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        border-radius: var(--radius-lg);
-    }
-
-    /* Insignias centrales para los títulos */
-    .b-content {
-        position: relative;
-        z-index: 5;
-        background: rgba(0, 0, 0, 0.7);
-        padding: 0.8rem 1.5rem;
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-    }
-    .b-title {
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin: 0;
-        letter-spacing: -0.02em;
-    }
-
-    /* Capa 1: Servidor Edge */
-    #layer-server {
-        background: #0a0a0c;
-        border: 1px solid rgba(0, 113, 227, 0.4);
-        transform: translateZ(
-            calc(
-                (var(--p1) * -120px) + (var(--p2) * -120px) +
-                    (var(--p3) * -120px)
-            )
-        );
-    }
-    .server-grid {
-        position: absolute;
-        inset: 0;
-        background-image:
-            radial-gradient(
-                circle at 20% 20%,
-                rgba(0, 113, 227, 0.15) 0%,
-                transparent 40%
-            ),
-            radial-gradient(
-                circle at 70% 60%,
-                rgba(0, 113, 227, 0.15) 0%,
-                transparent 40%
-            ),
-            linear-gradient(rgba(0, 113, 227, 0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 113, 227, 0.05) 1px, transparent 1px);
-        background-size:
-            cover,
-            cover,
-            30px 30px,
-            30px 30px;
-        opacity: 0.8;
-    }
-    .b-nodes {
-        display: flex;
-        gap: 1rem;
-        margin-top: 0.8rem;
-    }
-    .b-node {
-        width: 10px;
-        height: 10px;
+    .an-rail li.is-on {
+        height: 26px;
         background: var(--accent);
-        border-radius: 50%;
-        animation: pulseNode 1.5s infinite alternate;
     }
-    @keyframes pulseNode {
-        0% {
-            opacity: 0.3;
-            transform: scale(0.8);
-        }
-        100% {
-            opacity: 1;
-            transform: scale(1.2);
-        }
+    .an-steps {
+        position: relative;
+        flex: 1;
+        min-height: 340px;
     }
-
-    /* Capa 2: Estructura SEO (Código) */
-    #layer-seo {
-        background: rgba(10, 10, 15, 0.95);
-        border: 1px solid rgba(74, 222, 128, 0.2);
-        transform: translateZ(
-            calc((var(--p2) * -120px) + (var(--p3) * -120px))
-        );
-    }
-    .code-bg {
+    .an-step {
         position: absolute;
-        inset: 0;
-        color: #4ade80;
-        font-family: 'Space Mono', monospace;
-        font-size: 0.8rem;
-        padding: 2rem;
-        white-space: pre;
-        line-height: 1.5;
-        opacity: 0.6;
-        text-align: left;
-    }
-
-    /* Capa 3: UI Base (Wireframes) */
-    #layer-ui {
-        background: rgba(15, 15, 18, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        transform: translateZ(calc((var(--p3) * -120px)));
-    }
-    .wire-layout {
-        position: absolute;
-        inset: 0;
-    }
-    .wire-box {
-        position: absolute;
-        border: 2px dashed rgba(255, 255, 255, 0.15);
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.02);
-    }
-    .header-box {
-        top: 5%;
-        left: 5%;
-        width: 90%;
-        height: 10%;
-    }
-    .hero-box {
-        top: 20%;
-        left: 5%;
-        width: 90%;
-        height: 35%;
-    }
-    .card-box {
-        top: 60%;
-        width: 42%;
-        height: 30%;
-    }
-    .c1 {
-        left: 5%;
-    }
-    .c2 {
-        right: 5%;
-    }
-
-    /* Espaciadores optimizados (Pseudo-elementos) */
-    .black-layer::before {
-        content: '';
-        position: absolute;
-        inset: -20px;
-        background: radial-gradient(
-            circle at center,
-            rgba(0, 113, 227, 0.25) 0%,
-            transparent 65%
-        );
-        transform: translateZ(50px);
-        pointer-events: none;
+        inset: 50% 0 auto 0;
+        transform: translateY(calc(-50% + 36px));
         opacity: 0;
+        visibility: hidden;
+        filter: blur(6px);
+        transition:
+            opacity 0.6s var(--ease-out-quart),
+            transform 0.7s var(--ease-out-expo),
+            filter 0.6s var(--ease-out-quart),
+            visibility 0s linear 0.7s;
     }
-    #layer-server::before {
-        opacity: var(--p1);
+    .an-step.is-active {
+        opacity: 1;
+        visibility: visible;
+        filter: none;
+        transform: translateY(-50%);
+        transition-delay: 0.08s, 0.08s, 0.08s, 0s;
     }
-    #layer-seo::before {
-        opacity: var(--p2);
-        background: radial-gradient(
-            circle at center,
-            rgba(74, 222, 128, 0.15) 0%,
-            transparent 65%
-        );
+    .an-step.is-past {
+        transform: translateY(calc(-50% - 36px));
     }
-    #layer-ui::before {
-        opacity: var(--p3);
-        background: radial-gradient(
-            circle at center,
-            rgba(255, 255, 255, 0.15) 0%,
-            transparent 65%
-        );
+    .an-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 0.9rem;
+    }
+    .an-step-2 .an-eyebrow { color: var(--c2); }
+    .an-step-3 .an-eyebrow { color: var(--c3); }
+    .an-step h2,
+    .an-step h3 {
+        font-size: clamp(2rem, 4vw, 3.3rem);
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        line-height: 1.05;
+        margin-bottom: 1rem;
+    }
+    .an-text {
+        font-size: clamp(1.02rem, 1.4vw, 1.18rem);
+        line-height: 1.6;
+        color: var(--muted);
+        max-width: 44ch;
+    }
+    .an-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        margin-top: 1.4rem;
+        min-height: 44px;
+        font-weight: 600;
+        color: var(--accent);
+    }
+    @media (hover: hover) and (pointer: fine) {
+        .an-link:hover {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
     }
 
-    /* --- IMAGEN PRINCIPAL (TOP) --- */
-    .layer-image {
-        transform: translateZ(0px);
-        background: var(--bg);
-        border: 1px solid var(--border);
-        overflow: hidden;
-        box-shadow: -20px 40px 80px rgba(0, 0, 0, calc(var(--exp) * 0.3));
+    /* ================= ESCENA 3D ================= */
+    .an-stage {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        perspective: 1400px;
     }
-    .layer-image img {
+    .an-glow {
+        position: absolute;
+        inset: -10% -5%;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle at 50% 50%,
+            color-mix(in srgb, var(--accent) 22%, transparent),
+            transparent 65%
+        );
+        filter: blur(40px);
+        opacity: calc(0.35 + var(--glow, 0) * 0.65);
+        pointer-events: none;
+    }
+    .an-scene {
+        --gap: 150px;
+        position: relative;
+        width: min(100%, 760px);
+        aspect-ratio: 1904 / 951;
+        transform-style: preserve-3d;
+        transform: rotateX(calc(var(--t) * 54deg))
+            rotateZ(calc(var(--t) * -24deg))
+            scale(calc(1 - var(--t) * 0.1));
+        will-change: transform;
+        transition:
+            --an-up1 0.7s var(--ease-out-quart),
+            --an-up2 0.7s var(--ease-out-quart);
+    }
+    .an-scene[data-activo='2'] {
+        --an-up1: 110px;
+    }
+    .an-scene[data-activo='3'] {
+        --an-up1: 190px;
+        --an-up2: 110px;
+    }
+    .an-layer {
+        position: absolute;
+        inset: 0;
+        border-radius: 16px;
+        backface-visibility: hidden;
+        transition:
+            opacity 0.5s var(--ease-out-quart),
+            box-shadow 0.5s var(--ease-out-quart);
+    }
+    .an-l1 {
+        transform: translateZ(calc(var(--s) * (var(--gap) + var(--an-up1))));
+        overflow: hidden;
+        background: var(--surface);
+        box-shadow: 0 0 0 1px var(--border), 0 30px 60px -30px rgba(0, 0, 0, 0.35);
+    }
+    .an-l1 img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: top;
+    }
+    .an-l2 {
+        transform: translateZ(calc(var(--s) * var(--an-up2)));
+        background: #fff;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+    }
+    .an-l3 {
+        transform: translateZ(calc(var(--s) * var(--gap) * -1));
+        background: #0c0c10;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
     }
 
-    /* Glare FX ligero */
-    .layer-fx {
+    /* Etiqueta de cada capa: solo aparece al separarse */
+    .an-tag {
+        position: absolute;
+        top: -14px;
+        left: 18px;
+        z-index: 3;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.3rem 0.8rem 0.3rem 0.35rem;
+        border-radius: 99px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #fff;
+        background: var(--c1);
+        opacity: var(--s);
+        box-shadow: 0 6px 20px -6px rgba(0, 0, 0, 0.4);
+    }
+    .an-tag b {
+        display: grid;
+        place-items: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        font-size: 0.72rem;
+        background: rgba(255, 255, 255, 0.25);
+    }
+    .an-l2 .an-tag { background: var(--c2); }
+    .an-l3 .an-tag { background: var(--c3); }
+    .an-l1 .an-tag {
+        top: 14px; /* dentro: la capa 1 recorta su contenido */
+    }
+
+    /* Capa activa: se ilumina; las demás se apagan */
+    .an-scene[data-activo='1'] .an-layer:not(.an-l1),
+    .an-scene[data-activo='2'] .an-layer:not(.an-l2),
+    .an-scene[data-activo='3'] .an-layer:not(.an-l3) {
+        opacity: 0.16;
+    }
+    .an-scene[data-activo='1'] .an-l1 {
+        box-shadow: 0 0 0 2px var(--c1), 0 30px 90px -20px color-mix(in srgb, var(--c1) 70%, transparent);
+    }
+    .an-scene[data-activo='2'] .an-l2 {
+        box-shadow: 0 0 0 2px var(--c2), 0 30px 90px -20px color-mix(in srgb, var(--c2) 70%, transparent);
+    }
+    .an-scene[data-activo='3'] .an-l3 {
+        box-shadow: 0 0 0 2px var(--c3), 0 30px 90px -20px color-mix(in srgb, var(--c3) 70%, transparent);
+    }
+
+    /* "En producción": solo al final, con la web ya montada */
+    .an-live {
+        position: absolute;
+        left: 14px; /* a la derecha taparía el botón de chat de la web de GuadiCar */
+        bottom: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.4rem 0.8rem;
+        border-radius: 99px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.72);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        opacity: 0;
+        transform: translateY(8px);
+        transition:
+            opacity 0.5s var(--ease-out-quart),
+            transform 0.6s var(--ease-out-expo);
+    }
+    .an-live i {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #34c759;
+        box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.3);
+    }
+    .an-scene[data-paso='4'] .an-live {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* --- Capa 2: Google --- */
+    .an-serp {
         position: absolute;
         inset: 0;
-        pointer-events: none;
-        opacity: var(--exp);
-        background: linear-gradient(
-            115deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.05) 45%,
-            rgba(255, 255, 255, 0.3) 50%,
-            rgba(255, 255, 255, 0.05) 55%,
-            transparent 100%
-        );
-        background-size: 300% 300%;
-        background-position: calc(100% - (var(--exp) * 100%)) 0;
+        padding: 5% 6%;
+        display: flex;
+        flex-direction: column;
+        gap: 4%;
+        color: #202124;
+        font-family: Arial, Helvetica, sans-serif;
+        overflow: hidden;
+        border-radius: inherit;
+    }
+    .an-search {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.55rem 0.9rem;
+        border-radius: 99px;
+        border: 1px solid #dfe1e5;
+        font-size: clamp(0.62rem, 1.2vw, 0.85rem);
+        box-shadow: 0 1px 6px rgba(32, 33, 36, 0.12);
+    }
+    .an-search svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+        fill: none;
+        stroke: #5f6368;
+        stroke-width: 2;
+    }
+    .an-result {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        font-size: clamp(0.58rem, 1.1vw, 0.82rem);
+        line-height: 1.4;
+    }
+    .an-site {
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
+        color: #202124;
+    }
+    .an-site i {
+        display: grid;
+        place-items: center;
+        width: 1.7em;
+        height: 1.7em;
+        border-radius: 50%;
+        background: #f1f3f4;
+        font-style: normal;
+        font-weight: 700;
+        color: #c62828;
+    }
+    .an-result b {
+        font-weight: 400;
+        font-size: 1.28em;
+        color: #1a0dab;
+        line-height: 1.3;
+    }
+    .an-result p {
+        color: #4d5156;
+        max-width: none;
+    }
+    .an-code {
+        margin-top: auto;
+        padding: 0.8rem 1rem;
+        border-radius: 10px;
+        background: #f6f8fa;
+        font-family: var(--font-mono);
+        font-size: clamp(0.5rem, 0.9vw, 0.7rem);
+        line-height: 1.6;
+        color: #57606a;
+        white-space: pre-wrap;
+        overflow: hidden;
+    }
+    .an-code .k { color: #0550ae; }
+    .an-code .v { color: #1a7f37; }
+
+    /* --- Capa 3: velocidad (tipo "herramientas de desarrollador") --- */
+    .an-speed {
+        position: absolute;
+        inset: 0;
+        padding: 6% 6% 5%;
+        display: flex;
+        flex-direction: column;
+        gap: 5%;
+        color: #d1d1d6;
+        font-size: clamp(0.6rem, 1.15vw, 0.85rem);
+    }
+    .an-speed-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 600;
+    }
+    .an-ok {
+        padding: 0.25rem 0.7rem;
+        border-radius: 99px;
+        color: #34c759;
+        background: rgba(52, 199, 89, 0.14);
+        opacity: 0;
+        transition: opacity 0.4s ease 0.75s;
+    }
+    .an-bars {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+    .an-bars li {
+        display: grid;
+        grid-template-columns: 30% 1fr;
+        align-items: center;
+        gap: 0.8rem;
+    }
+    .an-bars span {
+        color: #8e8e93;
+    }
+    .an-bars i {
+        position: relative;
+        display: block;
+        height: 10px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.05);
+    }
+    .an-bars i::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: calc(var(--x) * 100%);
+        width: calc(var(--w) * 100%);
+        border-radius: 99px;
+        background: linear-gradient(90deg, var(--c3), #a78bfa);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.5s var(--ease-out-quart) var(--d);
+    }
+    .an-axis {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        padding-top: 0.5rem;
+    }
+    .an-axis span {
+        width: 1px;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.15);
+    }
+    /* La carga "se hace" cuando la capa 3 está activa (y queda hecha después) */
+    .an-scene[data-activo='3'] .an-bars i::after,
+    .an-scene[data-paso='4'] .an-bars i::after {
+        transform: scaleX(1);
+    }
+    .an-scene[data-activo='3'] .an-ok,
+    .an-scene[data-paso='4'] .an-ok {
+        opacity: 1;
     }
 
-    @media (max-width: 768px) {
-        .grid-wrap {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            height: 100svh;
-            padding: 80px 20px 40px; /* FUNDAMENTAL: 20px para que el texto no se aplaste */
+    /* ================= MÓVIL ================= */
+    @media (max-width: 860px) {
+        .anatomy {
+            height: 360vh;
         }
-        .sticky-stage {
+        .an-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto;
+            gap: 1.5rem;
+            align-content: center;
+            height: 100%;
+            padding-top: 70px; /* deja sitio a la barra de navegación */
+        }
+        .an-stage {
             order: -1;
-            height: 45vh; /* Dejamos más aire abajo para que respire el texto */
-            width: 100%;
-            align-items: center;
-            padding-top: 1rem;
+            height: 42svh;
         }
-        .text-content {
-            height: auto;
-            min-height: 200px;
-            width: 100%; /* Evita que el flexbox colapse el ancho a 1 palabra por línea */
-            text-align: center;
-            margin-top: auto; /* Anclado 100% abajo */
+        .an-scene {
+            --gap: 70px;
+            width: 92%;
         }
-        .step p {
-            margin: 0 auto;
+        .an-scene[data-activo='2'] {
+            --an-up1: 55px;
         }
-        .scene {
-            width: 100%;
-            /* EL TRUCO: Según se abre en Z (lo que visualmente la estira hacia abajo), la desplazamos físicamente hacia ARRIBA en Y para compensar, así nunca pisa el texto y podemos tenerla enorme. */
-            transform: translateY(calc(var(--exp) * -100px))
-                rotateX(calc(var(--exp) * 55deg))
-                rotateZ(calc(var(--exp) * -10deg))
-                scale(calc(0.85 - (var(--exp) * 0.1)));
+        .an-scene[data-activo='3'] {
+            --an-up1: 95px;
+            --an-up2: 55px;
         }
-        .code-bg {
-            font-size: 0.5rem;
-            padding: 1rem;
+        .an-copy {
+            gap: 1rem;
+            align-items: flex-start;
         }
-        .b-title {
-            font-size: 1.1rem;
+        .an-rail {
+            flex-direction: column;
+            padding-top: 0.4rem;
         }
+        .an-steps {
+            min-height: 250px;
+        }
+        .an-step {
+            inset: 0 0 auto 0;
+            transform: translateY(24px);
+        }
+        .an-step.is-active {
+            transform: none;
+        }
+        .an-step.is-past {
+            transform: translateY(-24px);
+        }
+        .an-step h2,
+        .an-step h3 {
+            font-size: clamp(1.7rem, 7vw, 2.2rem);
+            margin-bottom: 0.7rem;
+        }
+        .an-text {
+            font-size: 1rem;
+        }
+        .an-tag {
+            font-size: 0.68rem;
+            top: -12px;
+            left: 10px;
+        }
+        .an-l1 .an-tag {
+            top: 8px;
+        }
+        .an-live {
+            font-size: 0.65rem;
+            left: 8px;
+            bottom: 8px;
+            padding: 0.3rem 0.6rem;
+        }
+        .an-bars {
+            gap: 0.45rem;
+        }
+        .an-bars i {
+            height: 6px;
+        }
+        .an-code {
+            display: none;
+        }
+    }
+
+    /* ======== SIN JS / REDUCIR MOVIMIENTO: todo el texto visible, sin scroll largo ======== */
+    :global(html:not(.js-motion)) .anatomy {
+        height: auto;
+    }
+    :global(html:not(.js-motion)) .an-sticky {
+        position: relative;
+        height: auto;
+        padding-block: clamp(4rem, 10vh, 7rem);
+    }
+    :global(html:not(.js-motion)) .an-grid {
+        height: auto;
+        padding-top: 0;
+    }
+    :global(html:not(.js-motion)) .an-rail {
+        display: none;
+    }
+    :global(html:not(.js-motion)) .an-steps {
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2.2rem;
+    }
+    :global(html:not(.js-motion)) .an-step {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        filter: none;
+        transform: none;
+    }
+    :global(html:not(.js-motion)) .an-stage {
+        height: auto;
     }
 </style>
 
 <script>
     // @ts-nocheck
-    import { ScrollTrigger } from '@/lib/motion.js'
+    import { gsap, reduceMotion } from '@/lib/motion.js'
 
-    const scene = document.getElementById('anatomyScene')
-    const steps = document.querySelectorAll('.step')
+    const section = document.getElementById('anatomia')
+    const scene = section?.querySelector('.an-scene')
+    const steps = section ? [...section.querySelectorAll('.an-step')] : []
+    const rail = section ? [...section.querySelectorAll('.an-rail li')] : []
+    const glowHost = section?.querySelector('.an-stage')
 
-    if (scene && steps.length > 0) {
-        ScrollTrigger.create({
-            trigger: '#anatomyPin',
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: 1,
-            onUpdate: (self) => {
-                const exp = self.progress
-                scene.style.setProperty('--exp', exp)
+    if (section && scene && !reduceMotion) {
+        const clamp = (v) => Math.min(1, Math.max(0, v))
+        const tramo = (p, a, b) => clamp((p - a) / (b - a))
+        const suave = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2)
 
-                const p1 = Math.max(0, Math.min(1, (exp - 0.1) * 4))
-                const p2 = Math.max(0, Math.min(1, (exp - 0.35) * 4))
-                const p3 = Math.max(0, Math.min(1, (exp - 0.6) * 4))
+        // Guion del scroll (0 → 1):
+        //  0.00–0.18  web plana (intro)
+        //  0.06–0.26  se inclina y se separa en capas
+        //  0.20 / 0.42 / 0.62  capa 1 / 2 / 3 activa
+        //  0.76–0.92  las capas se vuelven a juntar → web terminada
+        const PASOS = [0, 0.2, 0.42, 0.62, 0.8]
+        let paso = -1
 
-                scene.style.setProperty('--p1', p1)
-                scene.style.setProperty('--p2', p2)
-                scene.style.setProperty('--p3', p3)
+        function pintar(p) {
+            const abre = suave(tramo(p, 0.06, 0.24))
+            const cierra = suave(tramo(p, 0.76, 0.92))
+            const t = abre * (1 - cierra)
+            const s = suave(tramo(p, 0.1, 0.26)) * (1 - suave(tramo(p, 0.74, 0.9)))
+            scene.style.setProperty('--t', t.toFixed(4))
+            scene.style.setProperty('--s', s.toFixed(4))
+            glowHost.style.setProperty('--glow', s.toFixed(3))
 
-                let stepIndex = 0
-                if (exp > 0.6) stepIndex = 3
-                else if (exp > 0.35) stepIndex = 2
-                else if (exp > 0.1) stepIndex = 1
-                else stepIndex = 0
+            let n = 0
+            PASOS.forEach((umbral, i) => {
+                if (p >= umbral) n = i
+            })
+            if (n === paso) return // solo se tocan clases cuando cambia el paso
+            paso = n
+            scene.dataset.paso = String(n)
+            scene.dataset.activo = n >= 1 && n <= 3 ? String(n) : '0'
+            steps.forEach((el, i) => {
+                el.classList.toggle('is-active', i === n)
+                el.classList.toggle('is-past', i < n)
+            })
+            rail.forEach((li, i) => li.classList.toggle('is-on', i === n))
+        }
 
-                steps.forEach((s, i) => {
-                    if (i === stepIndex) {
-                        s.className = 'step active'
-                    } else if (i < stepIndex) {
-                        s.className = 'step past'
-                    } else {
-                        s.className = 'step future'
-                    }
-                })
+        // Un "proxy" animado con scrub suaviza el movimiento respecto al scroll
+        const estado = { p: 0 }
+        gsap.to(estado, {
+            p: 1,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: section,
+                start: 'top top',
+                end: 'bottom bottom',
+                scrub: 0.8,
             },
+            onUpdate: () => pintar(estado.p),
         })
+        pintar(0)
     }
 </script>

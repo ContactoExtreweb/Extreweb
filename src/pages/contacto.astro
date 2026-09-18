@@ -54,9 +54,10 @@ const seoDesc =
                             <div class='c-info-item'>
                                 <span class='c-icon'>📍</span>
                                 <div>
-                                    <strong>Sede Principal</strong>
+                                    <strong>Dónde estamos</strong>
                                     <span
-                                        >Villanueva de la Serena, Extremadura</span
+                                        >Villanueva de la Serena (Badajoz). Trabajamos
+                                        en toda Extremadura y online.</span
                                     >
                                 </div>
                             </div>
@@ -148,8 +149,9 @@ const seoDesc =
                                     />
                                     <span
                                         >He leído y acepto la <a
-                                            href='/privacidad'
-                                            target='_blank'>política de privacidad</a
+                                            href='/privacidad/'
+                                            target='_blank'
+                                            rel='noopener'>política de privacidad</a
                                         >.</span
                                     >
                                 </label>
@@ -648,6 +650,26 @@ const seoDesc =
     const captchaError = document.querySelector('[data-captcha-error]')
     const submitBtn = form?.querySelector('[data-form-submit]')
     const submitLabel = submitBtn?.querySelector('[data-label]')
+
+    // Si viene del configurador de la home, dejamos el mensaje empezado (una sola vez)
+    try {
+        const raw = sessionStorage.getItem('ew-configurador')
+        if (raw && form) {
+            sessionStorage.removeItem('ew-configurador')
+            const c = JSON.parse(raw)
+            const msg = form.querySelector('#message')
+            const servicio = form.querySelector('#service')
+            if (msg && !msg.value) {
+                // "galería, opiniones y WhatsApp"
+                const lista = (a) =>
+                    a.length > 1 ? `${a.slice(0, -1).join(', ')} y ${a.at(-1)}` : a[0] || ''
+                const estilo = c.estilo ? ` y estilo ${c.estilo}` : ''
+                const extras = c.extras?.length ? `, con ${lista(c.extras)}` : ''
+                msg.value = `Hola, tengo ${c.articulo} («${c.nombre}») y me gustaría una web como la que he probado en vuestro configurador: color ${c.color}${estilo}${extras}. `
+            }
+            if (servicio) servicio.value = 'web'
+        }
+    } catch (e) {}
 
     // Los tokens de reCAPTCHA son de un solo uso: tras cada intento se reinicia
     const resetCaptcha = () => {

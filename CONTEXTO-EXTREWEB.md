@@ -4,13 +4,16 @@
 > stack, decisiones tomadas, lo que YA funciona (y no hay que tocar), los errores
 > cometidos y por qué, y lo que queda pendiente.
 > **Léelo entero antes de proponer cambios.**
+>
+> Última actualización: **18/09/2026**.
 
 ---
 
 ## 1. Quién soy
 
 - **Saúl Correyero Pañero**, desarrollador web **junior**.
-- **Co-fundador de extreweb**, agencia web con sede en **Miajadas (Cáceres), Extremadura**.
+- **Co-fundador de extreweb**, agencia web de **Extremadura** (futura base en **Villanueva de la Serena**;
+  aún **sin oficina**).
 - Socio: **Pedro Fernández Sánchez** (gestión, sistemas y redes). Yo llevo **desarrollo y diseño**.
 - Formación: **DAW** en I.E.S. Ágora (Cáceres), finalizado junio 2026. Grado medio SMR.
 - Portfolio personal: **sauldev.es**
@@ -25,15 +28,16 @@
 - **Mobile-first** y **modo claro/oscuro** en todo lo que toques.
 - A veces trabajo desde el **iPhone**: los bloques de código muy largos se cortan al pegar.
   Si algo deja de animar o sale en blanco, sospechar de eso primero.
+- **Los commits y el push los hago yo.**
 
 ### Otros proyectos míos (contexto)
 | Proyecto | Stack | Estado |
 |---|---|---|
-| **guadicar.es** — GuadiCar Multimarcas (concesionario, cliente José Juan) | Astro + Supabase + Netlify | En producción, mantenido |
+| **guadicar.es** — GuadiCar Multimarcas (concesionario, cliente José Juan) | Astro + Supabase + Netlify (adaptador, `/api/lead`, Resend) | En producción, mantenido |
 | **carmeet.es** — CarMeet ESP (red social motor) | React + Vite + Supabase | TFG de DAW, en migración |
 | **Físicas Élite** | Next.js + Supabase + Stripe + Bunny Stream | Traspasado a Pedro |
 | **toldospallares.com** | WordPress + Elementor | Cliente |
-| **Taller Guzmán** | Astro 6 + Tailwind | Cliente |
+| **Taller Guzmán** | Astro 6 + Tailwind | Cliente (aún en `project-r5m3o.vercel.app`) |
 
 > Nota: **sí uso React y Tailwind** en otros proyectos (CarMeet, taller Guzmán), aunque en
 > extreweb.es el sitio público va en Astro vanilla. Si la web lo menciona como servicio, es honesto.
@@ -50,20 +54,29 @@ Web de la **agencia**. Es un híbrido: **negocio local** (confianza, contacto, g
 - **Estética:** **estilo Apple** — limpio, mucho aire, tipografía protagonista, animación fluida,
   claro/oscuro. Simple, elegante, rápido.
 
+### ⚠️ Rebranding pendiente
+La empresa se ha **registrado fiscalmente con otro nombre**. Habrá que hacer un **rebranding de
+nombre** (y probablemente de dominio). **De momento se mantiene "extreweb" y extreweb.es.**
+Cuando llegue: el nombre está repartido por textos, títulos, schema (`src/lib/site.js`), logo del
+Navbar/Footer, panel `/admin` y legales. Conviene centralizarlo antes (ver §14).
+
 ---
 
 ## 3. Stack técnico (versiones exactas)
 
 - **Astro 6.4.8** (requiere Node ≥ 22.12)
 - **GSAP 3.15** + ScrollTrigger · **Lenis 1.3.x** (smooth scroll)
-- **Inter** vía `@fontsource-variable/inter` → `'Inter Variable'`
-- `@astrojs/sitemap` (con `site:` configurado → genera `sitemap-index.xml`)
+- **Inter** vía `@fontsource-variable/inter` → `'Inter Variable'` (subset latino **precargado**
+  en `BaseLayout`)
+- `@astrojs/sitemap` (con `site:` configurado → genera `sitemap-index.xml`; **filtra `/admin`**)
 - `@astrojs/react` + `react` + `react-dom` → **solo para el panel `/admin`**
-- `@supabase/supabase-js` → **solo para el panel `/admin`**
+- `@supabase/supabase-js` → panel `/admin` **y** funciones de Netlify
 - Alias **`@/*` → `src/*`** (en `tsconfig.json`)
 - CSS: un `global.css` con tokens + estilos **scoped** por componente Astro.
   **Sin Tailwind, sin Sass** en este proyecto.
 - JS vanilla en los `<script>` de componentes, con `// @ts-nocheck`.
+- Dependencias sin usar en `package.json`: `@fontsource-variable/space-grotesk` y
+  `@fontsource/space-mono` (no se importan; inofensivas).
 
 ---
 
@@ -77,36 +90,62 @@ Web de la **agencia**. Es un híbrido: **negocio local** (confianza, contacto, g
   - `extreweb.es` **A** → `75.2.60.5` (Netlify) ✅
   - `www.extreweb.es` **CNAME** → `extreweb.netlify.app` ✅
   - **MX de Zoho** (`mx.zoho.eu`, `mx2.zoho.eu`, `mx3.zoho.eu`) + SPF + DKIM + verificaciones
-    (Zoho, Google Search Console) → **NO TOCAR, de ahí depende el correo.**
+    (Zoho, Google Search Console) → **NO TOCAR.**
   - CNAMEs residuales de DonDominio (`mail`, `imap`, `pop`, `smtp`, `webmail`, `ftp`, `bbdd`) —
     inofensivos.
 - ⛔ **NUNCA debe existir un CNAME comodín `*.extreweb.es`** ni un `ANAME` al parking.
   Eso fue lo que rompió la renovación del certificado SSL (ver §10).
 
+### Correo
+- **Email público de la web: `contactoextreweb@gmail.com`** (decisión 18/09/2026: el Gmail lo
+  tenemos más a mano; Zoho apenas se abre). Aparece en contacto, footer, menú móvil, legales y
+  schema (`SITE.email`).
+- `contacto@extreweb.es` (Zoho) sigue existiendo, pero ya no se muestra en la web.
+
 ### Hosting
 - **GitHub → Netlify**, auto-deploy en cada `git push`.
 - `netlify.toml`: `command = "npm run build"`, `publish = "dist"`, `NODE_VERSION = "22"`.
+- `public/_redirects` → `/blog` y `/blog/*` → `/` (301). Se copia tal cual a `dist/`.
+- `public/_headers` → caché de 1 año para `/_astro/*` (llevan hash) + cabeceras de seguridad
+  (`nosniff`, `Referrer-Policy`, `X-Frame-Options: SAMEORIGIN`, `Permissions-Policy`).
 - Subdominio de pruebas: **extreweb.netlify.app** (útil para aislar problemas de dominio/SSL).
-- Local: `npm run dev` → `localhost:4321`.
+- Local: `npm run dev` → `localhost:4321`. `npx astro preview --port 4322` sirve el `dist/`.
 - SSL: Let's Encrypt, dominios `extreweb.es, www.extreweb.es`, auto-renovación activa.
+
+### Netlify Forms (formulario de contacto)
+- Formulario `contacto` en `src/pages/contacto.astro`: `data-netlify`, honeypot `bot-field`,
+  **reCAPTCHA de Netlify** (`data-netlify-recaptcha`), casilla RGPD `privacidad`.
+- Se envía por `fetch` a `/` (sin salir de la página). Sin JS, POST normal + página de Netlify.
+- **El reCAPTCHA solo aparece desplegado** (lo inyecta Netlify); en local no sale.
+- **Aviso por email:** Netlify → Forms → *Submission notifications* → `contactoextreweb@gmail.com`.
+- Cada envío verificado dispara `netlify/functions/submission-created.mjs`, que lo copia a la
+  tabla `mensajes` de Supabase (ver §11). Si falla, el mensaje sigue en Netlify → Forms.
+
+### Funciones de Netlify (`netlify/functions/`)
+| Archivo | Qué hace |
+|---|---|
+| `submission-created.mjs` | Evento de Netlify Forms → inserta en `mensajes` (idempotente por `netlify_id`). No se puede llamar desde fuera (Netlify firma el evento). |
+| `calendario.mjs` | `GET /calendario.ics?t=TOKEN` → reuniones en formato iCalendar para suscribirse desde el iPhone. Token en la tabla `ajustes`. |
 
 ### ⚠️ Gotcha crítico: variables de entorno
 Las `PUBLIC_*` de Astro **se incrustan en el momento del build**. Si cambias una variable en
-Netlify, **hay que redesplegar** (`Trigger deploy → Clear cache and deploy site`) o seguirá
-sirviéndose el build viejo sin ellas. Esto ya nos costó un "supabaseUrl is required" en producción.
+Netlify, **hay que redesplegar** (`Trigger deploy → Clear cache and deploy site`).
 
-Variables en Netlify (scope: All):
+Variables en Netlify:
 ```
-PUBLIC_SUPABASE_URL=https://ihmcqjuztvuxljsiukjo.supabase.co
-PUBLIC_SUPABASE_ANON_KEY=eyJ...
+PUBLIC_SUPABASE_URL=https://ihmcqjuztvuxljsiukjo.supabase.co   (scope: All)
+PUBLIC_SUPABASE_ANON_KEY=eyJ...                                (scope: All)
+SUPABASE_SERVICE_KEY=...   (SECRETA · solo la usan las funciones · recomendado: scope solo Functions)
 ```
 > La URL es **solo la base**, sin `/rest/v1/`. La `anon key` es pública por diseño;
-> la seguridad la da la RLS. **Nunca** meter aquí la `service_role`.
+> la seguridad la da la RLS. La `service key` **nunca** con prefijo `PUBLIC_` (se saltaría la RLS
+> y acabaría en el navegador).
 
 ### Imágenes
 En `public/proyectos/`, referenciadas **sin** `/public/` (ej. `/proyectos/Guadicar.webp`).
 **OJO con mayúsculas** — Netlify/Linux distingue, Windows no: `Guadicar.webp`, `Car-MeetESP.webp`,
-`Fichar.webp`, `Guzman.webp`, `Toldos-Pallares.webp`.
+`Fichar.webp`, `Guzman.webp`, `Toldos-Pallares.webp`. Todas ~1905×952; los `<img>` llevan
+`width`/`height` para evitar saltos de maquetación.
 
 ---
 
@@ -138,7 +177,10 @@ En `public/proyectos/`, referenciadas **sin** `/public/` (ej. `/proyectos/Guadic
 
 ### Reglas de estilo
 - Botones `.btn`: pastilla, `:active { transform: scale(0.97) }` (feedback táctil).
+  El hover de `.btn` usa `color-mix` con `--fg` (antes era `#e8e8ed` fijo y rompía el oscuro).
 - **Hover SOLO** dentro de `@media (hover: hover) and (pointer: fine)` — en táctil no se dispara.
+- **Grises de texto: siempre `var(--muted)`.** Se eliminó el `#86868b` fijo (no llegaba al
+  contraste mínimo sobre blanco).
 - Utilidad `.mono` (usa `--font-mono`).
 - Modo oscuro: toggle sol/luna en `Navbar.astro` (pone `data-theme` en `<html>` + `localStorage`)
   + script `is:inline` anti-FOUC en el `<head>` de `BaseLayout.astro`.
@@ -157,13 +199,17 @@ Internamente: `initLenis()` (smooth scroll **solo escritorio con ratón**; móvi
 - Cada página importa `gsap` desde `@/lib/motion.js` → al cargarse arranca el motor.
 - Héroes: `.gsap-reveal` / `.gsap-fade` (animan al cargar).
 - Tarjetas y secciones: `.gsap-up` con **ScrollTrigger** (`start: "top 85%"`).
-- Los componentes de la home (Services, Projects, Process, Showcase, Playground, Trust, Areas)
-  tienen su propio `<script>` con ScrollTrigger importando desde `motion.js`.
+- Los componentes de la home (Services, Projects, Process, Showcase, Trust, Areas)
+  tienen su propio `<script>` con ScrollTrigger (Trust importa `gsap` directamente).
 
 ### 🔑 Invariante que NO se puede romper
 **Ninguna clase `gsap-*` está oculta por CSS.** Si el JS falla, el contenido **se ve igual**.
 Nunca condicionar la visibilidad del contenido a JavaScript → eso provocó varias veces
 páginas en blanco o textos desaparecidos. El movimiento solo realza; nunca es requisito.
+
+> `Showcase.astro` (scrollytelling) oculta los pasos no activos, pero **solo con `html.js-motion`**:
+> sin JS o con "reducir movimiento" todos los textos se ven como lista normal y sin scroll largo.
+> Usar el mismo patrón (`:global(html:not(.js-motion))`) en cualquier sección de scroll nueva.
 
 ### Código muerto conocido
 El sistema `data-reveal` / `.is-in` de `global.css` + `initReveals()` **está sin usar**.
@@ -184,6 +230,8 @@ Vienen de skills de expertos (Emil Kowalski, "impeccable"/Paul Bakaus, frontend-
 6. **Nunca condicionar visibilidad a JS.**
 7. Botones con feedback al pulsar, hover gateado a `pointer:fine`, zonas táctiles ~48px.
 8. **Mobile-first siempre.**
+9. **Nada importante solo en hover** (lección: las tarjetas de proyecto de la home no se podían
+   abrir en móvil porque el botón solo salía con hover; ahora toda la tarjeta es el enlace).
 
 ---
 
@@ -194,46 +242,96 @@ src/
 ├── styles/global.css              tokens + reset + modo oscuro + utilidades
 ├── lib/
 │   ├── motion.js                  motor de animación
-│   └── site.js                    datos NAP + constantes SEO
-├── layouts/BaseLayout.astro       <head> SEO + Schema + anti-FOUC + motion.js
+│   └── site.js                    datos NAP + constantes SEO (+ instagram, locality)
+├── layouts/BaseLayout.astro       <head> SEO + Schema + anti-FOUC + preload fuente + motion.js
 ├── components/
-│   ├── Navbar.astro               (~511 líneas, con toggle de tema)
-│   ├── Hero.astro                 ⭐ CSS PURO, sin JS (ver §9)
-│   ├── Showcase.astro             captura de GuadiCar con revelado Apple al scroll
-│   ├── Playground.astro           demo interactiva (era el hero descartado, ver §9)
-│   ├── Services.astro
-│   ├── Projects.astro
-│   ├── Trust.astro                stats con contadores, fondo azul
+│   ├── Navbar.astro               toggle de tema, menú móvil, sección activa normalizada
+│   ├── Hero.astro                 ⭐ CSS PURO, sin JS (ver §9) + marquee
+│   ├── Showcase.astro             "Anatomía de una web que vende" (420vh; 360vh en móvil): la web
+│   │                              REAL de GuadiCar se abre en 3 capas (diseño · Google · velocidad)
+│   │                              y se vuelve a montar al final. Datos de Google = los reales.
+│   ├── Configurador.astro         "¿Cómo quedaría la web de tu negocio?": el visitante monta una
+│   │                              web (sector, nombre, foto, color, estilo, extras) y la maqueta
+│   │                              FUNCIONA (reservar/comprar, WhatsApp) → "Quiero una web así"
+│   ├── Services.astro             tarjetas apiladas con sticky
+│   ├── Projects.astro             scroll horizontal fijado; cada tarjeta es un <a> al proyecto
+│   ├── Trust.astro                stats con contadores
 │   ├── Process.astro
 │   ├── Areas.astro                zonas → enlaza a las 3 landings locales
 │   ├── Faq.astro                  array `faqs` + JSON-LD FAQPage
+│   ├── LocalLanding.astro         plantilla de las páginas por ciudad (diseño común, TEXTO por props)
 │   ├── Cta.astro
-│   ├── Footer.astro
+│   ├── Footer.astro               solo Instagram en redes (SITE.instagram)
 │   └── seo/
 │       ├── Schema.astro           JSON-LD @graph sitewide
-│       └── ServiceSchema.astro    Service + BreadcrumbList (reutilizable)
-├── content/blog/                  posts .md
+│       └── ServiceSchema.astro    Service + BreadcrumbList (URLs con barra final)
 └── pages/
     ├── index.astro
     ├── admin.astro                ⭐ panel interno (ver §11)
     ├── servicios/{index, diseno-web, seo, redes-sociales, sistemas-soporte}.astro
     ├── proyectos/index.astro      array `projects` → enlaces EXTERNOS a las webs en vivo
-    ├── nosotros.astro             (~709 líneas, con bios reales de los dos socios)
+    ├── nosotros.astro             bios reales de los dos socios
     ├── proceso.astro · contacto.astro
-    ├── blog/{index, [slug]}.astro
-    ├── diseno-web-don-benito.astro
-    ├── diseno-web-villanueva-de-la-serena.astro
-    ├── diseno-web-caceres.astro   (las 3 con contenido ÚNICO, no plantilla repetida)
+    ├── diseno-web-don-benito.astro            ┐ solo contenido; usan LocalLanding.astro
+    ├── diseno-web-villanueva-de-la-serena.astro │ (~700 palabras únicas cada una,
+    ├── diseno-web-caceres.astro                ┘ proyectos reales de la zona, FAQs locales)
     └── aviso-legal.astro · privacidad.astro · cookies.astro
+netlify/functions/                 submission-created.mjs · calendario.mjs (ver §4)
+supabase/                          SQL de las tablas nuevas (ya ejecutadas en producción)
+public/_redirects · public/_headers
 ```
 
 **Orden de la home (`index.astro`):**
-`Navbar → Hero → Showcase → Playground → Services → Projects → Trust → Process → Areas → Faq → Cta → Footer`
+`Navbar → Hero → Showcase → Configurador → Services → Projects → Trust → Process → Areas → Faq → Cta → Footer`
 
-**Archivos borrados a propósito** (no recrear):
-- `blog/[...slug].astro` → colisionaba con `blog/[slug].astro`.
-- `proyectos/[slug].astro` → devolvía `[]`; las tarjetas de proyecto enlazan a las **webs reales
-  en vivo** con `target="_blank"`, no a fichas internas. Es lo correcto para una agencia.
+**Showcase (`Showcase.astro`) — cómo funciona:**
+- Un proxy `{ p }` animado con ScrollTrigger (`scrub: 0.8`) suaviza el scroll; `pintar(p)` calcula
+  `--t` (inclinación) y `--s` (separación) con curvas suaves y cambia de paso en 0 / .2 / .42 / .62 / .8.
+- La capa activa se ilumina (azul diseño, verde Google, violeta velocidad) y las de encima se
+  apartan con `@property --an-up1/--an-up2` (se animan solas sin frenar el scroll).
+- La capa de Google usa el título, la descripción y el schema (`AutoDealer`) **reales** de
+  guadicar.es. Si GuadiCar los cambia, actualizarlos aquí. Nada de métricas ni reseñas inventadas.
+
+**Configurador (`Configurador.astro`) — cómo funciona:**
+- **El nombre del negocio es el titular** de la web simulada (el eslogan va debajo); la primera vez
+  que se ve la sección se "escribe" solo, y al escribir en el campo se resalta en la maqueta.
+- Editor: 1 Negocio (taller/restaurante/tienda/peluquería) · 2 Nombre y foto · 3 Color y estilo
+  (Moderno / Clásico serif cálido / Atrevido oscuro en mayúsculas) · 4 Extras (galería, opiniones,
+  mapa, WhatsApp) · 🎲 Sorpréndeme.
+  - **Escritorio (≥1000 px):** título a todo el ancho; debajo, un panel con cada paso en una fila
+    (etiqueta | opciones) y la maqueta *sticky* a la derecha en una columna de 340 px. El panel es
+    un *container*: si mide menos de 600 px por dentro (p. ej. con "Ordenador", que pasa a 50/50),
+    las etiquetas van encima y los grupos de 4 opciones en cuadrícula 2×2.
+  - **Móvil (<1000 px, con JS):** teléfono arriba y pestañas debajo, como un editor de fotos.
+  - ⚠️ El bloque CSS de escritorio va **al final** del `<style>`: tiene la misma especificidad que
+    las reglas base y, si va antes, estas lo pisan (pasó y no se veían ni las filas ni los separadores).
+- La maqueta **funciona**: «Pedir cita / Reservar mesa / Comprar» abre una hoja con opciones y
+  confirmación; la burbuja de WhatsApp abre un chat con pregunta y respuesta. Al confirmar salta
+  fuera del móvil la notificación "Así te avisa tu web" (lo que le llegaría al dueño).
+- Todo el contenido por sector (textos, lista, opiniones, chat y flujo) está en el array `tipos`
+  del frontmatter. Las opiniones/precios del mock son de un negocio ficticio de ejemplo.
+- La foto se usa con `URL.createObjectURL`: **no sale del dispositivo**.
+- Sin GSAP. `@property --brand` anima el color en toda la sección. Estilos en `<style is:global>`
+  con prefijo `#configurador` (casi todo el mock lo crea el JS y el CSS scoped no le llegaría).
+- ⚠️ La sección usa `overflow: clip`, **no** `hidden`: `hidden` rompe el `position: sticky`.
+- La maqueta es una *container query* (`@container (min-width: 420px)` = versión ordenador);
+  tamaños en `cqi` para que escale con la pantalla del mock. `data-lenis-prevent` en el scroll
+  interno para que Lenis no se lo coma en escritorio.
+- "Quiero una web así" guarda en `sessionStorage` (`ew-configurador`) sector, nombre, color,
+  estilo y extras; `contacto.astro` escribe el mensaje una sola vez. Nada va en la URL.
+
+**Enlaces internos: SIEMPRE con barra final** (`/servicios/`, no `/servicios`). Netlify sirve las
+páginas con barra y sin ella hace una redirección 301 extra en cada clic.
+
+**Borrado a propósito** (no recrear):
+- **El blog entero** (18/09/2026): páginas, colección de contenido y artículo de ejemplo. Motivo:
+  sin lectores no compensa, y tener un blog con un artículo que daba 404 era peor que no tenerlo.
+  `/blog` redirige a la home.
+- `proyectos/[slug].astro` → las tarjetas de proyecto enlazan a las **webs reales en vivo** con
+  `target="_blank"`, no a fichas internas. Es lo correcto para una agencia.
+- `Stats.astro` (estaba vacío).
+- `Playground.astro` (18/09/2026): sustituido por `Configurador.astro`. Era la "web dentro de un
+  navegador" con cursores, vista SEO y reseñas/métricas **inventadas**. Recuperable en git.
 
 ---
 
@@ -247,10 +345,9 @@ Se dedicaron **muchísimas** iteraciones. Ideas **descartadas definitivamente**:
    encima → quedaba una web dentro de una web dentro de una web. Horrible.
 3. ❌ **Tipografía kinética con palabra rotativa** (reales / a medida / que venden / rápidas) →
    bug: todas las palabras apiladas y superpuestas, o el titular desaparecido.
-4. ❌ **"Patio de juegos" interactivo** en el hero (cambiar color de marca, cursor tipo Figma,
-   arrastrar tarjetas, claro/oscuro, wireframe/SEO, calculadora de presupuesto) →
-   *"una portada convence, no entretiene"*; además eliminaba los CTAs.
-   **Guardado como `Playground.astro`** y colocado más abajo en la home.
+4. ❌ **"Patio de juegos" interactivo** en el hero → *"una portada convence, no entretiene"*;
+   además eliminaba los CTAs. Estuvo como `Playground.astro` más abajo en la home; el 18/09/2026
+   se sustituyó por el **Configurador** (ver §8), que sí tiene un objetivo: acabar en contacto.
 
 ### ✅ HERO ACTUAL (aprobado — "simple pero funcional")
 - **Estilo Apple**, **100% CSS, SIN JavaScript** (por eso es imposible que se rompa).
@@ -258,11 +355,10 @@ Se dedicaron **muchísimas** iteraciones. Ideas **descartadas definitivamente**:
   `linear-gradient(120deg, var(--accent), #7c5cff)` + `background-clip: text`.
 - Kicker eyebrow: "Diseño y desarrollo web · Extremadura".
 - Sub: "A medida, rápidas y pensadas para vender. Sin plantillas, sin atajos."
-- 2 CTAs: **Empezar proyecto** (/contacto) y **Ver proyectos** (/proyectos).
-- Chevron de scroll animado abajo.
-- `min-height: 100svh` (no `100vh`), `@keyframes heroIn` con delays escalonados
-  (0.1s / 0.22s / 0.4s / 0.55s), `prefers-reduced-motion` respetado.
-- Funciona perfecto en claro y oscuro.
+- 2 CTAs: **Empezar proyecto** (/contacto/) y **Ver proyectos** (/proyectos/).
+- Chevron de scroll animado abajo + marquee infinito de especialidades.
+- `min-height: 100svh`, `@keyframes heroIn` con delays escalonados, `prefers-reduced-motion`
+  respetado. Funciona perfecto en claro y oscuro.
 
 > ⚠️ **No propongas volver a meter el navegador/mini-web en el hero.** Si hay que mejorarlo,
 > que sea sobre esta base tipográfica.
@@ -271,63 +367,57 @@ Se dedicaron **muchísimas** iteraciones. Ideas **descartadas definitivamente**:
 
 ## 10. Incidencia de SSL (resuelta el 15/09/2026) — documentada para que no se repita
 
-**Síntoma:** `extreweb.es` caído con `NET::ERR_CERT_COMMON_NAME_INVALID`. El panel `/admin`
-también inaccesible. Correos de Netlify: *"Failed attempt to renew your TLS certificate"* con
+**Síntoma:** `extreweb.es` caído con `NET::ERR_CERT_COMMON_NAME_INVALID`. Correos de Netlify:
+*"Failed attempt to renew your TLS certificate"* con
 `Unable to verify challenge for *.extreweb.es: No TXT record found at _acme-challenge.extreweb.es`.
 
 **Causa (doble):**
-1. En DonDominio existían dos registros de parking:
-   - `extreweb.es` **ANAME** → `parkingsrv0.dondominio.com` (competía con el A correcto)
-   - `*.extreweb.es` **CNAME** → `parkingsrv0.dondominio.com` ← **el asesino**: el comodín
-     capturaba `_acme-challenge.extreweb.es`, así que Let's Encrypt nunca podía validar.
-2. En Netlify había una **zona DNS huérfana** (el dominio figuraba como "Netlify DNS") mientras
-   los nameservers apuntaban a DonDominio → Netlify pedía un certificado **wildcard**
-   `*.extreweb.es` que jamás podría validar.
+1. En DonDominio existían `extreweb.es` **ANAME** → parking y `*.extreweb.es` **CNAME** → parking
+   ← **el asesino**: el comodín capturaba `_acme-challenge.extreweb.es`.
+2. En Netlify había una **zona DNS huérfana** → Netlify pedía un certificado **wildcard** imposible.
 
-**Solución aplicada:**
-1. Borrar en DonDominio el `ANAME` y el `CNAME *`.
-2. Borrar la zona DNS de Netlify (Team → DNS → Danger zone → Delete DNS zone).
-3. Esperar propagación (verificado con dnschecker: `75.2.60.5` en todo el mundo).
-4. Netlify → Domain management → **Renew certificate**.
+**Solución:** borrar el `ANAME` y el `CNAME *` en DonDominio, borrar la zona DNS de Netlify,
+esperar propagación y **Renew certificate**. Resultado: `extreweb.es, www.extreweb.es` (sin wildcard).
 
-**Resultado:** `Domains: extreweb.es, www.extreweb.es` (sin wildcard), auto-renovación 14 dic.
-
-**Lecciones:** nunca dejar un comodín en la zona DNS; si el certificado falla, mirar primero el DNS;
-el HSTS hace que el navegador cachee el error (probar en incógnito o limpiar en
-`chrome://net-internals/#hsts`).
+**Lecciones:** nunca un comodín en la zona DNS; si el certificado falla, mirar primero el DNS;
+el HSTS cachea el error (probar en incógnito o `chrome://net-internals/#hsts`).
 
 ---
 
 ## 11. Panel de administración (`/admin`)
 
-Herramienta interna tipo mini-CRM para los dos socios. **Ya está en producción y funcionando.**
+Herramienta interna tipo mini-CRM para los dos socios. **En producción y funcionando.**
 
 ### Arquitectura
 Vive **dentro del mismo proyecto Astro**, como una **isla de React** (`client:only="react"`)
-en `src/pages/admin.astro`. **El sitio público sigue siendo 100% estático** — no se activó SSR.
+en `src/pages/admin.astro`. **El sitio público sigue siendo 100% estático** — no se activó SSR
+(lo dinámico va en funciones de Netlify, ver §4).
 La seguridad la da **Supabase Auth + RLS**, no el hecho de ocultar la página.
-La página lleva `<meta name="robots" content="noindex, nofollow">` y `robots.txt` tiene `Disallow: /admin`.
+`noindex, nofollow`, `Disallow: /admin` en `robots.txt` y **fuera del sitemap**.
 
 ### Supabase
 - Proyecto: `https://ihmcqjuztvuxljsiukjo.supabase.co`
 - **Auth:** una **única cuenta compartida** para los dos socios. **Registro público desactivado.**
 - **RLS activada en todas las tablas**, con política `"auth all" for all to authenticated
-  using (true) with check (true)`. El rol `anon` no ve nada.
+  using (true) with check (true)`. El rol `anon` no ve nada. Las funciones de Netlify usan la
+  service key (se salta la RLS).
 - Cliente en `src/lib/adminClient.js` (`persistSession: true`, `autoRefreshToken: true`).
 
 **Esquema:**
 ```
-clientes      id, nombre, empresa, email, telefono, notas, created_at
-proyectos     id, cliente_id→clientes, titulo, descripcion, estado('activo'|'pausado'|'terminado'), created_at
-notas         id, proyecto_id→proyectos, contenido, created_at
-reuniones     id, proyecto_id→proyectos(null), cliente_id→clientes(null), titulo, descripcion,
-              fecha (inicio), fecha_fin, created_at
-presupuestos  id, proyecto_id→proyectos, titulo, created_at
-partidas      id, presupuesto_id→presupuestos, concepto, importe numeric(10,2),
-              pagado bool, fecha_pago date, created_at
+clientes       id, nombre, empresa, email, telefono, notas, created_at
+proyectos      id, cliente_id→clientes, titulo, descripcion, estado('activo'|'pausado'|'terminado'), created_at
+notas          id, proyecto_id→proyectos, contenido, created_at
+reuniones      id, proyecto_id→proyectos(null), cliente_id→clientes(null), titulo, descripcion,
+               fecha (inicio), fecha_fin, created_at
+presupuestos   id, proyecto_id→proyectos, titulo, created_at
+partidas       id, presupuesto_id→presupuestos, concepto, importe numeric(10,2),
+               pagado bool, fecha_pago date, created_at
+mensajes       id, netlify_id (unique), nombre, email, servicio, mensaje, leido bool, created_at
+notas_rapidas  id, texto, hecha bool, created_at
+ajustes        clave (pk), valor, updated_at        ← 'calendario_token'
 ```
-Todas las FK con `on delete cascade` (salvo las de `reuniones`, que son `set null`).
-Índices en las columnas de relación.
+Las tres últimas: SQL en `supabase/*.sql` (ya ejecutadas). Todas con la misma RLS.
 
 > El dinero funciona así: proyecto → presupuesto(s) → **partidas**. Cada partida se marca
 > pagada/pendiente. Total, cobrado y pendiente se **calculan sumando partidas**, no se guardan.
@@ -338,135 +428,149 @@ src/pages/admin.astro               shell mínimo, noindex, script de tema
 src/styles/admin.css                todos los estilos del panel
 src/lib/adminClient.js              cliente de Supabase
 src/components/admin/
-  ├── AdminApp.jsx                  raíz: sesión, HEADER superior, routing por estado
+  ├── AdminApp.jsx                  raíz: sesión, HEADER, routing por estado, contador de no leídos
   ├── Login.jsx                     email + contraseña
-  ├── Inicio.jsx                    hero de bienvenida + stats + cobros pendientes + reuniones
-  ├── Clientes.jsx                  listado + alta
+  ├── Inicio.jsx                    hero + resumen + stats + mensajes + reuniones + notas + cobros
+  ├── Mensajes.jsx                  mensajes del formulario (leer, responder, crear cliente, borrar)
+  ├── NotasRapidas.jsx              post-its del Inicio
+  ├── Clientes.jsx                  listado + alta (prop `nuevo` abre el formulario)
   ├── ClienteDetalle.jsx            ficha, edición, borrado + sus proyectos
   ├── ProyectoDetalle.jsx           presupuestos/partidas + notas + reuniones del proyecto
-  ├── Calendario.jsx                rejilla mensual + vista lista + modal crear/editar
-  └── helpers.js                    euro(), fechaCorta(), fechaHora(), soloHora(),
-                                    rangoReunion(), paraInputDatetime()
+  ├── Calendario.jsx                rejilla mensual + lista + modal (prop `nueva` abre el modal)
+  ├── CalendarioSync.jsx            ventana "iPhone": enlace webcal + regenerar token
+  └── helpers.js                    euro(), fechaCorta(), fechaHora(), soloHora(), rangoReunion(),
+                                    paraInputDatetime(), cuandoReunion() ("Hoy · 17:00"), hace()
 ```
 
-### Layout — HEADER superior (importante)
-La **primera versión tenía barra lateral y se descartó**. Ahora hay un **header horizontal
-sticky** igual que la web pública:
-- Izquierda: logo SVG (la "E" en squircle con gradiente azul→violeta) + "extreweb" + badge "panel".
-- Centro: nav (**Inicio · Clientes · Calendario**) con la sección activa resaltada.
-- Derecha: toggle de tema + cerrar sesión + hamburguesa (≤720px, despliega el nav debajo).
-- Fondo con `backdrop-filter` (efecto cristal), `max-width: 1200px`.
+### Layout — HEADER superior
+La **primera versión tenía barra lateral y se descartó**. Header horizontal sticky:
+logo (la "E" en squircle) + "extreweb" + badge "panel" · nav (**Inicio · Mensajes · Clientes ·
+Calendario**, con contador de no leídos) · tema + cerrar sesión + hamburguesa (≤720px, con
+puntito azul si hay mensajes sin leer).
 
 ### Pantallas
-- **Inicio:** hero de bienvenida que **saluda según la hora** ("Buenos días/tardes/noches, {nombre} 👋",
-  el nombre sale del email antes de la @), fecha de hoy, frase-resumen, y 3 botones de acción.
-  Debajo: franja de stats (clientes / proyectos activos / pendiente / cobrado), **cobros pendientes
-  por proyecto** (ordenados por importe, clicables) y **próximas reuniones**.
+- **Inicio:** saludo según la hora, resumen en una frase (mensajes sin leer, proyectos activos,
+  por cobrar), botones de acción (Ver mensajes / Nuevo cliente / Nueva reunión — abren directamente
+  el formulario). Franja de stats. Rejilla: **Mensajes** (3 últimos) · **Próximas reuniones**
+  ("Hoy"/"Mañana") · **Notas rápidas** · **Cobros pendientes**.
+- **Mensajes:** lista (no leídos en negrita, filtro Todos/Sin leer). Al abrir uno se marca leído.
+  Acciones: Responder (mailto), Crear cliente (con el mensaje en notas), Marcar no leído, Eliminar.
 - **Clientes / ClienteDetalle:** CRUD de clientes y sus proyectos.
-- **ProyectoDetalle:** el corazón. Resumen económico con **barra de progreso** (% cobrado),
-  presupuestos con **partidas tipo checkbox** (clic = pagado/pendiente, guarda `fecha_pago` sola),
-  edición inline de partidas, notas del cliente, y reuniones del proyecto con inicio+fin y editables.
-- **Calendario:** rejilla mensual (lunes→domingo, 42 celdas), navegación de meses, botón "Hoy",
-  conmutador **Mes / Lista** (en móvil arranca en Lista automáticamente), clic en un día → panel
-  con las reuniones de ese día, clic en una reunión → **modal para editar/eliminar**.
-  Modal con título, inicio, fin, cliente y descripción. Varios eventos por día a distintas horas.
+- **ProyectoDetalle:** resumen económico con barra de progreso, presupuestos con partidas tipo
+  checkbox, notas, reuniones con inicio+fin.
+- **Calendario:** rejilla mensual (lunes→domingo, 42 celdas), Mes/Lista (en móvil arranca en
+  Lista; en móvil la fecha va bajo el título), modal crear/editar. Botón **iPhone** →
+  suscripción `webcal://extreweb.es/calendario.ics?t=…` (solo lectura, aviso 30 min antes,
+  el iPhone refresca cada ~1 h). **Importar desde iCloud se descartó.**
 
 ---
 
 ## 12. SEO — lo que ya está hecho
 
-- **`src/lib/site.js`** → objeto `SITE`: name, url, description, email, telephone, **`sameAs: []`
-  (VACÍO, pendiente)**, region, country, `areaServed` (5 ciudades), `founders` (los 2 socios),
-  `ogImage: '/og-portada.jpg'`.
+- **`src/lib/site.js`** → objeto `SITE`: name, url, description, email (Gmail), telephone
+  (`+34628775619`), `instagram`, **`sameAs: [instagram]`** (solo perfiles externos, nunca la
+  propia web), `locality: 'Villanueva de la Serena'`, region, country, `areaServed`, `founders`,
+  `ogImage: '/og-portada.jpg'` (existe, 1200×630).
 - **`seo/Schema.astro`** → JSON-LD `@graph` con **Organization + ProfessionalService + WebSite**,
-  renderizado **sitewide** desde `BaseLayout`.
-- **`seo/ServiceSchema.astro`** → **Service + BreadcrumbList**, una línea en cada una de las
-  4 páginas de servicio ("Diseño y desarrollo web", "Posicionamiento SEO", "Gestión de redes
-  sociales", "Sistemas y soporte técnico").
-- **`Faq.astro`** → JSON-LD **FAQPage** generado desde el array `faqs`.
-- **`nosotros.astro`** → tiene las bios reales de los dos socios (E-E-A-T). Se le quitó el JSON-LD
-  inline duplicado porque ya va el global.
-- **`BaseLayout.astro`** → title, description, canonical, Open Graph completo, `og:image`,
-  `twitter:card`/`twitter:image`, `theme-color` adaptable (light/dark), `robots: index, follow`.
-- **`public/robots.txt`** → permite buscadores **y explícitamente los bots de IA**
-  (GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-User, PerplexityBot, Perplexity-User,
-  Google-Extended, Applebot-Extended, Bytespider, meta-externalagent), `Disallow: /admin`,
-  y `Sitemap: https://extreweb.es/sitemap-index.xml`.
-- **Sitemap** confirmado (`site:` está en `astro.config.mjs`).
-- **Google Search Console:** propiedad verificada, sitemap enviado, indexación solicitada
-  página a página. La home ya sale como "indexada".
-- **Landings locales** con contenido **único** por ciudad (no plantilla duplicada).
+  sitewide. La dirección lleva `addressLocality`.
+- **`seo/ServiceSchema.astro`** → **Service + BreadcrumbList** en las 4 páginas de servicio.
+- **`Faq.astro`** → JSON-LD **FAQPage**.
+- **`BaseLayout.astro`** → title, description, canonical, Open Graph, `twitter:card`,
+  `theme-color` claro/oscuro, `robots: index, follow`.
+- Cada página tiene **título y descripción propios** (las legales repetían la de la home; arreglado).
+- **Una sola `<h1>` por página.**
+- **`public/robots.txt`** → permite buscadores **y los bots de IA**, `Disallow: /admin`,
+  `Sitemap: https://extreweb.es/sitemap-index.xml`.
+- **Sitemap** sin `/admin` ni `/blog`.
+- **Páginas por ciudad** (18/09/2026): ~700 palabras únicas, proyectos reales de la zona
+  (Villanueva: GuadiCar y Toldos Pallares · Cáceres: Taller M. Guzmán · Don Benito: los de
+  Villanueva, "a 6 km"), FAQs locales, migas de pan visibles + `Service` (areaServed = la ciudad)
+  + `BreadcrumbList`. **Regla: no inventar clientes ni datos locales.**
+- Schema global con `hasOfferCatalog` (4 servicios), `foundingDate: 2022`, `knowsAbout`,
+  fundadores (Saúl → `sauldev.es`) y `areaServed` con ciudades (`City`) + Extremadura (`State`).
+- Título de la home con la palabra clave delante: "Diseño y desarrollo web en Extremadura — extreweb".
+- **Google Search Console:** propiedad verificada, sitemap enviado.
 
 ### Realidad sobre "que me recomienden las IAs"
-El schema y lo técnico están bien, pero que una IA te recomiende depende sobre todo de la
-**reputación FUERA de la web**: Google Business Profile, reseñas, menciones. Es trabajo de meses,
-no de código. Lo que sí controlamos (permitir bots de IA, contenido citable, entidad consistente)
-ya está hecho.
+Depende sobre todo de la **reputación FUERA de la web**: Google Business Profile, reseñas,
+menciones. Es trabajo de meses, no de código. Lo técnico ya está hecho.
 
 ---
 
 ## 13. Marca
 
-Símbolo generado: una **"E" formada por barras redondeadas apiladas** dentro de un **squircle**
-con gradiente **`#0071e3 → #7c5cff`**. Lee como la E de extreweb y como bloques de contenido web.
-Ese SVG está **incrustado inline** en el header y el login del panel.
+Símbolo: una **"E" formada por barras redondeadas apiladas** dentro de un **squircle** con
+gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** en el panel.
 
-Archivos generados (comprobar si están ya en el repo):
-- `og-portada.jpg` (1200×630) → debe estar en **`public/og-portada.jpg`** (el meta ya apunta ahí).
-- `logo-icon-extreweb.svg` → candidato a sustituir `public/favicon.svg`.
-- `logo-extreweb-horizontal.png` / `-dark.png` → para usos fuera de la web (firmas, redes).
-
-En la web, el wordmark "extreweb" es **texto Inter en vivo**, no imagen.
+- ⚠️ **Inconsistencia:** el Navbar usa una "E" en cuadrado azul plano y el **Footer usa un rayo**
+  con "Extreweb" en mayúscula. Se deja así hasta el rebranding (§2).
+- `public/og-portada.jpg` (1200×630) ✅ · `logo-extreweb-horizontal(-dark).png` para usos externos.
+- En la web, el wordmark "extreweb" es **texto Inter en vivo**, no imagen.
 
 ---
 
-## 14. PENDIENTE — en lo que quiero que me ayudes
+## 14. PENDIENTE
 
-### Prioridad alta
-1. **Formulario de contacto — NUNCA SE TERMINÓ.** Es el agujero más grave: la web no recibe
-   mensajes. `contacto.astro` tiene un `<form>` (aparentemente con `data-netlify="true"`) y
-   existe un honeypot `.hp-field` en `global.css`. **Verificar y rematar**: que Netlify Forms lo
-   detecte en el build (HTML estático, `name` en el form, input oculto `form-name`), activar la
-   detección de formularios en Netlify y **redesplegar**, probar un envío real y configurar el
-   aviso por email.
-2. **Repaso responsive / móvil del panel `/admin`.** Era el paso final acordado y quedó sin hacer.
-   Revisar espaciados, tamaños táctiles, el calendario en pantallas pequeñas, los modales y las
-   filas de partidas.
-3. **Limpiar CSS muerto en `admin.css`.** Al cambiar de barra lateral a header superior quedaron
-   sin usar: `.a-shell`, `.a-side`, `.a-side-brand`, `.a-side-foot`, `.a-nav`, `.a-nav-btn`,
-   `.a-nav-logout`, `.a-overlay`, `.a-menu-open`, `.a-menu-close`, y probablemente las versiones
-   antiguas de `.a-stats` / `.a-stat` y `.a-partida` (sustituidas por `.a-stats2`/`.a-stat2` y
-   `.a-partida2`). **Verificar uso real antes de borrar.**
-4. **Bloque CSS del calendario en móvil mal rematado:** dentro de `@media (max-width: 720px)` hay
-   un `.a-cal-ev { display: none; }` **duplicado** y un `::before` vacío. La idea era mostrar un
-   **puntito por evento** en cada celda; está a medias.
+### Bloqueado por datos
+1. **Aviso legal:** falta **razón social + NIF** (y datos registrales si es S.L.) de la empresa
+   tal como se registró fiscalmente. **Lo exige la LSSI.** Los tiene que pasar Pedro.
+2. **Rebranding** (§2): cuando se decida el nombre. Antes conviene **centralizar la marca**:
+   un `Logo.astro` único para Navbar y Footer + usar `SITE.name` en títulos y textos.
 
-### Prioridad media
-5. **`Login.jsx`:** distinguir **error de red** de **credenciales incorrectas**. Ahora cualquier
-   fallo dice "Email o contraseña incorrectos", lo que despista mucho cuando la base de datos está
-   pausada o caída. (Se propuso el arreglo pero no está confirmado que se aplicara.)
-6. **Keep-alive de Supabase.** El plan gratuito **pausa el proyecto tras ~7 días sin actividad**
-   (ya nos pasó: `ERR_NAME_NOT_RESOLVED` y "credenciales incorrectas" engañosas). Propuesta:
-   **Netlify Scheduled Function** (`netlify/functions/keep-alive.js` con `@netlify/functions`,
-   cron `0 9 * * *`, un `fetch` a `/rest/v1/clientes?select=id&limit=1` con la anon key).
-   **No implementado todavía.**
-7. **`sameAs` en `site.js`** sigue vacío — pendiente de definir Instagram / LinkedIn /
-   Google Business Profile.
-8. **`og-portada.jpg` en `public/`** — confirmar que está subida (si no, al compartir el enlace
-   no sale miniatura).
-9. **Blog**: solo hay un post de ejemplo (`como-subir-articulos.md`). Faltan artículos reales.
-   Ideas: "¿Cuánto cuesta una página web en Extremadura?", "Diseño web en Don Benito",
-   "Por qué tu web debe cargar en menos de 2 segundos".
-   Formato: `.md` en `src/content/blog/` con frontmatter `title`, `description`, `category` (opc),
-   `pubDate` (YYYY-MM-DD, sin comillas), `heroImage` (opc → `public/blog/`).
-   El **nombre del archivo es la URL** (minúsculas, guiones, sin tildes).
+### Contenido (decisión nuestra, no de código)
+3. **Afirmaciones difíciles de sostener** — conviene suavizarlas (credibilidad + publicidad engañosa):
+   - `Services.astro`: "+142% Conversión", "monitorización 24/7", "seguridad absoluta".
+   - `Process.astro` / `servicios/diseno-web`: "rendimiento (100/100) garantizado".
+   - `servicios/index`: "matemáticamente inmune a hackeos masivos", "<0.8s", "24/7".
+   - `Faq.astro`: "100/100", "24/7".
+   - `Trust.astro`: "+5 años de experiencia" (¿real?) y "4 proyectos en producción" (la home
+     enseña 5).
+4. **Jerga que el cliente local no entiende:** "Headless", "WPO", "UI/UX", "Edge" en el marquee
+   del hero y en servicios. Mejor beneficios en cristiano.
+5. **Páginas de servicio muy finas** (~150 palabras). Las de ciudad ya están hechas (18/09).
+   Siguiente pieza SEO: servicios → páginas por sector (concesionarios, talleres, instalación)
+   → guía de precios ("¿cuánto cuesta una web?").
+6. **`/servicios`**: las imágenes al pasar el ratón son **fotos de stock de Unsplash** cargadas
+   desde sus servidores. Mejor capturas propias de proyectos.
+7. **Web de Taller Guzmán** (otro repo): sigue en `project-r5m3o.vercel.app`; su **canonical y
+   og:url apuntan a `http://localhost:4321/`** (le falta `site` en `astro.config`) → Google no
+   la indexa bien; enlaza a extreweb con el dominio viejo **`extreweb.ct.ws`**; y muestra nuestro
+   Gmail como contacto. Arreglar antes de entregarla.
+8. Footer: la columna "Expertise" está en inglés; el lema "Ingeniería digital premium…" es
+   genérico.
 
-### Prioridad baja / opcional
-10. Breadcrumbs + schema en las **3 landings locales**.
-11. Limpiar el **código muerto** del sistema `data-reveal` (en `global.css` y `motion.js`) y
-    comprobar si sigue existiendo un `Stats.astro` vacío (0 bytes).
-12. Mejoras del panel ya comentadas: **buscador de clientes**, **exportar presupuesto a PDF**,
-    **subir archivos/imágenes a los proyectos**, formulario de alta de proyecto más completo.
+### Panel `/admin`
+9. Repaso responsive general (espaciados, tamaños táctiles, modales, partidas).
+10. **Limpiar CSS muerto en `admin.css`**. Verificado el 18/09 que **no se usan** en ningún `.jsx`:
+    `.a-shell`, `.a-side*`, `.a-nav`, `.a-nav-btn`, `.a-nav-logout`, `.a-overlay`, `.a-menu-*`,
+    `.a-stats`, `.a-stat`, `.a-stat-num`, `.a-partida`, `.a-partida-add`, `.a-quick*`,
+    `.a-stats2`, `.a-stat2`, `.a-money`, `.a-badge-toggle`, `.a-btn-xs`.
+    ⚠️ `.a-stat-label` **sí** se usa (resumen económico del proyecto): no borrarla.
+11. **Calendario móvil (vista Mes):** `.a-cal-ev { display: none }` duplicado y un `::before`
+    vacío; la idea era **un puntito por evento**. Está a medias.
+12. **`Login.jsx`:** distinguir **error de red** de **credenciales incorrectas** (hoy todo dice
+    "Email o contraseña incorrectos", despista si Supabase está pausado).
+13. Errores de Supabase silenciados en Clientes/Proyecto/Calendario (si algo falla, no pasa nada).
+
+### SEO fuera de la web (lo que más pesa para salir en búsquedas locales)
+- **Google Business Profile** como negocio de zona de servicio (sin dirección visible) → reseñas
+  de clientes reales (GuadiCar, Toldos Pallares, Taller Guzmán, Físicas Élite).
+- Enlaces desde las webs de clientes: GuadiCar enlaza a `www.extreweb.es` (mejor sin `www`);
+  Fichar365 y CarMeet no enlazan; Taller Guzmán, al dominio viejo.
+- Mismo nombre, teléfono y web en directorios y redes. Instagram con la web en la bio.
+- Search Console: pedir indexación de las páginas nuevas y revisar *Rendimiento → Consultas*.
+- ⚠️ Con el rebranding/cambio de dominio: **redirecciones 301 de todas las URLs** para no perder
+  lo ganado.
+
+### Técnico / baja prioridad
+14. **Keep-alive de Supabase:** probablemente ya no haga falta — la suscripción del calendario del
+    iPhone consulta la base cada ~hora. Confirmar que el proyecto no vuelve a pausarse.
+15. Saltos de encabezado `h1 → h3` en servicios y proceso (tarjetas en `h3` sin `h2`).
+16. Imágenes responsive: las capturas de 1905 px se sirven igual a móvil (~85 KB c/u). Moverlas a
+    `src/assets/` y usar `<Image>`/`<Picture>` de Astro generaría tamaños y AVIF.
+17. Limpiar el código muerto de `data-reveal` (`global.css` + `motion.js`).
+18. Mejoras del panel ya comentadas: buscador de clientes, exportar presupuesto a PDF,
+    subir archivos a proyectos, alta de proyecto más completa.
 
 ---
 
@@ -475,20 +579,26 @@ En la web, el wordmark "extreweb" es **texto Inter en vivo**, no imagen.
 | Problema | Causa | Regla |
 |---|---|---|
 | Página en blanco / texto desaparecido | Ocultar contenido con CSS y revelarlo con JS | **Nunca** condicionar visibilidad a JS |
+| Algo que solo funciona con ratón | Botón/enlace visible solo en `:hover` | En táctil no hay hover: lo importante siempre visible o la tarjeta entera clicable |
 | Animación que no arranca al pegar desde el móvil | `<script>` largo cortado al pegar | Trocear el código; sospechar de esto primero |
 | Imagen que no carga solo en producción | Mayúsculas en el nombre | Linux/Netlify distingue mayúsculas |
 | `supabaseUrl is required` en producción | Variables añadidas después del último build | Redesplegar con caché limpia tras tocar env vars |
-| "Credenciales incorrectas" en el panel | Proyecto de Supabase **pausado** (`ERR_NAME_NOT_RESOLVED`) | Mirar la consola; no es la contraseña |
-| `ERR_CERT_COMMON_NAME_INVALID` | Comodín `*.extreweb.es` + ANAME al parking en el DNS | Jamás un CNAME comodín en la zona |
-| El navegador sigue mostrando el error de SSL ya arreglado | HSTS cacheado | Incógnito o `chrome://net-internals/#hsts` |
+| "Credenciales incorrectas" en el panel | Proyecto de Supabase **pausado** | Mirar la consola; no es la contraseña |
+| `ERR_CERT_COMMON_NAME_INVALID` | Comodín `*.extreweb.es` + ANAME al parking | Jamás un CNAME comodín en la zona |
+| Error de SSL ya arreglado que sigue saliendo | HSTS cacheado | Incógnito o `chrome://net-internals/#hsts` |
 | Build falla en Netlify | Node 20 | `NODE_VERSION = "22"` (Astro 6 lo exige) |
+| Cada clic interno tarda más de la cuenta | Enlace sin barra final → 301 de Netlify | Enlaces internos siempre con `/` final |
+| El reCAPTCHA no sale en local | Lo inyecta Netlify al desplegar | Probar el formulario en producción |
+| `/admin` en blanco en `npm run dev` (`jsxDEV is not a function`) | `astro build` con el dev arrancado corrompe `node_modules/.vite` | Parar el dev, borrar `node_modules/.vite`, recargar con Ctrl+Shift+R |
+| Mensaje del formulario que no llega al panel | Falta `SUPABASE_SERVICE_KEY` o la tabla | Netlify → Logs → Functions → `submission-created` |
 
 ---
 
 ## 16. Lo que NO hay que tocar
 
-- `package.json`, `netlify.toml`, `astro.config.mjs`, `tsconfig.json`.
+- `package.json`, `netlify.toml`, `tsconfig.json`.
+- `astro.config.mjs` — **solo** se añadió el filtro del sitemap (`/admin` fuera), con permiso.
 - El **Hero** (está aprobado y es CSS puro a propósito).
 - El **sistema de animación** (`motion.js` + clases `gsap-*`): es coherente y seguro.
-- Los **registros MX/SPF/DKIM de Zoho** en el DNS (de ahí depende el correo).
-- La **RLS** de Supabase.
+- Los **registros MX/SPF/DKIM de Zoho** en el DNS.
+- La **RLS** de Supabase (las tablas nuevas siguen la misma política; no se ha cambiado ninguna).

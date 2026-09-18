@@ -1,45 +1,79 @@
 ---
-// src/components/seo/Schema.astro
-import { SITE } from '@/lib/site.js'
+// src/components/seo/Schema.astro — JSON-LD sitewide (se pinta en todas las páginas)
+import { SITE, areaServedSchema } from '@/lib/site.js'
+
+const founders = SITE.founders.map((f) => ({
+    '@type': 'Person',
+    name: f.name,
+    jobTitle: f.jobTitle,
+    ...(f.url ? { url: f.url, sameAs: [f.url] } : {}),
+}))
 
 const org = {
     '@type': 'Organization',
     '@id': SITE.url + '/#organization',
     name: SITE.name,
-    url: SITE.url,
-    logo: SITE.url + '/favicon.svg',
+    url: SITE.url + '/',
+    logo: {
+        '@type': 'ImageObject',
+        url: SITE.url + '/favicon.svg',
+    },
     description: SITE.description,
-    founder: SITE.founders.map((f) => ({
-        '@type': 'Person',
-        name: f.name,
-        jobTitle: f.jobTitle,
-    })),
+    foundingDate: SITE.founded,
+    founder: founders,
     ...(SITE.email ? { email: SITE.email } : {}),
     ...(SITE.telephone ? { telephone: SITE.telephone } : {}),
     ...(SITE.sameAs.length ? { sameAs: SITE.sameAs } : {}),
 }
 
+// Negocio local: es lo que Google cruza con la ficha de Google Business
 const business = {
     '@type': 'ProfessionalService',
     '@id': SITE.url + '/#business',
     name: SITE.name,
-    url: SITE.url,
+    url: SITE.url + '/',
     image: SITE.url + SITE.ogImage,
+    logo: SITE.url + '/favicon.svg',
     description: SITE.description,
     priceRange: '€€',
-    areaServed: SITE.areaServed.map((a) => ({ '@type': 'City', name: a })),
+    parentOrganization: { '@id': SITE.url + '/#organization' },
+    areaServed: areaServedSchema,
     address: {
         '@type': 'PostalAddress',
+        addressLocality: SITE.locality,
         addressRegion: SITE.region,
         addressCountry: SITE.country,
     },
+    knowsAbout: [
+        'Diseño web',
+        'Desarrollo web a medida',
+        'Tiendas online',
+        'Posicionamiento SEO local',
+        'Google Business Profile',
+        'Redes sociales para empresas',
+        'Soporte informático',
+    ],
+    hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Servicios de ' + SITE.name,
+        itemListElement: SITE.services.map((s) => ({
+            '@type': 'Offer',
+            itemOffered: {
+                '@type': 'Service',
+                name: s.name,
+                url: SITE.url + s.path,
+            },
+        })),
+    },
+    ...(SITE.email ? { email: SITE.email } : {}),
     ...(SITE.telephone ? { telephone: SITE.telephone } : {}),
+    ...(SITE.sameAs.length ? { sameAs: SITE.sameAs } : {}),
 }
 
 const website = {
     '@type': 'WebSite',
     '@id': SITE.url + '/#website',
-    url: SITE.url,
+    url: SITE.url + '/',
     name: SITE.name,
     inLanguage: 'es-ES',
     publisher: { '@id': SITE.url + '/#organization' },

@@ -50,18 +50,32 @@ const projects = [
         <div class='projects-track'>
             
             {projects.map((p, i) => (
-                <div class='project-card'>
+                <!-- Toda la tarjeta es el enlace: así funciona al tocar en móvil
+                     (antes el botón solo aparecía con hover) y con teclado -->
+                <a
+                    class='project-card'
+                    href={p.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
                     <div class='p-image'>
-                        <img src={p.image} alt={p.title} loading="lazy" />
-                        <div class='p-overlay' style={`--hover-c: ${p.color}`}>
-                            <a href={p.link} target="_blank" rel="noopener noreferrer" class='p-btn'>Visitar proyecto</a>
+                        <img
+                            src={p.image}
+                            alt={`Web de ${p.title}`}
+                            width="1905"
+                            height="953"
+                            loading="lazy"
+                            decoding="async"
+                        />
+                        <div class='p-overlay' style={`--hover-c: ${p.color}`} aria-hidden="true">
+                            <span class='p-btn'>Visitar proyecto</span>
                         </div>
                     </div>
                     <div class='p-info'>
-                        <span class='p-cat'>{p.category}</span>
+                        <span class='p-cat'>{p.category} <span class='p-ext' aria-hidden="true">↗</span></span>
                         <h3>{p.title}</h3>
                     </div>
-                </div>
+                </a>
             ))}
 
             <!-- Card final de Call to Action -->
@@ -72,7 +86,7 @@ const projects = [
                     </div>
                     <h3>¿Tienes un proyecto en mente?</h3>
                     <p>Hablemos sobre cómo podemos escalar tu negocio al siguiente nivel.</p>
-                    <a href='/proyectos' class='btn btn-accent btn-large'>Ver todos los proyectos</a>
+                    <a href='/proyectos/' class='btn btn-accent btn-large'>Ver todos los proyectos</a>
                 </div>
             </div>
 
@@ -184,7 +198,7 @@ const projects = [
     }
     
     /* Efectos Hover Desktop */
-    @media (hover: hover) {
+    @media (hover: hover) and (pointer: fine) {
         .project-card:hover .p-image img {
             transform: scale(1.06);
         }
@@ -195,6 +209,30 @@ const projects = [
             transform: translateY(0);
         }
     }
+    /* Teclado: el mismo efecto al llegar con Tab */
+    .project-card:focus-visible {
+        outline: none;
+    }
+    .project-card:focus-visible .p-image {
+        outline: 3px solid var(--accent);
+        outline-offset: 4px;
+    }
+    .project-card:focus-visible .p-overlay {
+        opacity: 1;
+    }
+    .project-card:focus-visible .p-btn {
+        transform: translateY(0);
+    }
+    .p-image {
+        transition: transform var(--dur-fast) var(--ease-out-quart);
+    }
+    .project-card:active .p-image {
+        transform: scale(0.98);
+    }
+    .p-ext {
+        color: var(--accent);
+        font-weight: 700;
+    }
 
     .p-info {
         display: flex;
@@ -204,7 +242,7 @@ const projects = [
     .p-cat {
         font-size: 0.95rem;
         font-weight: 500;
-        color: #86868b;
+        color: var(--muted);
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
@@ -250,7 +288,7 @@ const projects = [
         color: var(--fg);
     }
     .end-content p {
-        color: #86868b;
+        color: var(--muted);
         font-size: 1.15rem;
         max-width: 400px;
         margin-bottom: 1rem;

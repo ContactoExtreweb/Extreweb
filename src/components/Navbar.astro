@@ -1,13 +1,19 @@
 ---
 // src/components/Navbar.astro
 const links = [
-    { href: '/servicios', label: 'Servicios' },
-    { href: '/proyectos', label: 'Proyectos' },
-    { href: '/proceso', label: 'Proceso' },
-    { href: '/nosotros', label: 'Nosotros' },
-    { href: '/blog', label: 'Blog' },
+    { href: '/servicios/', label: 'Servicios' },
+    { href: '/proyectos/', label: 'Proyectos' },
+    { href: '/proceso/', label: 'Proceso' },
+    { href: '/nosotros/', label: 'Nosotros' },
 ]
-const path = Astro.url.pathname
+// Rutas y enlaces llevan barra final (/servicios/): se comparan sin ella.
+// Una sección cuenta como activa también en sus subpáginas (/servicios/seo/).
+const sinBarra = (u) => u.replace(/\/$/, '') || '/'
+const path = sinBarra(Astro.url.pathname)
+const isActive = (href) => {
+    const h = sinBarra(href)
+    return path === h || path.startsWith(h + '/')
+}
 ---
 
 <div class='nav-container'>
@@ -27,7 +33,7 @@ const path = Astro.url.pathname
                             href={l.href}
                             class:list={[
                                 'nav-link',
-                                { active: path === l.href },
+                                { active: isActive(l.href) },
                             ]}
                         >
                             {l.label}
@@ -70,7 +76,7 @@ const path = Astro.url.pathname
                         ></path></svg
                     >
                 </button>
-                <a href='/contacto' class='btn btn-accent nav-cta hide-mobile'
+                <a href='/contacto/' class='btn btn-accent nav-cta hide-mobile'
                     >Hablemos</a
                 >
 
@@ -100,7 +106,7 @@ const path = Astro.url.pathname
                 links.map((l) => (
                     <a
                         href={l.href}
-                        class:list={['m-link', { active: path === l.href }]}
+                        class:list={['m-link', { active: isActive(l.href) }]}
                     >
                         {l.label}
                     </a>
@@ -108,12 +114,14 @@ const path = Astro.url.pathname
             }
         </div>
         <div class='menu-footer'>
-            <a href='/contacto' class='btn btn-accent btn-large'
+            <a href='/contacto/' class='btn btn-accent btn-large'
                 >Empezar proyecto</a
             >
             <div class='menu-contact'>
-                <p>contactoextreweb@gmail.com</p>
-                <p>628 77 56 19</p>
+                <a href='mailto:contactoextreweb@gmail.com'
+                    >contactoextreweb@gmail.com</a
+                >
+                <a href='tel:+34628775619'>628 77 56 19</a>
             </div>
         </div>
     </nav>
@@ -338,6 +346,9 @@ const path = Astro.url.pathname
     /* Añadimos un poco de desenfoque al fondo para asegurar la legibilidad */
     html[data-theme='dark'] .menu-bg {
         background: rgba(0, 0, 0, 0.95);
+        /* Igual que en claro: sin esto el titular blanco del hero se transparenta */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
     }
     html[data-theme='light'] .menu-bg {
         background: rgba(255, 255, 255, 0.95);
@@ -401,6 +412,9 @@ const path = Astro.url.pathname
     .fullscreen-menu.is-open .m-link:nth-child(4) {
         transition-delay: 0.25s;
     }
+    .fullscreen-menu.is-open .m-link:nth-child(5) {
+        transition-delay: 0.3s;
+    }
 
     .menu-footer {
         margin-top: clamp(2rem, 5vh, 3.5rem);
@@ -433,7 +447,8 @@ const path = Astro.url.pathname
         align-items: center;
         gap: 0.5rem;
     }
-    .menu-contact p {
+    .menu-contact a {
+        padding: 0.35rem 0.5rem; /* zona táctil cómoda */
         color: var(--muted);
         font-weight: 500;
         font-size: 0.95rem;

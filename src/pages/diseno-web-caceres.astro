@@ -1,124 +1,52 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro'
-import Navbar from '@/components/Navbar.astro'
-import Cta from '@/components/Cta.astro'
-import Footer from '@/components/Footer.astro'
-
-const seoTitle = "Diseño Web en Cáceres | extreweb";
-const seoDesc = "¿Buscas una agencia de diseño web en la provincia de Cáceres? Creamos páginas web a medida, rápidas y optimizadas para negocios locales.";
+// Página local: Cáceres. El diseño está en LocalLanding.astro;
+// aquí solo va el contenido, que tiene que ser propio de esta ciudad.
+import LocalLanding from '@/components/LocalLanding.astro'
 ---
 
-<BaseLayout title={seoTitle} description={seoDesc}>
-    <Navbar />
-    <main class="page-main">
-        <div class="ambient-glow g-1"></div>
-
-        <section class="local-hero text-center">
-            <div class="container">
-                <span class="eyebrow gsap-fade">Expande tu negocio</span>
-                <h1 class="gsap-reveal">Diseño Web en<br/><span class="text-accent">Cáceres.</span></h1>
-                <p class="hero-desc gsap-fade">
-                    Impulsa la presencia digital de tu empresa en toda la provincia de Cáceres. Diseñamos plataformas web modernas que captan la atención y consiguen clientes reales.
-                </p>
-                <div class="hero-actions gsap-fade" style="margin-top: 2rem;">
-                    <a href="/contacto" class="btn btn-accent">Despegar mi negocio</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="local-benefits">
-            <div class="container">
-                <div class="b-grid">
-                    <div class="b-card gsap-up">
-                        <div class="b-icon">🏰</div>
-                        <h3>Alcance Provincial</h3>
-                        <p>Te ayudamos a posicionar tu negocio en toda la provincia de Cáceres. Desde la capital hasta cualquier pueblo de la comarca.</p>
-                    </div>
-                    <div class="b-card gsap-up" style="transition-delay: 0.1s;">
-                        <div class="b-icon">💡</div>
-                        <h3>Diseño a Medida</h3>
-                        <p>Destaca entre la competencia con un diseño único. No usamos plantillas; cada proyecto se diseña desde cero según la identidad de tu marca.</p>
-                    </div>
-                    <div class="b-card gsap-up" style="transition-delay: 0.2s;">
-                        <div class="b-icon">📈</div>
-                        <h3>Resultados Reales</h3>
-                        <p>Nuestras webs están optimizadas para la conversión. Velocidad extrema, llamadas a la acción claras y SEO técnico impecable.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <Cta />
-    </main>
-    <Footer />
-</BaseLayout>
-
-<style>
-    .page-main { background: var(--bg); overflow-x: hidden; position: relative; }
-    .text-center { text-align: center; }
-
-    .ambient-glow {
-        position: absolute; border-radius: 50%; filter: blur(120px);
-        opacity: 0.15; z-index: 0; pointer-events: none;
-    }
-    .g-1 {
-        width: 600px; height: 600px; background: var(--accent);
-        top: -100px; left: 50%; transform: translateX(-50%);
-    }
-    html[data-theme='light'] .ambient-glow { opacity: 0.08; }
-
-    .local-hero {
-        padding: clamp(160px, 20vh, 220px) 0 clamp(60px, 10vh, 100px);
-        position: relative; z-index: 10;
-    }
-    .eyebrow {
-        color: var(--accent); font-weight: 600; letter-spacing: 0.1em;
-        text-transform: uppercase; display: block; margin-bottom: 2rem;
-    }
-    .local-hero h1 {
-        font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 800;
-        line-height: 1.05; margin-bottom: 2rem; color: var(--fg);
-    }
-    .hero-desc {
-        font-size: clamp(1.2rem, 2vw, 1.4rem); line-height: 1.6;
-        color: var(--muted); max-width: 700px; margin: 0 auto;
-    }
-
-    .local-benefits {
-        padding-bottom: clamp(100px, 15vh, 150px);
-        position: relative; z-index: 10;
-    }
-    .b-grid {
-        display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem;
-    }
-    .b-card {
-        background: var(--surface); border: 1px solid var(--border);
-        border-radius: 24px; padding: 3rem 2rem; text-align: center;
-        transition: transform 0.3s ease, border-color 0.3s ease;
-    }
-    .b-card:hover {
-        transform: translateY(-5px); border-color: var(--accent);
-    }
-    .b-icon { font-size: 3rem; margin-bottom: 1.5rem; }
-    .b-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--fg); }
-    .b-card p { font-size: 1.1rem; color: var(--muted); line-height: 1.6; }
-
-    @media (max-width: 900px) {
-        .b-grid { grid-template-columns: 1fr; }
-    }
-</style>
-
-<script>
-    // @ts-nocheck
-    import { gsap } from '@/lib/motion.js'
-    document.addEventListener('DOMContentLoaded', () => {
-        gsap.from(".gsap-reveal", { y: 40, opacity: 0, duration: 1, ease: "power4.out", delay: 0.1 });
-        gsap.from(".gsap-fade", { y: 20, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.2 });
-        gsap.utils.toArray('.gsap-up').forEach((el) => {
-            gsap.from(el, {
-                scrollTrigger: { trigger: el, start: "top 85%" },
-                y: 50, opacity: 0, duration: 0.8, ease: "power3.out"
-            });
-        });
-    });
-</script>
+<LocalLanding
+    ciudad='Cáceres'
+    provincia='Cáceres'
+    slug='/diseno-web-caceres/'
+    title='Diseño web en Cáceres — Páginas web a medida | extreweb'
+    description='Páginas web a medida para negocios de Cáceres y su provincia. Hicimos la web del Taller M. Guzmán, de chapa y pintura en Charca Musia. Pide presupuesto.'
+    eyebrow='Cáceres y provincia'
+    intro='Páginas web a medida para negocios de Cáceres capital y del resto de la provincia: rápidas, cuidadas y pensadas para que el cliente te llame, te escriba o reserve sin dar vueltas.'
+    proyectosTitulo='Una web que hemos hecho en Cáceres'
+    proyectos={[
+        {
+            nombre: 'Taller M. Guzmán',
+            sector: 'Chapa y pintura',
+            lugar: 'Polígono Charca Musia, Cáceres',
+            img: '/proyectos/Guzman.webp',
+            url: 'https://project-r5m3o.vercel.app/',
+            texto: 'Web del taller con galería de trabajos terminados, horarios, cómo llegar al polígono y un formulario de presupuesto que pide el modelo del coche. El botón de WhatsApp abre el chat con el mensaje ya escrito: el cliente solo tiene que darle a enviar.',
+        },
+    ]}
+    contextoTitulo='En Cáceres, tu cliente te busca desde el móvil'
+    contexto={[
+        'Cáceres mezcla tres públicos muy distintos: el vecino de toda la vida, los estudiantes del campus y los visitantes que llegan por su casco antiguo, Patrimonio de la Humanidad. Los tres tienen algo en común: buscan en el móvil antes de decidir dónde comer, dónde dormir, a qué taller llevar el coche o a qué tienda ir.',
+        'Para un restaurante o un alojamiento, eso significa carta y fotos que carguen al momento, reservas fáciles y, a menudo, la web en inglés o en portugués. Para un taller o una empresa de los polígonos de Charca Musia o Las Capellanías, significa que te encuentren, sepan llegar y puedan pedir cita sin esperar a que cojas el teléfono.',
+        'Diseñamos cada web pensando en quién te busca y qué necesita encontrar en los primeros segundos. Sin plantillas genéricas: la estructura, los textos y las funciones salen de cómo funciona tu negocio.',
+    ]}
+    cercaniaTitulo='Trabajamos contigo aunque no estemos en la capital'
+    cercania='Nuestra base está en Villanueva de la Serena, pero Cáceres la conocemos bien: Saúl se formó en desarrollo web en el IES Ágora. El día a día lo llevamos por WhatsApp, teléfono y videollamada, con avances que puedes ver en tu móvil cada semana, y si hace falta, nos acercamos.'
+    faqs={[
+        {
+            q: 'No tenéis oficina en Cáceres capital, ¿es un problema?',
+            a: 'En la práctica, no. Casi todo el trabajo de una web se revisa en pantalla: te mandamos enlaces para que veas cómo va, lo comentamos por teléfono o videollamada y ajustamos. Para la primera reunión o la entrega podemos vernos en persona si lo prefieres.',
+        },
+        {
+            q: 'Tengo un restaurante o un alojamiento, ¿qué debería tener mi web?',
+            a: 'Lo básico que funciona: fotos buenas y ligeras, carta o habitaciones claras, horarios, cómo llegar y un botón para reservar o llamar que se vea sin buscarlo. Si recibes turistas, conviene al menos una versión en inglés. Y enlazarla con tu ficha de Google, que es donde te encuentran la mayoría.',
+        },
+        {
+            q: '¿Trabajáis con negocios de Plasencia, Trujillo, Navalmoral u otros pueblos de la provincia?',
+            a: 'Sí. Trabajamos en toda Extremadura. La forma de trabajar es la misma que con Cáceres capital: reuniones por videollamada o teléfono y en persona cuando haga falta.',
+        },
+        {
+            q: '¿Podéis hacer una web con reservas o cita previa?',
+            a: 'Sí. Lo adaptamos a cómo trabajas: reserva por horas, por servicio o como solicitud que luego confirmas tú. En la del Taller M. Guzmán, por ejemplo, el cliente pide presupuesto indicando el modelo de su coche y al taller le llega al momento, sin estar pendiente del teléfono.',
+        },
+    ]}
+/>

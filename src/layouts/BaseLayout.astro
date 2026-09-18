@@ -1,6 +1,8 @@
 ---
 // src/layouts/BaseLayout.astro
 import '@fontsource-variable/inter'
+// Subset latino de Inter: se precarga porque es la fuente del titular del hero
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url'
 import '@/styles/global.css'
 import Schema from '@/components/seo/Schema.astro'
 import { SITE } from '@/lib/site.js'
@@ -11,7 +13,7 @@ interface Props {
     canonical?: string
 }
 const {
-    title = 'extreweb — Diseño y desarrollo web en Extremadura',
+    title = 'Diseño y desarrollo web en Extremadura — extreweb',
     description = SITE.description,
     canonical,
 } = Astro.props
@@ -50,6 +52,13 @@ const ogImage = new URL(SITE.ogImage, SITE.url).href
             })()
         </script>
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+        <link
+            rel='preload'
+            href={interLatin}
+            as='font'
+            type='font/woff2'
+            crossorigin
+        />
         <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
         <meta name='generator' content={Astro.generator} />
         <meta

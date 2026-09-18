@@ -219,7 +219,7 @@ export default function Calendario({ go, nueva = false }) {
             ) : (
               <ul className="a-list">
                 {proximas.map((r) => (
-                  <li key={r.id} className="a-row a-row-click" onClick={() => editar(r)}>
+                  <li key={r.id} className="a-row a-row-click a-reu-row" onClick={() => editar(r)}>
                     <div className="a-reu-item">
                       <span className="a-reu-dot" aria-hidden="true" />
                       <div>
@@ -241,7 +241,7 @@ export default function Calendario({ go, nueva = false }) {
               <div className="a-card-head"><h2 className="a-h2">Pasadas</h2></div>
               <ul className="a-list a-list-muted">
                 {pasadas.map((r) => (
-                  <li key={r.id} className="a-row a-row-click" onClick={() => editar(r)}>
+                  <li key={r.id} className="a-row a-row-click a-reu-row" onClick={() => editar(r)}>
                     <div>
                       <strong>{r.titulo}</strong>
                       <span className="a-muted a-small">{r.cliente?.nombre || r.proyecto?.titulo || 'General'}</span>
