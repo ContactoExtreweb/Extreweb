@@ -1,5 +1,5 @@
 // src/components/admin/AdminApp.jsx
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@/lib/adminClient.js'
 import Login from './Login.jsx'
 import Inicio from './Inicio.jsx'
@@ -7,9 +7,11 @@ import Clientes from './Clientes.jsx'
 import ClienteDetalle from './ClienteDetalle.jsx'
 import ProyectoDetalle from './ProyectoDetalle.jsx'
 import Calendario from './Calendario.jsx'
+import Mensajes from './Mensajes.jsx'
 
 const NAV = [
   { key: 'inicio', label: 'Inicio' },
+  { key: 'mensajes', label: 'Mensajes' },
   { key: 'clientes', label: 'Clientes' },
   { key: 'calendario', label: 'Calendario' },
 ]
@@ -22,6 +24,7 @@ export default function AdminApp() {
     typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark'
   )
   const [menuOpen, setMenuOpen] = useState(false)
+  const [sinLeer, setSinLeer] = useState(0)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -31,6 +34,19 @@ export default function AdminApp() {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s))
     return () => sub.subscription.unsubscribe()
   }, [])
+
+  // Contador de mensajes sin leer (se refresca al cambiar de sección)
+  const cargarSinLeer = useCallback(async () => {
+    const { count } = await supabase
+      .from('mensajes')
+      .select('id', { count: 'exact', head: true })
+      .eq('leido', false)
+    setSinLeer(count || 0)
+  }, [])
+
+  useEffect(() => {
+    if (session) cargarSinLeer()
+  }, [session, nav.view, cargarSinLeer])
 
   function go(view, params = {}) {
     setNav({ view, ...params })
@@ -87,6 +103,7 @@ export default function AdminApp() {
             {NAV.map((n) => (
               <button key={n.key} className={`a-topnav-link ${isActive(n.key) ? 'is-active' : ''}`} onClick={() => go(n.key)}>
                 {n.label}
+                {n.key === 'mensajes' && sinLeer > 0 && <span className="a-nav-count">{sinLeer}</span>}
               </button>
             ))}
           </nav>
@@ -104,8 +121,9 @@ export default function AdminApp() {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" /></svg>
             </button>
             {/* Hamburguesa (solo móvil) */}
-            <button className="a-burger" onClick={() => setMenuOpen((s) => !s)} aria-label="Menú">
+            <button className="a-burger" onClick={() => setMenuOpen((s) => !s)} aria-label="Menú" aria-expanded={menuOpen}>
               {menuOpen ? '✕' : '☰'}
+              {!menuOpen && sinLeer > 0 && <span className="a-burger-dot" aria-hidden="true" />}
             </button>
           </div>
         </div>
@@ -116,6 +134,7 @@ export default function AdminApp() {
             {NAV.map((n) => (
               <button key={n.key} className={`a-mobilenav-link ${isActive(n.key) ? 'is-active' : ''}`} onClick={() => go(n.key)}>
                 {n.label}
+                {n.key === 'mensajes' && sinLeer > 0 && <span className="a-nav-count">{sinLeer}</span>}
               </button>
             ))}
           </nav>
@@ -125,6 +144,7 @@ export default function AdminApp() {
       {/* ---------- CONTENIDO ---------- */}
       <main className="a-main">
         {nav.view === 'inicio' && <Inicio go={go} email={session.user?.email} />}
+        {nav.view === 'mensajes' && <Mensajes go={go} onChange={cargarSinLeer} />}
         {nav.view === 'clientes' && <Clientes go={go} />}
         {nav.view === 'cliente' && <ClienteDetalle clienteId={nav.clienteId} go={go} />}
         {nav.view === 'proyecto' && <ProyectoDetalle proyectoId={nav.proyectoId} clienteId={nav.clienteId} go={go} />}
