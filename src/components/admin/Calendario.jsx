@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/adminClient.js'
 import { soloHora, rangoReunion, paraInputDatetime } from './helpers.js'
+import CalendarioSync from './CalendarioSync.jsx'
 
 const DIAS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
 const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
@@ -9,7 +10,7 @@ const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', '
 const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 const mismoDia = (a, b) => ymd(a) === ymd(b)
 
-export default function Calendario({ go }) {
+export default function Calendario({ go, nueva = false }) {
   const [reuniones, setReuniones] = useState([])
   const [clientes, setClientes] = useState([])
   const [loading, setLoading] = useState(true)
@@ -17,6 +18,7 @@ export default function Calendario({ go }) {
   const [vista, setVista] = useState('mes') // 'mes' | 'lista'
   const [modal, setModal] = useState(null) // null | {form}
   const [diaSel, setDiaSel] = useState(null) // día seleccionado (para panel de detalle)
+  const [sync, setSync] = useState(false) // ventana "Ver en el iPhone"
 
   // En móvil arrancamos en lista
   useEffect(() => {
@@ -25,6 +27,7 @@ export default function Calendario({ go }) {
 
   useEffect(() => {
     cargar()
+    if (nueva) nuevaEnDia(null) // viene del botón "Nueva reunión" del Inicio
   }, [])
 
   async function cargar() {
@@ -124,7 +127,13 @@ export default function Calendario({ go }) {
           <h1 className="a-h1">Calendario</h1>
           <p className="a-muted">Reuniones y citas del equipo.</p>
         </div>
-        <button className="a-btn a-btn-accent" onClick={() => nuevaEnDia(null)}>+ Nueva reunión</button>
+        <div className="a-topbar-actions">
+          <button className="a-btn" onClick={() => setSync(true)}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2" /><path d="M11 18h2" /></svg>
+            iPhone
+          </button>
+          <button className="a-btn a-btn-accent" onClick={() => nuevaEnDia(null)}>+ Nueva reunión</button>
+        </div>
       </div>
 
       {/* Barra de control: mes + navegación + cambio de vista */}
@@ -245,6 +254,8 @@ export default function Calendario({ go }) {
           )}
         </>
       )}
+
+      {sync && <CalendarioSync onClose={() => setSync(false)} />}
 
       {/* ---------- MODAL CREAR/EDITAR ---------- */}
       {modal && (

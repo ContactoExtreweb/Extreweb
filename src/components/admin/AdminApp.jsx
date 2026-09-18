@@ -144,11 +144,11 @@ export default function AdminApp() {
       {/* ---------- CONTENIDO ---------- */}
       <main className="a-main">
         {nav.view === 'inicio' && <Inicio go={go} email={session.user?.email} />}
-        {nav.view === 'mensajes' && <Mensajes go={go} onChange={cargarSinLeer} />}
-        {nav.view === 'clientes' && <Clientes go={go} />}
+        {nav.view === 'mensajes' && <Mensajes go={go} onChange={cargarSinLeer} abrirId={nav.mensajeId} />}
+        {nav.view === 'clientes' && <Clientes go={go} nuevo={nav.nuevo} />}
         {nav.view === 'cliente' && <ClienteDetalle clienteId={nav.clienteId} go={go} />}
         {nav.view === 'proyecto' && <ProyectoDetalle proyectoId={nav.proyectoId} clienteId={nav.clienteId} go={go} />}
-        {nav.view === 'calendario' && <Calendario go={go} />}
+        {nav.view === 'calendario' && <Calendario go={go} nueva={nav.nueva} />}
       </main>
     </div>
   )

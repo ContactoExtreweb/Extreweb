@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/adminClient.js'
 
-export default function Clientes({ go }) {
+export default function Clientes({ go, nuevo = false }) {
   const [clientes, setClientes] = useState([])
   const [loading, setLoading] = useState(true)
-  const [showForm, setShowForm] = useState(false)
+  const [showForm, setShowForm] = useState(nuevo)
   const [form, setForm] = useState({ nombre: '', empresa: '', email: '', telefono: '' })
   const [saving, setSaving] = useState(false)
 

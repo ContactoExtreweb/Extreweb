@@ -32,8 +32,8 @@ const seoDesc =
                                 <span class='c-icon'>✉️</span>
                                 <div>
                                     <strong>Email directo</strong>
-                                    <a href='mailto:contacto@extreweb.es'
-                                        >contacto@extreweb.es</a
+                                    <a href='mailto:contactoextreweb@gmail.com'
+                                        >contactoextreweb@gmail.com</a
                                     >
                                 </div>
                             </div>
@@ -71,6 +71,7 @@ const seoDesc =
                                 method='POST'
                                 data-netlify='true'
                                 netlify-honeypot='bot-field'
+                                data-netlify-recaptcha='true'
                                 class='extre-form'
                             >
                                 <p class='hp-field'>
@@ -158,11 +159,28 @@ const seoDesc =
                                     <strong>Finalidad:</strong> responder a tu consulta.
                                     <strong>Legitimación:</strong> tu consentimiento.
                                     <strong>Destinatarios:</strong> no se ceden a
-                                    terceros; el formulario lo gestiona Netlify como
-                                    proveedor técnico.
+                                    terceros; Netlify (formulario) y Google
+                                    reCAPTCHA (antispam) actúan como proveedores
+                                    técnicos.
                                     <strong>Derechos:</strong> acceso, rectificación,
                                     supresión y demás, escribiendo a
-                                    contacto@extreweb.es.
+                                    contactoextreweb@gmail.com.
+                                </p>
+
+                                <!-- Netlify sustituye este div por el reCAPTCHA
+                                     al desplegar (en local no aparece). -->
+                                <div class='form-captcha'>
+                                    <div data-netlify-recaptcha='true'></div>
+                                </div>
+
+                                <p
+                                    class='form-error'
+                                    role='alert'
+                                    data-captcha-error
+                                    hidden
+                                >
+                                    Marca la casilla «No soy un robot» antes de
+                                    enviar.
                                 </p>
 
                                 <p
@@ -173,8 +191,8 @@ const seoDesc =
                                 >
                                     No hemos podido enviar el mensaje. Prueba de
                                     nuevo o escríbenos a <a
-                                        href='mailto:contacto@extreweb.es'
-                                        >contacto@extreweb.es</a
+                                        href='mailto:contactoextreweb@gmail.com'
+                                        >contactoextreweb@gmail.com</a
                                     >.
                                 </p>
 
@@ -464,6 +482,29 @@ const seoDesc =
         display: none;
     }
 
+    /* El widget de Google mide 304×78 fijo: se escala para que quepa en móvil */
+    .form-captcha {
+        min-height: 78px;
+        margin-top: -0.8rem;
+    }
+    @media (max-width: 400px) {
+        .form-captcha {
+            min-height: 71px;
+        }
+        .form-captcha > div {
+            transform: scale(0.9);
+            transform-origin: left top;
+        }
+    }
+    @media (max-width: 340px) {
+        .form-captcha {
+            min-height: 62px;
+        }
+        .form-captcha > div {
+            transform: scale(0.78);
+        }
+    }
+
     .form-action {
         margin-top: 0.5rem;
     }
@@ -604,12 +645,29 @@ const seoDesc =
     const form = document.querySelector('form[name="contacto"]')
     const done = document.querySelector('[data-form-done]')
     const errorBox = document.querySelector('[data-form-error]')
+    const captchaError = document.querySelector('[data-captcha-error]')
     const submitBtn = form?.querySelector('[data-form-submit]')
     const submitLabel = submitBtn?.querySelector('[data-label]')
+
+    // Los tokens de reCAPTCHA son de un solo uso: tras cada intento se reinicia
+    const resetCaptcha = () => {
+        try {
+            window.grecaptcha?.reset()
+        } catch (e) {}
+    }
 
     form?.addEventListener('submit', async (e) => {
         e.preventDefault()
         errorBox.hidden = true
+        captchaError.hidden = true
+
+        // Solo existe cuando Netlify ha inyectado el reCAPTCHA (en producción)
+        const captcha = form.querySelector('[name="g-recaptcha-response"]')
+        if (captcha && !captcha.value) {
+            captchaError.hidden = false
+            return
+        }
+
         submitBtn.disabled = true
         submitLabel.textContent = 'Enviando…'
 
@@ -636,6 +694,7 @@ const seoDesc =
             console.error('[contacto] Error al enviar:', err)
             errorBox.hidden = false
         } finally {
+            resetCaptcha()
             submitBtn.disabled = false
             submitLabel.textContent = 'Enviar mensaje'
         }

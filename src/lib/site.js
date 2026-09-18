@@ -6,8 +6,8 @@ export const SITE = {
     'Agencia de diseño y desarrollo web, SEO y soporte técnico en Don Benito, Villanueva de la Serena y Cáceres. Webs a medida, rápidas y pensadas para vender.',
 
   // ⚠️ RELLENA estos cuando los tengáis (déjalos vacíos si aún no):
-  email: 'contacto@extreweb.es',          // ej. 'contacto@extreweb.es'
-  telephone: '628775619',      // ej. '+34 628 775 619'
+  email: 'contactoextreweb@gmail.com',
+  telephone: '+34628775619',   // formato internacional (lo pide el schema de Google)
   sameAs: ['https://instagram.com/extreweb', 'https://extreweb.es', 'https://extreweb.es/blog'],         // ej. ['https://instagram.com/extreweb', 'https://linkedin.com/company/extreweb']
 
   region: 'Extremadura',

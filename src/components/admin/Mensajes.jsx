@@ -11,7 +11,7 @@ const SERVICIOS = {
   otro: 'Otra consulta',
 }
 
-export default function Mensajes({ go, onChange }) {
+export default function Mensajes({ go, onChange, abrirId = null }) {
   const [mensajes, setMensajes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -31,6 +31,13 @@ export default function Mensajes({ go, onChange }) {
     if (error) setError('No se han podido cargar los mensajes. ¿Está Supabase activo?')
     setMensajes(data || [])
     setLoading(false)
+
+    // Viene de pulsar un mensaje en el Inicio: se abre directamente
+    const pedido = abrirId && (data || []).find((m) => m.id === abrirId)
+    if (pedido) {
+      setAbierto(pedido.id)
+      if (!pedido.leido) marcar(pedido, true)
+    }
   }
 
   async function marcar(m, leido) {
