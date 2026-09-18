@@ -122,7 +122,7 @@ section { padding-block: clamp(4rem, 11vh, 8rem); }
 
 /* Hover SOLO con ratón fino (en táctil no se dispara al tocar) */
 @media (hover: hover) and (pointer: fine) {
-  .btn:hover { background: #e8e8ed; }
+  .btn:hover { background: color-mix(in srgb, var(--fg) 10%, var(--surface)); }
   .btn-accent:hover { background: var(--accent-hover); }
 }
 
