@@ -19,25 +19,51 @@ function initLenis() {
   window.__lenis = lenis;
 }
 
-/* 2) Reveal seguro: CSS off-main-thread + red de seguridad */
+/* 2) Aparición al hacer scroll (.fx-up / .fx-row, ver global.css).
+      Aquí solo se pone la clase .is-in; la animación es CSS */
 function initReveals() {
-  const els = document.querySelectorAll('[data-reveal]');
+  const els = document.querySelectorAll('.fx-up, .fx-row');
   if (!els.length) return;
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) {
       if (!e.isIntersecting) continue;
-      const el = e.target;
-      if (el.dataset.revealDelay) el.style.transitionDelay = el.dataset.revealDelay + 'ms';
-      el.classList.add('is-in');
-      io.unobserve(el);
+      e.target.classList.add('is-in');
+      io.unobserve(e.target);
     }
-  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+  }, { rootMargin: '0px 0px -10% 0px' });
   els.forEach((el) => io.observe(el));
-  // Si algo no llegara a revelarse (pestaña oculta, etc.), se muestra igualmente
-  setTimeout(() => els.forEach((el) => el.classList.add('is-in')), 3000);
+  // Al imprimir no se hace scroll: que salga todo
+  window.addEventListener('beforeprint', () => els.forEach((el) => el.classList.add('is-in')));
 }
 
-/* 3) Spring: persigue un objetivo con inercia (para seguir al puntero) */
+/* 3) Las animaciones infinitas se pausan mientras su bloque no se ve */
+function initPausaFuera() {
+  const els = document.querySelectorAll('[data-anim-pausa]');
+  if (!els.length) return;
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) e.target.classList.toggle('is-fuera', !e.isIntersecting);
+  }, { rootMargin: '200px 0px' });
+  els.forEach((el) => io.observe(el));
+}
+
+/* 4) Si cambia la altura de la página (se abre una FAQ, el configurador cambia
+      de pestaña, termina de cargar una fuente…) ScrollTrigger vuelve a medir.
+      Sin esto, las secciones fijadas (Proyectos) empezaban antes o después de tiempo */
+function initAutoRefresh() {
+  let alto = document.documentElement.scrollHeight;
+  let t;
+  new ResizeObserver(() => {
+    clearTimeout(t);
+    t = setTimeout(() => {
+      const nuevo = document.documentElement.scrollHeight;
+      if (Math.abs(nuevo - alto) < 2) return;
+      alto = nuevo;
+      ScrollTrigger.refresh();
+    }, 200);
+  }).observe(document.body);
+}
+
+/* 5) Spring: persigue un objetivo con inercia (para seguir al puntero) */
 export function spring(onUpdate, { stiffness = 0.08, damping = 0.75, precision = 0.001 } = {}) {
   let current = 0, target = 0, vel = 0, raf = null;
   function loop() {
@@ -59,6 +85,8 @@ function boot() {
   document.documentElement.setAttribute('data-motion-ready', '');
   initLenis();
   initReveals();
+  initPausaFuera();
+  initAutoRefresh();
 }
 document.readyState === 'loading'
   ? document.addEventListener('DOMContentLoaded', boot)

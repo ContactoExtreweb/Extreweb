@@ -1,7 +1,7 @@
 ---
 // src/components/Cta.astro
 ---
-<section class='cta-section'>
+<section class='cta-section' data-anim-pausa>
     <div class='container'>
         <div class='cta-card'>
             <!-- Elemento decorativo de luz de fondo (Glow) -->
@@ -36,8 +36,8 @@
         text-align: center;
         overflow: hidden;
         isolation: isolate;
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        /* Sin backdrop-filter: detrás solo hay fondo liso, y con el brillo
+           animado dentro se recalculaba en cada frame */
     }
     html[data-theme='light'] .cta-card {
         background: rgba(255,255,255,0.6);
@@ -51,9 +51,10 @@
         left: 50%;
         width: 80%;
         height: 80%;
-        background: radial-gradient(circle, color-mix(in srgb, var(--accent) 30%, transparent) 0%, transparent 70%);
+        /* closest-side: se desvanece justo en el borde (sin blur se veía el contorno) */
+        background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 30%, transparent) 0%, transparent);
         z-index: -1;
-        filter: blur(60px);
+        /* El degradado ya es suave: sin filter: blur, carísimo al animarse */
         border-radius: 50%;
         animation: pulseGlow 10s ease-in-out infinite alternate;
         pointer-events: none;

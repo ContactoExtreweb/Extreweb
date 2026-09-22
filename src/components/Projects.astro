@@ -45,51 +45,57 @@ const projects = [
         <h2>Proyectos que<br />marcan la diferencia.</h2>
     </div>
 
-    <!-- Contenedor que se fijará (pin) durante el scroll -->
-    <div class='projects-wrapper'>
-        <div class='projects-track'>
+    <!-- Con JS, .projects-pin es tan alto como el recorrido horizontal y
+         .projects-wrapper se queda fija dentro (sticky) mientras pasan las tarjetas.
+         Sin JS o con "reducir movimiento": carrusel nativo que se desliza con el dedo -->
+    <div class='projects-pin'>
+        <div class='projects-wrapper'>
+            <div class='projects-track'>
             
-            {projects.map((p, i) => (
-                <!-- Toda la tarjeta es el enlace: así funciona al tocar en móvil
-                     (antes el botón solo aparecía con hover) y con teclado -->
-                <a
-                    class='project-card'
-                    href={p.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <div class='p-image'>
-                        <img
-                            src={p.image}
-                            alt={`Web de ${p.title}`}
-                            width="1905"
-                            height="953"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                        <div class='p-overlay' style={`--hover-c: ${p.color}`} aria-hidden="true">
-                            <span class='p-btn'>Visitar proyecto</span>
+                {projects.map((p, i) => (
+                    <!-- Toda la tarjeta es el enlace: así funciona al tocar en móvil
+                         (antes el botón solo aparecía con hover) y con teclado -->
+                    <a
+                        class='project-card'
+                        href={p.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <div class='p-image'>
+                            <img
+                                src={p.image}
+                                srcset={`${p.image.replace('.webp', '-800.webp')} 800w, ${p.image.replace('.webp', '-1200.webp')} 1200w, ${p.image} 1905w`}
+                                sizes='(max-width: 768px) 80vw, (min-width: 1637px) 900px, 55vw'
+                                alt={`Web de ${p.title}`}
+                                width="1905"
+                                height="953"
+                                loading="lazy"
+                                decoding="async"
+                            />
+                            <div class='p-overlay' style={`--hover-c: ${p.color}`} aria-hidden="true">
+                                <span class='p-btn'>Visitar proyecto</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class='p-info'>
-                        <span class='p-cat'>{p.category} <span class='p-ext' aria-hidden="true">↗</span></span>
-                        <h3>{p.title}</h3>
-                    </div>
-                </a>
-            ))}
+                        <div class='p-info'>
+                            <span class='p-cat'>{p.category} <span class='p-ext' aria-hidden="true">↗</span></span>
+                            <h3>{p.title}</h3>
+                        </div>
+                    </a>
+                ))}
 
-            <!-- Card final de Call to Action -->
-            <div class='projects-end'>
-                <div class='end-content'>
-                    <div class='end-icon'>
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                <!-- Card final de Call to Action -->
+                <div class='projects-end'>
+                    <div class='end-content'>
+                        <div class='end-icon'>
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                        </div>
+                        <h3>¿Tienes un proyecto en mente?</h3>
+                        <p>Hablemos sobre cómo podemos escalar tu negocio al siguiente nivel.</p>
+                        <a href='/proyectos/' class='btn btn-accent btn-large'>Ver todos los proyectos</a>
                     </div>
-                    <h3>¿Tienes un proyecto en mente?</h3>
-                    <p>Hablemos sobre cómo podemos escalar tu negocio al siguiente nivel.</p>
-                    <a href='/proyectos/' class='btn btn-accent btn-large'>Ver todos los proyectos</a>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
 </section>
@@ -98,7 +104,7 @@ const projects = [
     .projects {
         padding: clamp(80px, 12vh, 140px) 0;
         background: var(--bg);
-        overflow: hidden;
+        overflow: clip; /* recorta el carril; con hidden, el sticky de dentro no funcionaría */
         position: relative;
     }
     
@@ -122,13 +128,63 @@ const projects = [
         color: var(--fg);
     }
 
-    /* --- HORIZONTAL SCROLL TRACK --- */
+    /* --- HORIZONTAL SCROLL TRACK ---
+       Por defecto (sin JS o con "reducir movimiento"): carrusel nativo que se
+       desliza con el dedo y se imanta a cada tarjeta. */
     .projects-wrapper {
-        height: 80vh; 
-        min-height: 500px;
         display: flex;
         align-items: center;
-        /* En escritorio no tiene overflow porque GSAP mueve el track */
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        padding-block: 1rem 2.5rem; /* sitio para la sombra de las tarjetas */
+    }
+    .project-card,
+    .projects-end {
+        scroll-snap-align: center;
+    }
+    @media (pointer: coarse) {
+        .projects-wrapper {
+            scrollbar-width: none;
+        }
+        .projects-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+    }
+    /* Con JS, en móvil y en escritorio: la sección se queda fija y las tarjetas
+       pasan en horizontal al bajar. Se fija con position: sticky (lo hace el
+       navegador, sin los saltos del "pin" de GSAP al entrar y salir).
+       El recorrido (--recorrido) lo mide el script */
+    :global(html.js-motion) .projects-pin {
+        height: calc(100svh + var(--recorrido, 0px));
+    }
+    :global(html.js-motion) .projects-wrapper {
+        position: sticky;
+        top: 0;
+        height: 100svh;
+        overflow: visible;
+        scroll-snap-type: none;
+        padding-block: 0;
+    }
+    /* Navegadores con animaciones ligadas al scroll (Chrome, Edge, Safari 26+):
+       el carril lo mueve CSS en la GPU, sin JavaScript en cada frame.
+       En el resto lo mueve GSAP (ver script) */
+    @supports (animation-timeline: view()) {
+        :global(html.js-motion) .projects-pin {
+            view-timeline: --proyectos block;
+        }
+        :global(html.js-motion) .projects-track {
+            animation: proyectos-x linear both;
+            animation-duration: 1ms; /* ignorada con scroll; algunos la exigen > 0 */
+            animation-timeline: --proyectos;
+            /* del momento en que se fija al momento en que se suelta */
+            animation-range: contain 0% contain 100%;
+        }
+    }
+    @keyframes proyectos-x {
+        to {
+            transform: translateX(calc(-1 * var(--recorrido, 0px)));
+        }
     }
     .projects-track {
         display: flex;
@@ -165,7 +221,6 @@ const projects = [
         height: 100%;
         object-fit: cover;
         transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        will-change: transform;
     }
     
     /* Overlay y Botón al hacer Hover */
@@ -300,11 +355,18 @@ const projects = [
 
     /* --- RESPONSIVE MOBILE --- */
     @media (max-width: 768px) {
+        /* 80vw centrada: asoma un trozo de la siguiente para invitar a deslizar */
+        .projects-track {
+            gap: 1rem;
+            padding: 0 10vw;
+        }
         .project-card {
-            width: 85vw;
+            width: 80vw;
+            min-width: 0;
         }
         .projects-end {
-            width: 85vw;
+            width: 80vw;
+            min-width: 0;
             padding: 0 1rem;
         }
         .p-btn { display: none; }
@@ -313,30 +375,51 @@ const projects = [
 
 <script>
     // @ts-nocheck
-    import { gsap, ScrollTrigger, reduceMotion } from '@/lib/motion.js'
+    import { gsap } from '@/lib/motion.js'
 
-    if (!reduceMotion) {
-        const wrapper = document.querySelector('.projects-wrapper');
-        const track = document.querySelector('.projects-track');
-        
-        if (wrapper && track) {
-            // Función para calcular la distancia a desplazar
-            const getScrollAmount = () => -(track.scrollWidth - window.innerWidth);
-            
-            const tween = gsap.to(track, {
-                x: getScrollAmount,
-                ease: "none"
-            });
+    const pin = document.querySelector('.projects-pin')
+    const wrapper = pin?.querySelector('.projects-wrapper')
+    const track = pin?.querySelector('.projects-track')
 
-            ScrollTrigger.create({
-                trigger: wrapper,
-                start: "center center",      // Cuando el contenedor llega al centro de la pantalla
-                end: () => `+=${track.scrollWidth - window.innerWidth}`, // Hacer scroll la misma distancia que la anchura sobrante
-                pin: true,                   // Fijar la sección
-                animation: tween,
-                scrub: 1,                    // Suavizado del scroll
-                invalidateOnRefresh: true,   // Recalcular medidas al redimensionar la ventana
-            });
+    if (pin && wrapper && track) {
+        // Las capturas se piden un poco antes de llegar a la sección. Con
+        // loading="lazy" solo se pedían al asomar y aparecían de golpe
+        // mientras las tarjetas ya iban pasando
+        const imgs = track.querySelectorAll('img[loading="lazy"]')
+        new IntersectionObserver(
+            (entries, io) => {
+                if (!entries[0].isIntersecting) return
+                imgs.forEach((img) => (img.loading = 'eager'))
+                io.disconnect()
+            },
+            { rootMargin: '100% 0px' },
+        ).observe(pin)
+
+        // Con "reducir movimiento" no hay js-motion: se queda el carrusel nativo
+        if (document.documentElement.classList.contains('js-motion')) {
+            // Recorrido = lo que sobra del carril respecto a la pantalla.
+            // Cambia con el ancho de la ventana: se vuelve a medir solo
+            const recorrido = () => Math.max(0, track.scrollWidth - wrapper.clientWidth)
+            const medir = () => pin.style.setProperty('--recorrido', recorrido() + 'px')
+            medir()
+            const ro = new ResizeObserver(medir)
+            ro.observe(track)
+            ro.observe(wrapper)
+
+            // Sin animaciones ligadas al scroll en CSS (Firefox, Safari antiguo): GSAP
+            if (!CSS.supports('animation-timeline: view()')) {
+                gsap.to(track, {
+                    x: () => -recorrido(),
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: pin,
+                        start: 'top top', // se fija
+                        end: 'bottom bottom', // se suelta
+                        scrub: 0.4,
+                        invalidateOnRefresh: true,
+                    },
+                })
+            }
         }
     }
 </script>

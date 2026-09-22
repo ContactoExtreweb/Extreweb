@@ -93,12 +93,12 @@ const schema = [
                     <span aria-hidden='true'>›</span>
                     <span aria-current='page'>Diseño web en {p.ciudad}</span>
                 </nav>
-                <span class='eyebrow gsap-fade'>{p.eyebrow}</span>
-                <h1 class='gsap-reveal'>
+                <span class='eyebrow fx-in-soft'>{p.eyebrow}</span>
+                <h1 class='fx-in'>
                     Diseño web en<br /><span class='text-accent'>{p.ciudad}.</span>
                 </h1>
-                <p class='ll-intro gsap-fade'>{p.intro}</p>
-                <div class='ll-actions gsap-fade'>
+                <p class='ll-intro fx-in-soft'>{p.intro}</p>
+                <div class='ll-actions fx-in-soft'>
                     <a href='/contacto/' class='btn btn-accent'>Pedir presupuesto</a>
                     <a
                         href='https://wa.me/34628775619'
@@ -239,7 +239,11 @@ const schema = [
         transform: translateX(-50%);
         border-radius: 50%;
         background: var(--accent);
-        filter: blur(120px);
+        /* Degradado en vez de filter: blur(120px): mismo halo, pero sin
+           recalcular un desenfoque enorme cada vez que se repinta la zona */
+        -webkit-mask-image: radial-gradient(closest-side, #000 20%, transparent);
+        mask-image: radial-gradient(closest-side, #000 20%, transparent);
+        scale: 1.7;
         opacity: 0.15;
         pointer-events: none;
     }
@@ -531,14 +535,3 @@ const schema = [
         font-weight: 500;
     }
 </style>
-
-<script>
-    // @ts-nocheck
-    // Solo el hero se anima al cargar; el resto de la página, quieto (sin fade-up en cada sección)
-    import { gsap, reduceMotion } from '@/lib/motion.js'
-
-    if (!reduceMotion) {
-        gsap.from('.ll-hero .gsap-reveal', { y: 40, opacity: 0, duration: 1, ease: 'power4.out', delay: 0.1 })
-        gsap.from('.ll-hero .gsap-fade', { y: 20, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out', delay: 0.2 })
-    }
-</script>

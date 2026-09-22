@@ -30,12 +30,12 @@ const steps = [
         <!-- Columna Izquierda (Sticky) -->
         <div class='p-left'>
             <div class='sticky-content'>
-                <span class='eyebrow'>El Método Extreweb</span>
-                <h2>Ingeniería web.<br />Paso a paso.</h2>
-                <p>Un proceso estructurado, transparente y diseñado milimétricamente para entregar productos digitales de calidad mundial. Así convertimos ideas complejas en código impecable.</p>
+                <span class='eyebrow fx-up'>El Método Extreweb</span>
+                <h2 class='fx-up' style='--fx-delay: 120ms'>Ingeniería web.<br />Paso a paso.</h2>
+                <p class='fx-up' style='--fx-delay: 240ms'>Un proceso estructurado, transparente y diseñado milimétricamente para entregar productos digitales de calidad mundial. Así convertimos ideas complejas en código impecable.</p>
                 
                 <!-- Opcional: Detalle decorativo -->
-                <div class='method-stats'>
+                <div class='method-stats fx-up' style='--fx-delay: 360ms'>
                     <div class='m-stat'>
                         <strong>+35</strong>
                         <span>Checklists por fase</span>
@@ -51,7 +51,7 @@ const steps = [
         <!-- Columna Derecha (Pasos) -->
         <div class='p-right'>
             {steps.map((s, i) => (
-                <div class='step-card'>
+                <div class='step-card fx-up'>
                     <div class='s-num'>{s.num}</div>
                     <div class='s-info'>
                         <h3>{s.title}</h3>
@@ -151,9 +151,10 @@ const steps = [
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+        /* Sin backdrop-filter: detrás solo hay fondo liso.
+           El hover usa translate (no transform): antes GSAP dejaba un transform
+           en línea al aparecer y el hover ya no se movía */
+        transition: translate 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
     }
     html[data-theme='light'] .step-card {
         background: rgba(255, 255, 255, 0.7);
@@ -163,7 +164,7 @@ const steps = [
     @media (hover: hover) {
         .step-card:hover {
             border-color: color-mix(in srgb, var(--accent) 50%, transparent);
-            transform: translateX(-15px);
+            translate: -15px 0;
             box-shadow: var(--shadow-lg);
         }
     }
@@ -221,45 +222,10 @@ const steps = [
         }
         @media (hover: hover) {
             .step-card:hover {
-                transform: translateY(-5px); /* Mejor movimiento en vertical en móvil si hay hover */
+                translate: 0 -5px; /* Mejor movimiento en vertical en móvil si hay hover */
             }
         }
     }
 </style>
 
-<script>
-    // @ts-nocheck
-    import { gsap, ScrollTrigger, reduceMotion } from '@/lib/motion.js'
-
-    if (!reduceMotion) {
-        // Animación de aparición suave para cada tarjeta del proceso
-        const cards = gsap.utils.toArray('.step-card');
-        
-        cards.forEach((card) => {
-            gsap.from(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 90%",
-                    toggleActions: "play none none reverse"
-                },
-                y: 60,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power3.out"
-            });
-        });
-
-        // Pequeña animación para la cabecera
-        gsap.from('.sticky-content > *', {
-            scrollTrigger: {
-                trigger: '.p-left',
-                start: "top 80%",
-            },
-            y: 30,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out"
-        });
-    }
-</script>
+<!-- Las apariciones son CSS (.fx-up en global.css): esta sección ya no necesita script -->

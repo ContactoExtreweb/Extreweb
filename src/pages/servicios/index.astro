@@ -70,11 +70,11 @@ const techStack = [
         <!-- HERO MONUMENTAL -->
         <section class='s-hero'>
             <div class='container s-hero-inner'>
-                <h1 class='h-title gsap-reveal'>
+                <h1 class='h-title fx-in'>
                     Más que código.<br /><span class='text-accent'
                         >Ingeniería pura.</span>
                 </h1>
-                <p class='h-desc gsap-reveal'>
+                <p class='h-desc fx-in'>
                     Diseñamos y desarrollamos ecosistemas digitales de alto
                     rendimiento. Arquitecturas preparadas para escalar que
                     transforman visitas en ingresos reales, dejando a tu
@@ -83,7 +83,7 @@ const techStack = [
             </div>
 
             <!-- Barra de Métricas (Ribbon) -->
-            <div class='metrics-ribbon gsap-reveal'>
+            <div class='metrics-ribbon fx-in' style='--fx-delay: 0.4s'>
                 <div class='m-item'>
                     <span class='m-val'>100/100</span>
                     <span class='m-lbl'>Lighthouse</span>
@@ -135,14 +135,14 @@ const techStack = [
         <section class='services-list-sec'>
             <div class='container'>
                 <div class='section-header'>
-                    <h2 class='gsap-up'>Nuestras Capacidades.</h2>
+                    <h2 class='fx-up'>Nuestras Capacidades.</h2>
                 </div>
                 <div class='s-list'>
                     {
                         services.map((s, index) => (
                             <a
                                 href={s.link}
-                                class='s-row gsap-row'
+                                class='s-row fx-row'
                                 data-img={s.img}
                             >
                                 <div class='s-row-main'>
@@ -197,8 +197,8 @@ const techStack = [
         <section class='interactive-features'>
             <div class='container'>
                 <div class='section-header center'>
-                    <h2 class='gsap-up'>Arquitectura sin fisuras.</h2>
-                    <p class='gsap-up'>
+                    <h2 class='fx-up'>Arquitectura sin fisuras.</h2>
+                    <p class='fx-up'>
                         Diseñamos cada capa de tu proyecto pensando en la
                         conversión y la velocidad extrema.
                     </p>
@@ -206,7 +206,7 @@ const techStack = [
 
                 <div class='if-layout'>
                     <!-- Columna Izquierda: Botones -->
-                    <div class='if-tabs gsap-up'>
+                    <div class='if-tabs fx-up'>
                         <button class='if-tab is-active' data-index='0'>
                             <div class='if-tab-content'>
                                 <h3>Velocidad Absoluta</h3>
@@ -263,7 +263,7 @@ const techStack = [
                     </div>
 
                     <!-- Columna Derecha: Visuales -->
-                    <div class='if-display gsap-up'>
+                    <div class='if-display fx-up'>
                         <!-- Panel 1: Velocidad -->
                         <div class='if-panel is-active' data-index='0'>
                             <div class='if-visual-speed'>
@@ -408,12 +408,12 @@ const techStack = [
         transform: translateX(-50%);
         width: 80vw;
         height: 60vh;
+        /* Sin filter: blur. closest-side: se desvanece justo en el borde de la caja */
         background: radial-gradient(
-            circle,
+            closest-side,
             color-mix(in srgb, var(--accent) 15%, transparent) 0%,
-            transparent 70%
+            transparent
         );
-        filter: blur(100px);
         z-index: 1;
         pointer-events: none;
     }
@@ -911,37 +911,8 @@ const techStack = [
         if (window.__complex_services_inited) return
         window.__complex_services_inited = true
 
-        // 1. Hero Reveal
-        gsap.from('.gsap-reveal', {
-            y: 50,
-            opacity: 0,
-            duration: 1.2,
-            stagger: 0.2,
-            ease: 'power3.out',
-            delay: 0.1,
-        })
-
-        // 2. Sections Reveal
-        gsap.utils.toArray('.gsap-up').forEach((el) => {
-            gsap.from(el, {
-                scrollTrigger: { trigger: el, start: 'top 85%' },
-                y: 40,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power3.out',
-            })
-        })
-
-        // 3. Hover List Reveal
-        gsap.utils.toArray('.gsap-row').forEach((row) => {
-            gsap.from(row, {
-                scrollTrigger: { trigger: row, start: 'top 90%' },
-                y: 60,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power3.out',
-            })
-        })
+        // 1-3. La cabecera y las apariciones al hacer scroll son CSS
+        //      (.fx-in / .fx-up / .fx-row en global.css)
 
         // 4. Lógica de Pestañas Interactivas (Reemplazo Bento)
         const tabs = document.querySelectorAll('.if-tab')

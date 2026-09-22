@@ -10,9 +10,9 @@ const stats = [
 <section class='stats'>
     <div class='container'>
         <div class='stats-head'>
-            <span class='mono'>// por qué nosotros</span>
-            <h2>Sin plantillas.<br />Solo resultados.</h2>
-            <p class='stats-sub'>
+            <span class='mono fx-up'>// por qué nosotros</span>
+            <h2 class='fx-up' style='--fx-delay: 120ms'>Sin plantillas.<br />Solo resultados.</h2>
+            <p class='stats-sub fx-up' style='--fx-delay: 240ms'>
                 Un equipo cercano de Extremadura que cuida cada detalle, del
                 diseño al servidor.
             </p>
@@ -98,30 +98,16 @@ const stats = [
 
 <script>
     // @ts-nocheck
-    import { gsap } from 'gsap'
-    import { ScrollTrigger } from 'gsap/ScrollTrigger'
+    import { gsap, reduceMotion } from '@/lib/motion.js'
 
-    gsap.registerPlugin(ScrollTrigger)
-
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const nums = gsap.utils.toArray('.stat-num')
 
     const fmt = (el, val) =>
         (el.dataset.prefix || '') + Math.round(val) + (el.dataset.suffix || '')
 
-    if (reduce) {
-        // Sin animación: dejamos el valor final (ya está en el HTML)
-    } else {
-        // Cabecera
-        gsap.from('.stats-head > *', {
-            scrollTrigger: { trigger: '.stats', start: 'top 70%' },
-            y: 30,
-            autoAlpha: 0,
-            stagger: 0.12,
-            duration: 0.7,
-            ease: 'power3.out',
-        })
-
+    // La cabecera aparece con CSS (.fx-up). Con "reducir movimiento" los
+    // números se quedan con el valor final, que ya viene en el HTML
+    if (!reduceMotion) {
         // Contadores: cuentan desde 0 al entrar en pantalla
         nums.forEach((el) => {
             const target = +el.dataset.count

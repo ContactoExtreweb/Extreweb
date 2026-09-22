@@ -157,6 +157,7 @@ const check = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-
 <section
     class='cfg'
     id='configurador'
+    data-anim-pausa
     style={`--brand:${c.hex}`}
     data-tipos={JSON.stringify(tipos)}
     data-colores={JSON.stringify(colores)}
@@ -420,8 +421,8 @@ const check = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-
         width: 700px;
         height: 700px;
         border-radius: 50%;
-        background: radial-gradient(circle, color-mix(in srgb, var(--brand) 32%, transparent), transparent 62%);
-        filter: blur(40px);
+        /* El degradado ya es suave: sin filter: blur (se repintaba al cambiar de color) */
+        background: radial-gradient(circle, color-mix(in srgb, var(--brand) 32%, transparent), transparent 66%);
         opacity: 0.55;
         pointer-events: none;
     }
@@ -878,16 +879,30 @@ const check = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-
         text-align: center;
     }
     #configurador .cfg-tip-dot {
+        position: relative;
         width: 8px;
         height: 8px;
         border-radius: 50%;
         background: var(--brand);
-        box-shadow: 0 0 0 0 color-mix(in srgb, var(--brand) 60%, transparent);
+    }
+    /* El pulso es un anillo que crece (transform + opacity: lo mueve la GPU) */
+    #configurador .cfg-tip-dot::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: var(--brand);
         animation: cfgPing 1.8s infinite;
     }
     @keyframes cfgPing {
-        70% {
-            box-shadow: 0 0 0 8px transparent;
+        0% {
+            transform: scale(1);
+            opacity: 0.6;
+        }
+        70%,
+        100% {
+            transform: scale(3);
+            opacity: 0;
         }
     }
 
@@ -1293,16 +1308,27 @@ const check = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-
         color: #fff;
         font-size: 3.9cqi;
         font-weight: 600;
-        box-shadow: 0 0 0 0 color-mix(in srgb, var(--brand) 55%, transparent);
-        animation: mPulse 2.4s infinite 1.5s;
+        position: relative;
+        isolation: isolate;
         transition: transform var(--dur-fast) var(--ease-out-quart);
+    }
+    /* Pulso del botón: anillo detrás que crece (antes box-shadow animado) */
+    #configurador .m-cta::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        border-radius: inherit;
+        background: var(--brand);
+        opacity: 0;
+        animation: mPulse 2.4s infinite 1.5s;
     }
     #configurador .m-cta:active {
         transform: scale(0.95);
     }
     @keyframes mPulse {
-        0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--brand) 55%, transparent); }
-        70%, 100% { box-shadow: 0 0 0 3cqi transparent; }
+        0% { transform: scale(1); opacity: 0.55; }
+        70%, 100% { transform: scale(1.12, 1.5); opacity: 0; }
     }
     #configurador .m-list {
         display: grid;

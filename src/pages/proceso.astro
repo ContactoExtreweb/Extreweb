@@ -18,9 +18,9 @@ const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página w
         <!-- HERO PROCESO -->
         <section class="process-hero text-center">
             <div class="container">
-                <span class="eyebrow gsap-fade">Cómo trabajamos</span>
-                <h1 class="gsap-reveal">Del caos a la<br/><span class="text-accent">claridad.</span></h1>
-                <p class="hero-desc gsap-fade">
+                <span class="eyebrow fx-in-soft">Cómo trabajamos</span>
+                <h1 class="fx-in">Del caos a la<br/><span class="text-accent">claridad.</span></h1>
+                <p class="hero-desc fx-in-soft">
                     Crear una web no debería ser un dolor de cabeza. Hemos diseñado un proceso de 4 fases donde nosotros nos encargamos de la parte técnica y tú del control de tu negocio.
                 </p>
             </div>
@@ -39,7 +39,7 @@ const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página w
                     <!-- FASE 1 -->
                     <div class="tl-step tl-left">
                         <div class="tl-dot">1</div>
-                        <div class="tl-content gsap-up">
+                        <div class="tl-content fx-up">
                             <h3>Discovery & Estrategia</h3>
                             <p>Nos sentamos contigo (física o virtualmente) para entender tu negocio a la perfección. Analizamos a tu competencia, definimos a tu cliente ideal y trazamos la arquitectura de la web.</p>
                             <ul class="tl-list">
@@ -53,7 +53,7 @@ const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página w
                     <!-- FASE 2 -->
                     <div class="tl-step tl-right">
                         <div class="tl-dot">2</div>
-                        <div class="tl-content gsap-up">
+                        <div class="tl-content fx-up">
                             <h3>Diseño UI y Textos</h3>
                             <p>Creamos un diseño visual a medida, sin plantillas, que encaje perfectamente con tu marca. Al mismo tiempo, redactamos o perfilamos los textos para que convenzan y vendan, no solo para rellenar huecos.</p>
                             <ul class="tl-list">
@@ -67,7 +67,7 @@ const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página w
                     <!-- FASE 3 -->
                     <div class="tl-step tl-left">
                         <div class="tl-dot">3</div>
-                        <div class="tl-content gsap-up">
+                        <div class="tl-content fx-up">
                             <h3>Desarrollo y Código</h3>
                             <p>Convertimos el diseño en una web real y ultrarrápida utilizando tecnologías de vanguardia como Astro. Nos aseguramos de que el SEO técnico sea perfecto desde el primer minuto.</p>
                             <ul class="tl-list">
@@ -81,7 +81,7 @@ const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página w
                     <!-- FASE 4 -->
                     <div class="tl-step tl-right">
                         <div class="tl-dot">4</div>
-                        <div class="tl-content gsap-up">
+                        <div class="tl-content fx-up">
                             <h3>Lanzamiento y Soporte</h3>
                             <p>Hacemos las pruebas finales, conectamos tu dominio y la lanzamos al mundo. Pero no nos vamos: te ofrecemos un mantenimiento continuo para que tu web sea una roca frente a hackeos o caídas.</p>
                             <ul class="tl-list">
@@ -115,7 +115,11 @@ const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página w
     .ambient-glow {
         position: absolute;
         border-radius: 50%;
-        filter: blur(120px);
+        /* Degradado en vez de filter: blur(120px): mismo halo, pero sin
+           recalcular un desenfoque enorme cada vez que se repinta la zona */
+        -webkit-mask-image: radial-gradient(closest-side, #000 20%, transparent);
+        mask-image: radial-gradient(closest-side, #000 20%, transparent);
+        scale: 1.7;
         opacity: 0.15;
         z-index: 0;
         pointer-events: none;
@@ -190,7 +194,11 @@ const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página w
         top: 0;
         left: 0;
         width: 100%;
-        height: 0%; /* Animado por GSAP */
+        height: 100%;
+        /* GSAP la estira con scaleY (va en la GPU); antes animaba height,
+           que obligaba a recalcular el layout en cada frame del scroll */
+        transform: scaleY(0);
+        transform-origin: top;
         background: var(--accent);
     }
 
@@ -325,20 +333,7 @@ const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página w
     import { gsap, ScrollTrigger } from '@/lib/motion.js'
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Hero
-        gsap.from(".gsap-reveal", { y: 40, opacity: 0, duration: 1, ease: "power4.out", delay: 0.1 });
-        gsap.from(".gsap-fade", { y: 20, opacity: 0, duration: 1, stagger: 0.15, ease: "power3.out", delay: 0.2 });
-
-        // Scroll reveals for cards
-        gsap.utils.toArray('.gsap-up').forEach((el) => {
-            gsap.from(el, {
-                scrollTrigger: { trigger: el, start: "top 85%" },
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power3.out"
-            });
-        });
+        // La cabecera y las tarjetas aparecen con CSS (.fx-in / .fx-up en global.css)
 
         // Timeline Line Progress & Dot Activation
         const tlWrapper = document.querySelector('.timeline-wrapper');
@@ -346,7 +341,7 @@ const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página w
         const dots = document.querySelectorAll('.tl-dot');
 
         if (tlWrapper && tlProgress) {
-            // Animar el alto de la línea en función del scroll dentro del wrapper
+            // Estirar la línea (scaleY) en función del scroll dentro del wrapper
             gsap.to(tlProgress, {
                 scrollTrigger: {
                     trigger: tlWrapper,
@@ -354,7 +349,7 @@ const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página w
                     end: "bottom 50%", // Termina cuando el final del wrapper llega al medio
                     scrub: 0.5, // Smooth scrubbing
                 },
-                height: "100%",
+                scaleY: 1,
                 ease: "none"
             });
 

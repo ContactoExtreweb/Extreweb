@@ -1,9 +1,9 @@
 ---
 // src/components/Hero.astro
-// Forzando recarga de estilos HMR
 ---
 
-<section class='hero'>
+<!-- data-anim-pausa: el marquee y la flecha se paran cuando el hero no se ve -->
+<section class='hero' data-anim-pausa>
     <div class='hero-glow' aria-hidden='true'></div>
 
     <div class='container hero-inner'>
@@ -176,8 +176,8 @@
         background: color-mix(in srgb, var(--surface) 60%, transparent);
         border-top: 1px solid color-mix(in srgb, var(--border) 50%, transparent);
         padding: 1.2rem 0;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+        /* Sin backdrop-filter: detrás solo hay fondo liso y el desenfoque
+           se recalculaba en cada frame del marquee */
         z-index: 10;
         animation: heroIn 1s var(--ease-out-quart) 0.6s both;
     }

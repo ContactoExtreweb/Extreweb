@@ -22,9 +22,9 @@ const zonas = [
 <section class='zonas'>
     <div class='container'>
         <div class='zonas-head'>
-            <span class='eyebrow'>Zonas</span>
-            <h2>Diseño web <span class='text-accent'>cerca de ti</span>.</h2>
-            <p class='zonas-sub'>
+            <span class='eyebrow fx-up'>Zonas</span>
+            <h2 class='fx-up' style='--fx-delay: 100ms'>Diseño web <span class='text-accent'>cerca de ti</span>.</h2>
+            <p class='zonas-sub fx-up' style='--fx-delay: 200ms'>
                 Somos de aquí. Trabajamos codo con codo con negocios de toda
                 Extremadura — y en remoto para el resto de España.
             </p>
@@ -32,8 +32,8 @@ const zonas = [
 
         <div class='zonas-grid'>
             {
-                zonas.map((z) => (
-                    <a href={z.href} class='zona-card'>
+                zonas.map((z, i) => (
+                    <a href={z.href} class='zona-card fx-up' style={`--fx-delay: ${i * 100}ms`}>
                         <div class='zona-top'>
                             <span class='zona-pin' aria-hidden='true'>
                                 <svg
@@ -181,26 +181,5 @@ const zonas = [
     }
 </style>
 
-<script>
-    // @ts-nocheck
-    import { gsap, ScrollTrigger } from '@/lib/motion.js'
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (!reduce) {
-        gsap.from('.zonas-head > *', {
-            scrollTrigger: { trigger: '.zonas', start: 'top 78%' },
-            y: 26,
-            autoAlpha: 0,
-            stagger: 0.1,
-            duration: 0.7,
-            ease: 'power3.out',
-        })
-        gsap.from('.zona-card', {
-            scrollTrigger: { trigger: '.zonas-grid', start: 'top 84%' },
-            y: 30,
-            autoAlpha: 0,
-            stagger: 0.1,
-            duration: 0.6,
-            ease: 'power3.out',
-        })
-    }
-</script>
+<!-- Las apariciones son CSS (.fx-up en global.css). Antes GSAP dejaba un
+     transform en línea y el :hover de las tarjetas ya no subía -->

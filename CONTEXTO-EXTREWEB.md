@@ -5,7 +5,7 @@
 > cometidos y por qué, y lo que queda pendiente.
 > **Léelo entero antes de proponer cambios.**
 >
-> Última actualización: **18/09/2026**.
+> Última actualización: **22/09/2026**.
 
 ---
 
@@ -146,6 +146,9 @@ En `public/proyectos/`, referenciadas **sin** `/public/` (ej. `/proyectos/Guadic
 **OJO con mayúsculas** — Netlify/Linux distingue, Windows no: `Guadicar.webp`, `Car-MeetESP.webp`,
 `Fichar.webp`, `Guzman.webp`, `Toldos-Pallares.webp`. Todas ~1905×952; los `<img>` llevan
 `width`/`height` para evitar saltos de maquetación.
+Cada una tiene versiones **`-800.webp`** (~20 KB) y **`-1200.webp`** (~35 KB), generadas con `sharp`,
+que la portada usa con `srcset` (Showcase y Projects): el móvil ya no baja la de ~85 KB.
+**Si se cambia o se añade una captura, generar también sus dos versiones.**
 
 ---
 
@@ -187,35 +190,60 @@ En `public/proyectos/`, referenciadas **sin** `/public/` (ej. `/proyectos/Guadic
 
 ---
 
-## 6. Sistema de animación (ANALIZADO — es coherente y seguro, NO reescribir)
+## 6. Sistema de animación (revisado el 22/09/2026 para que vaya fluido)
 
 ### `src/lib/motion.js`
-Exporta: `gsap`, `ScrollTrigger`, `reduceMotion`, `finePointer`, `spring(onUpdate, {stiffness, damping, precision})`.
-Internamente: `initLenis()` (smooth scroll **solo escritorio con ratón**; móvil usa scroll nativo),
-`initReveals()` (IntersectionObserver para `[data-reveal]` + **red de seguridad `setTimeout` 3s**),
-`boot()` que marca `data-motion-ready` en `<html>`.
+Exporta: `gsap`, `ScrollTrigger`, `reduceMotion`, `finePointer`, `spring(…)` (sin uso ahora).
+Al importarse arranca (`boot()`, marca `data-motion-ready` en `<html>`):
+1. `initLenis()` — smooth scroll **solo escritorio con ratón**; móvil usa el scroll nativo.
+2. `initReveals()` — pone `.is-in` a `.fx-up` / `.fx-row` cuando entran en pantalla
+   (IntersectionObserver). La animación en sí es CSS.
+3. `initPausaFuera()` — pone `.is-fuera` a los bloques con `data-anim-pausa` cuando no se ven:
+   sus animaciones infinitas (marquee, brillos, pulsos) se pausan.
+4. `initAutoRefresh()` — si cambia la altura de la página (FAQ abierta, pestaña del configurador,
+   fuente cargada…), `ScrollTrigger.refresh()`. Sin esto las secciones fijadas se descuadraban.
 
-### Cómo se usa realmente
-- Cada página importa `gsap` desde `@/lib/motion.js` → al cargarse arranca el motor.
-- Héroes: `.gsap-reveal` / `.gsap-fade` (animan al cargar).
-- Tarjetas y secciones: `.gsap-up` con **ScrollTrigger** (`start: "top 85%"`).
-- Los componentes de la home (Services, Projects, Process, Showcase, Trust, Areas)
-  tienen su propio `<script>` con ScrollTrigger (Trust importa `gsap` directamente).
+### Clases de animación (`global.css`) — CSS puro, van en la GPU
+| Clase | Cuándo entra | Uso |
+|---|---|---|
+| `.fx-in` | al cargar, sin esperar al JS | titular de la cabecera (sube 40 px) |
+| `.fx-in-soft` | al cargar | resto de la cabecera (sube 20 px) |
+| `.fx-up` | al llegar con el scroll | tarjetas y bloques (40 px) |
+| `.fx-row` | al llegar con el scroll | filas de lista (60 px) |
 
-### 🔑 Invariante que NO se puede romper
-**Ninguna clase `gsap-*` está oculta por CSS.** Si el JS falla, el contenido **se ve igual**.
-Nunca condicionar la visibilidad del contenido a JavaScript → eso provocó varias veces
-páginas en blanco o textos desaparecidos. El movimiento solo realza; nunca es requisito.
+- **Cascada automática** entre hermanos `.fx-in`/`.fx-in-soft` (0,1 · 0,25 · 0,4 · 0,55 s).
+  Retraso a mano: `style="--fx-delay: 120ms"`.
+- Animan **`translate` y `opacity`, nunca `transform`**: así no pisan los `:hover` de las
+  tarjetas. Antes, GSAP dejaba un `transform` en línea y el hover dejaba de moverse (Process, Areas).
+- Antes eran `.gsap-reveal/.gsap-fade/.gsap-up/.gsap-row` animadas con `gsap.from()`: el titular
+  se pintaba, desaparecía al cargar GSAP y volvía a entrar (el "parpadeo" de las páginas interiores).
 
-> `Showcase.astro` (scrollytelling) oculta los pasos no activos, pero **solo con `html.js-motion`**:
-> sin JS o con "reducir movimiento" todos los textos se ven como lista normal y sin scroll largo.
-> Usar el mismo patrón (`:global(html:not(.js-motion))`) en cualquier sección de scroll nueva.
+### GSAP se queda solo para lo que va pegado al scroll
+Showcase (capas), Services (baraja, **solo ≥901 px**), Projects (solo como respaldo, ver abajo),
+Trust (contadores), Nosotros (contadores), Proceso (línea con `scaleY`),
+Proyectos (baraja fijada) y las pestañas de Servicios. Usar `gsap.matchMedia()` para los
+efectos que dependen del ancho (se activan/desactivan solos al cambiar la ventana).
 
-### Código muerto conocido
-El sistema `data-reveal` / `.is-in` de `global.css` + `initReveals()` **está sin usar**.
-Es inofensivo, pero se puede limpiar.
+### 🔑 Invariantes
+- **El contenido nunca depende del JS.** `.fx-in` es CSS y siempre termina. `.fx-up` solo se
+  oculta con `html.js-motion`, y el script del `<head>` quita esa clase si `motion.js` no arranca
+  en 2,5 s. Con "reducir movimiento" no hay `js-motion`: todo visible y quieto.
+- `Showcase.astro` oculta los pasos no activos también **solo con `html.js-motion`**
+  (`:global(html:not(.js-motion))` = lista normal). Mismo patrón para cualquier sección nueva.
 
----
+### ⚡ Reglas de rendimiento (lo que hacía que fuera a tirones)
+- **Nada de `backdrop-filter` sobre fondo liso ni en elementos grandes o animados.** Se recalcula
+  cada frame. Se quitó de: tarjetas de Services (4 de 70vh con escala por scroll), marquee del
+  Hero, Process, Cta, tarjeta de cristal, texto de Proyectos. Queda en la navbar y el menú (pequeños).
+- **Nada de `filter: blur()` para halos.** Un `radial-gradient` ya es suave. Los "ambient-glow" de
+  las páginas interiores usan `mask-image: radial-gradient(…)` + `scale: 1.7` (mismo halo).
+  ⚠️ El degradado tiene que llegar a transparente dentro de su caja: `radial-gradient(closest-side, color, transparent)`.
+  Con `circle … transparent 70%` se veía el contorno del círculo (antes lo tapaba el blur).
+- **No animar `box-shadow`, `height`, `width`, `top`…** Pulsos = anillo `::after` con
+  `transform` + `opacity`; barras = `scaleY`.
+- **No mezclar `transition: transform` en CSS con GSAP animando el mismo elemento.**
+- `will-change` solo donde de verdad se anima (y por media query si solo es en escritorio).
+- Imágenes de un scroll horizontal: se pasan a `loading="eager"` al acercarse (Projects).
 
 ## 7. Principios de diseño que rigen el proyecto
 
@@ -253,8 +281,9 @@ src/
 │   ├── Configurador.astro         "¿Cómo quedaría la web de tu negocio?": el visitante monta una
 │   │                              web (sector, nombre, foto, color, estilo, extras) y la maqueta
 │   │                              FUNCIONA (reservar/comprar, WhatsApp) → "Quiero una web así"
-│   ├── Services.astro             tarjetas apiladas con sticky
-│   ├── Projects.astro             scroll horizontal fijado; cada tarjeta es un <a> al proyecto
+│   ├── Services.astro             tarjetas apiladas con sticky (se encogen solo en escritorio)
+│   ├── Projects.astro             scroll horizontal al bajar (móvil y escritorio) · cada
+│   │                              tarjeta es un <a> al proyecto
 │   ├── Trust.astro                stats con contadores
 │   ├── Process.astro
 │   ├── Areas.astro                zonas → enlaza a las 3 landings locales
@@ -291,6 +320,20 @@ public/_redirects · public/_headers
   apartan con `@property --an-up1/--an-up2` (se animan solas sin frenar el scroll).
 - La capa de Google usa el título, la descripción y el schema (`AutoDealer`) **reales** de
   guadicar.es. Si GuadiCar los cambia, actualizarlos aquí. Nada de métricas ni reseñas inventadas.
+- **Rendimiento (22/09):** las capas llevan `will-change: transform` (se pintan una vez y luego solo
+  se recolocan). El brillo de la capa activa es un `::after` con la sombra ya pintada que solo
+  cambia de opacidad. Las etiquetas aparecen con la clase `.is-abierta`. El script solo escribe
+  `--t`/`--s` si cambian. En móvil, el texto cambia sin `filter: blur`.
+
+**Projects (`Projects.astro`) — cómo funciona:**
+- `.projects-pin` mide `100svh + --recorrido` (lo que sobra del carril; lo mide el script y lo
+  vuelve a medir si cambia la ventana). Dentro, `.projects-wrapper` es **sticky**: la fija el
+  navegador, sin los saltos del "pin" de GSAP al entrar y salir (el motivo de los tirones en móvil).
+- El carril lo mueve **CSS con `animation-timeline`** (Chrome, Edge, Safari 26+; va en la GPU,
+  sin JS por frame). Donde no existe (Firefox, Safari antiguo), lo mueve **GSAP** con el mismo
+  inicio y final.
+- `.projects` usa `overflow: clip` (con `hidden` el sticky de dentro no funciona).
+- Sin JS o con "reducir movimiento": carrusel nativo que se desliza con el dedo.
 
 **Configurador (`Configurador.astro`) — cómo funciona:**
 - **El nombre del negocio es el titular** de la web simulada (el eslogan va debajo); la primera vez
@@ -566,9 +609,9 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
 14. **Keep-alive de Supabase:** probablemente ya no haga falta — la suscripción del calendario del
     iPhone consulta la base cada ~hora. Confirmar que el proyecto no vuelve a pausarse.
 15. Saltos de encabezado `h1 → h3` en servicios y proceso (tarjetas en `h3` sin `h2`).
-16. Imágenes responsive: las capturas de 1905 px se sirven igual a móvil (~85 KB c/u). Moverlas a
-    `src/assets/` y usar `<Image>`/`<Picture>` de Astro generaría tamaños y AVIF.
-17. Limpiar el código muerto de `data-reveal` (`global.css` + `motion.js`).
+16. Imágenes responsive: **hecho en la portada** (versiones -800/-1200 con `srcset`). Faltan
+    `/proyectos/` y las landings locales, que siguen sirviendo la de 1905 px.
+17. ~~Limpiar el código muerto de `data-reveal`~~ ✅ hecho (22/09): sustituido por `.fx-*`.
 18. Mejoras del panel ya comentadas: buscador de clientes, exportar presupuesto a PDF,
     subir archivos a proyectos, alta de proyecto más completa.
 
@@ -591,6 +634,9 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
 | El reCAPTCHA no sale en local | Lo inyecta Netlify al desplegar | Probar el formulario en producción |
 | `/admin` en blanco en `npm run dev` (`jsxDEV is not a function`) | `astro build` con el dev arrancado corrompe `node_modules/.vite` | Parar el dev, borrar `node_modules/.vite`, recargar con Ctrl+Shift+R |
 | Mensaje del formulario que no llega al panel | Falta `SUPABASE_SERVICE_KEY` o la tabla | Netlify → Logs → Functions → `submission-created` |
+| Scroll a tirones | `backdrop-filter`/`filter: blur` grandes, `box-shadow` o `height` animados | Ver §6 "Reglas de rendimiento" |
+| Titular que parpadea al cargar | `gsap.from()` en la cabecera: se ve, se oculta y vuelve a entrar | Cabeceras con `.fx-in` (CSS) |
+| El hover de una tarjeta ya no se mueve | GSAP deja `transform` en línea tras animar | Apariciones con `.fx-up` (usa `translate`) |
 
 ---
 
@@ -598,7 +644,9 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
 
 - `package.json`, `netlify.toml`, `tsconfig.json`.
 - `astro.config.mjs` — **solo** se añadió el filtro del sitemap (`/admin` fuera), con permiso.
-- El **Hero** (está aprobado y es CSS puro a propósito).
-- El **sistema de animación** (`motion.js` + clases `gsap-*`): es coherente y seguro.
+- El **Hero** (está aprobado y es CSS puro a propósito). El 22/09 solo se le quitó el
+  `backdrop-filter` al marquee y se le puso `data-anim-pausa` (rendimiento, mismo aspecto).
+- Las **reglas del sistema de animación** (§6): clases `.fx-*` en CSS, GSAP solo para lo que va
+  pegado al scroll, nada de desenfoques grandes. Si algo va a tirones, mirar §6 antes de tocar.
 - Los **registros MX/SPF/DKIM de Zoho** en el DNS.
 - La **RLS** de Supabase (las tablas nuevas siguen la misma política; no se ha cambiado ninguna).

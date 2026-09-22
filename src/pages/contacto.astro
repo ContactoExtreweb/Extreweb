@@ -19,15 +19,15 @@ const seoDesc =
                 <div class='contact-grid'>
                     <!-- LADO IZQUIERDO: Info y Mensaje -->
                     <div class='c-left'>
-                        <span class='eyebrow gsap-fade'>¿Hablamos?</span>
-                        <h1 class='gsap-reveal'>Cuéntanos tu<br />proyecto.</h1>
-                        <p class='c-desc gsap-fade'>
+                        <span class='eyebrow fx-in-soft'>¿Hablamos?</span>
+                        <h1 class='fx-in'>Cuéntanos tu<br />proyecto.</h1>
+                        <p class='c-desc fx-in-soft'>
                             Sin compromisos ni chatbots. Cuéntanos qué necesitas
                             y te responderemos en menos de 24 horas. También
                             puedes enviarnos un WhatsApp si lo prefieres.
                         </p>
 
-                        <div class='c-info-list gsap-fade'>
+                        <div class='c-info-list fx-in-soft'>
                             <div class='c-info-item'>
                                 <span class='c-icon'>✉️</span>
                                 <div>
@@ -65,7 +65,7 @@ const seoDesc =
                     </div>
 
                     <!-- LADO DERECHO: Formulario Conversacional -->
-                    <div class='c-right gsap-up'>
+                    <div class='c-right fx-in' style='--fx-delay: 0.4s'>
                         <div class='form-card'>
                             <form
                                 name='contacto'
@@ -251,7 +251,11 @@ const seoDesc =
     .ambient-glow {
         position: absolute;
         border-radius: 50%;
-        filter: blur(120px);
+        /* Degradado en vez de filter: blur(120px): mismo halo, pero sin
+           recalcular un desenfoque enorme cada vez que se repinta la zona */
+        -webkit-mask-image: radial-gradient(closest-side, #000 20%, transparent);
+        mask-image: radial-gradient(closest-side, #000 20%, transparent);
+        scale: 1.7;
         opacity: 0.15;
         z-index: 0;
         pointer-events: none;
@@ -614,32 +618,7 @@ const seoDesc =
 
 <script>
     // @ts-nocheck
-    import { gsap } from '@/lib/motion.js'
-
-    document.addEventListener('DOMContentLoaded', () => {
-        gsap.from('.gsap-reveal', {
-            y: 40,
-            opacity: 0,
-            duration: 1,
-            ease: 'power4.out',
-            delay: 0.1,
-        })
-        gsap.from('.gsap-fade', {
-            y: 20,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.15,
-            ease: 'power3.out',
-            delay: 0.2,
-        })
-        gsap.from('.gsap-up', {
-            y: 60,
-            opacity: 0,
-            duration: 1.2,
-            ease: 'power4.out',
-            delay: 0.4,
-        })
-    })
+    // La cabecera y el formulario entran con CSS (.fx-in en global.css)
 
     // --- Envío del formulario a Netlify Forms sin salir de la página ---
     // Sin JS el <form> hace POST normal y Netlify muestra su confirmación,

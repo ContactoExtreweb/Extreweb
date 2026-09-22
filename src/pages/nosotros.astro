@@ -20,9 +20,9 @@ const seoDesc =
         <!-- 1. HERO EQUILIBRADO (Split Screen) -->
         <section class='dyn-hero'>
             <div class='container'>
-                <span class='eyebrow gsap-fade'>Sobre nosotros</span>
+                <span class='eyebrow fx-in-soft'>Sobre nosotros</span>
                 <div class='hero-split'>
-                    <div class='h-left gsap-reveal'>
+                    <div class='h-left fx-in' style='--fx-delay: 0.2s'>
                         <h1>
                             Cercanos como<br />un vecino,<br /><span
                                 class='text-accent'
@@ -30,7 +30,7 @@ const seoDesc =
                             >
                         </h1>
                     </div>
-                    <div class='h-right gsap-fade'>
+                    <div class='h-right fx-in-soft' style='--fx-delay: 0.4s'>
                         <p>
                             Diseñamos y desarrollamos webs a medida para
                             negocios de Don Benito, Villanueva de la Serena,
@@ -47,7 +47,7 @@ const seoDesc =
         <section class='dyn-history'>
             <div class='container'>
                 <div class='h-blocks'>
-                    <div class='h-block gsap-up'>
+                    <div class='h-block fx-up'>
                         <span class='h-year'>2022</span>
                         <p>
                             <strong>extreweb</strong> nace de la unión de dos apasionados
@@ -57,7 +57,7 @@ const seoDesc =
                         </p>
                     </div>
                     <div
-                        class='h-block gsap-up'
+                        class='h-block fx-up'
                         style='transition-delay: 0.1s;'
                     >
                         <span class='h-year'>La Diferencia</span>
@@ -77,12 +77,12 @@ const seoDesc =
         <!-- 3. EQUIPO (TARJETAS DINÁMICAS REVEAL) -->
         <section class='dyn-team'>
             <div class='container'>
-                <h2 class='sec-title gsap-fade text-center'>
+                <h2 class='sec-title fx-up text-center'>
                     Las caras detrás del código
                 </h2>
                 <div class='team-grid'>
                     <!-- Tarjeta Saúl -->
-                    <div class='t-card gsap-up'>
+                    <div class='t-card fx-up'>
                         <div class='t-card-inner'>
                             <div class='t-visible'>
                                 <div class='photo-placeholder'>
@@ -110,7 +110,7 @@ const seoDesc =
                     </div>
 
                     <!-- Tarjeta Pedro -->
-                    <div class='t-card gsap-up' style='transition-delay: 0.1s;'>
+                    <div class='t-card fx-up' style='--fx-delay: 100ms'>
                         <div class='t-card-inner'>
                             <div class='t-visible'>
                                 <div class='photo-placeholder'>
@@ -144,14 +144,14 @@ const seoDesc =
         <section class='dyn-values'>
             <div class='container'>
                 <div class='values-split'>
-                    <div class='v-left gsap-fade'>
+                    <div class='v-left fx-up'>
                         <h2 class='sec-title'>Nuestros<br />Valores.</h2>
                         <p class='v-desc'>
                             Pasa el ratón o toca para descubrir cómo trabajamos.
                         </p>
                     </div>
                     <div class='v-right'>
-                        <div class='v-accordion gsap-up'>
+                        <div class='v-accordion fx-up'>
                             <div class='v-item is-active'>
                                 <div class='v-header'>
                                     <h3>Cercanía real</h3><span class='icon'
@@ -221,7 +221,7 @@ const seoDesc =
         <section class='dyn-stats-services'>
             <div class='container'>
                 <!-- Contadores Dinámicos -->
-                <div class='stats-banner gsap-up'>
+                <div class='stats-banner fx-up'>
                     <div class='s-box'>
                         <span class='s-num'
                             ><span class='counter' data-target='6'>6</span
@@ -246,7 +246,7 @@ const seoDesc =
                 </div>
 
                 <!-- Servicios (Grid Limpio) -->
-                <div class='services-clean gsap-fade'>
+                <div class='services-clean fx-up'>
                     <h2 class='text-center'>Qué hacemos</h2>
                     <div class='sc-grid'>
                         <a href='/servicios/' class='sc-item'>
@@ -273,7 +273,7 @@ const seoDesc =
         <!-- 6. ZONA DE ACTUACIÓN (SEO Local) -->
         <section class='dyn-local-seo'>
             <div class='container'>
-                <div class='local-banner gsap-up'>
+                <div class='local-banner fx-up'>
                     <p>
                         Diseñamos para negocios de <strong
                             >Villanueva de la Serena, Don Benito, Cáceres,
@@ -304,7 +304,11 @@ const seoDesc =
     .ambient-glow {
         position: absolute;
         border-radius: 50%;
-        filter: blur(120px);
+        /* Degradado en vez de filter: blur(120px): mismo halo, pero sin
+           recalcular un desenfoque enorme cada vez que se repinta la zona */
+        -webkit-mask-image: radial-gradient(closest-side, #000 20%, transparent);
+        mask-image: radial-gradient(closest-side, #000 20%, transparent);
+        scale: 1.7;
         opacity: 0.15;
         z-index: 0;
         pointer-events: none;
@@ -737,33 +741,8 @@ const seoDesc =
         if (window.__dyn_nosotros_inited) return
         window.__dyn_nosotros_inited = true
 
-        // 1. Hero Animations
-        gsap.from('.gsap-reveal', {
-            y: 40,
-            opacity: 0,
-            duration: 1,
-            ease: 'power4.out',
-            delay: 0.1,
-        })
-        gsap.from('.gsap-fade', {
-            y: 20,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: 'power3.out',
-            delay: 0.3,
-        })
-
-        // 2. Scroll Reveals Generales (Fade Up suave)
-        gsap.utils.toArray('.gsap-up').forEach((el, i) => {
-            gsap.from(el, {
-                scrollTrigger: { trigger: el, start: 'top 85%' },
-                y: 40,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power3.out',
-            })
-        })
+        // 1-2. La cabecera y las apariciones al hacer scroll son CSS
+        //      (.fx-in / .fx-up en global.css)
 
         // 3. Lógica del Acordeón de Valores (Hover en PC, Clic en Móvil)
         const accItems = document.querySelectorAll('.v-item')

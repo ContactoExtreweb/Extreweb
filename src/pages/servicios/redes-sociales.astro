@@ -22,14 +22,14 @@ const seoDesc =
 
         <section class='svc-hero text-center'>
             <div class='container'>
-                <a href='/servicios/' class='back-link gsap-fade'
+                <a href='/servicios/' class='back-link fx-in-soft'
                     >← Todos los servicios</a
                 >
-                <h1 class='gsap-reveal'>
+                <h1 class='fx-in'>
                     Gestión de<br /><span class='text-accent'
                         >Redes Sociales.</span>
                 </h1>
-                <p class='hero-desc gsap-fade'>
+                <p class='hero-desc fx-in-soft'>
                     Tu comunidad te está buscando. Diseñamos estrategias de
                     contenido, gestionamos tus perfiles y creamos anuncios (Ads)
                     para que tu marca destaque y atraiga clientes reales.
@@ -40,7 +40,7 @@ const seoDesc =
         <section class='svc-features'>
             <div class='container'>
                 <div class='feat-grid'>
-                    <div class='feat-card gsap-up'>
+                    <div class='feat-card fx-up'>
                         <div class='f-icon'>🎯</div>
                         <h3>Estrategia Real</h3>
                         <p>
@@ -50,7 +50,7 @@ const seoDesc =
                         </p>
                     </div>
                     <div
-                        class='feat-card gsap-up'
+                        class='feat-card fx-up'
                         style='transition-delay: 0.1s;'
                     >
                         <div class='f-icon'>📸</div>
@@ -62,7 +62,7 @@ const seoDesc =
                         </p>
                     </div>
                     <div
-                        class='feat-card gsap-up'
+                        class='feat-card fx-up'
                         style='transition-delay: 0.2s;'
                     >
                         <div class='f-icon'>📈</div>
@@ -95,7 +95,11 @@ const seoDesc =
     .ambient-glow {
         position: absolute;
         border-radius: 50%;
-        filter: blur(120px);
+        /* Degradado en vez de filter: blur(120px): mismo halo, pero sin
+           recalcular un desenfoque enorme cada vez que se repinta la zona */
+        -webkit-mask-image: radial-gradient(closest-side, #000 20%, transparent);
+        mask-image: radial-gradient(closest-side, #000 20%, transparent);
+        scale: 1.7;
         opacity: 0.15;
         z-index: 0;
         pointer-events: none;
@@ -188,34 +192,3 @@ const seoDesc =
         }
     }
 </style>
-
-<script>
-    // @ts-nocheck
-    import { gsap } from '@/lib/motion.js'
-    document.addEventListener('DOMContentLoaded', () => {
-        gsap.from('.gsap-reveal', {
-            y: 40,
-            opacity: 0,
-            duration: 1,
-            ease: 'power4.out',
-            delay: 0.1,
-        })
-        gsap.from('.gsap-fade', {
-            y: 20,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.15,
-            ease: 'power3.out',
-            delay: 0.2,
-        })
-        gsap.utils.toArray('.gsap-up').forEach((el) => {
-            gsap.from(el, {
-                scrollTrigger: { trigger: el, start: 'top 85%' },
-                y: 50,
-                opacity: 0,
-                duration: 0.8,
-                ease: 'power3.out',
-            })
-        })
-    })
-</script>

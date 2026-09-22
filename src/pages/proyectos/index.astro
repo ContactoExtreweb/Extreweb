@@ -60,9 +60,9 @@ const projects = [
         <section class="p-hero">
             <div class="container">
                 <div class="hero-content">
-                    <span class="eyebrow gsap-fade">Portfolio</span>
-                    <h1 class="gsap-reveal">Casos de<br/><span class="text-accent">Éxito.</span></h1>
-                    <p class="gsap-fade">Desliza hacia abajo para descubrir nuestros mejores proyectos, uno por uno.</p>
+                    <span class="eyebrow fx-in-soft">Portfolio</span>
+                    <h1 class="fx-in">Casos de<br/><span class="text-accent">Éxito.</span></h1>
+                    <p class="fx-in-soft">Desliza hacia abajo para descubrir nuestros mejores proyectos, uno por uno.</p>
                 </div>
             </div>
         </section>
@@ -208,8 +208,6 @@ const projects = [
         width: 100%;
         padding: clamp(2rem, 4vw, 3rem);
         background: rgba(15, 15, 15, 0.7);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
         border-top: 1px solid rgba(255,255,255,0.05);
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -306,9 +304,7 @@ const projects = [
         if (window.__deck_inited) return;
         window.__deck_inited = true;
 
-        // 1. Animación del Hero
-        gsap.from(".gsap-reveal", { y: 50, opacity: 0, duration: 1.2, ease: "power4.out", delay: 0.1 });
-        gsap.from(".gsap-fade", { y: 20, opacity: 0, duration: 1, ease: "power3.out", delay: 0.4 });
+        // 1. El hero entra con CSS (.fx-in / .fx-in-soft en global.css)
 
         // 2. Lógica del Sticky Deck (ScrollTrigger)
         const cards = gsap.utils.toArray('.deck-card');

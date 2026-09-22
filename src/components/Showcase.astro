@@ -122,6 +122,8 @@ const barras = [
                         <span class='an-tag'><b>1</b> Diseño</span>
                         <img
                             src='/proyectos/Guadicar.webp'
+                            srcset='/proyectos/Guadicar-800.webp 800w, /proyectos/Guadicar-1200.webp 1200w, /proyectos/Guadicar.webp 1904w'
+                            sizes='(max-width: 860px) 92vw, 760px'
                             alt=''
                             width='1904'
                             height='951'
@@ -285,13 +287,15 @@ const barras = [
         position: absolute;
         inset: -10% -5%;
         border-radius: 50%;
+        /* Sin filter: blur (costaba repintar). closest-side: el degradado llega a
+           transparente justo en el borde, así no se ve el contorno del círculo */
         background: radial-gradient(
-            circle at 50% 50%,
+            closest-side,
             color-mix(in srgb, var(--accent) 22%, transparent),
-            transparent 65%
+            transparent
         );
-        filter: blur(40px);
-        opacity: calc(0.35 + var(--glow, 0) * 0.65);
+        opacity: 0.35; /* el script lo sube al separarse las capas */
+        will-change: opacity;
         pointer-events: none;
     }
     .an-scene {
@@ -320,13 +324,29 @@ const barras = [
         inset: 0;
         border-radius: 16px;
         backface-visibility: hidden;
-        transition:
-            opacity 0.5s var(--ease-out-quart),
-            box-shadow 0.5s var(--ease-out-quart);
+        /* Se mueven en cada frame del scroll: con will-change el navegador las
+           pinta una vez y luego solo las recoloca (sin esto las volvía a pintar
+           a cada cambio de profundidad, que en móvil se notaba) */
+        will-change: transform;
+        transition: opacity 0.5s var(--ease-out-quart);
+    }
+    /* Brillo de la capa activa: la sombra ya está pintada en un ::after y solo
+       cambia su opacidad. Animar box-shadow repintaba la capa (imagen incluida) */
+    .an-layer::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        box-shadow:
+            0 0 0 2px var(--c),
+            0 30px 90px -20px color-mix(in srgb, var(--c) 70%, transparent);
+        opacity: 0;
+        transition: opacity 0.5s var(--ease-out-quart);
+        pointer-events: none;
     }
     .an-l1 {
+        --c: var(--c1);
         transform: translateZ(calc(var(--s) * (var(--gap) + var(--an-up1))));
-        overflow: hidden;
         background: var(--surface);
         box-shadow: 0 0 0 1px var(--border), 0 30px 60px -30px rgba(0, 0, 0, 0.35);
     }
@@ -335,13 +355,16 @@ const barras = [
         height: 100%;
         object-fit: cover;
         object-position: top;
+        border-radius: inherit; /* recorta la imagen (sin overflow en la capa, que cortaría el brillo) */
     }
     .an-l2 {
+        --c: var(--c2);
         transform: translateZ(calc(var(--s) * var(--an-up2)));
         background: #fff;
         box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
     }
     .an-l3 {
+        --c: var(--c3);
         transform: translateZ(calc(var(--s) * var(--gap) * -1));
         background: #0c0c10;
         box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
@@ -362,8 +385,13 @@ const barras = [
         font-weight: 600;
         color: #fff;
         background: var(--c1);
-        opacity: var(--s);
+        opacity: 0;
+        transition: opacity 0.4s var(--ease-out-quart);
         box-shadow: 0 6px 20px -6px rgba(0, 0, 0, 0.4);
+    }
+    /* .is-abierta la pone el script cuando las capas se separan */
+    .an-scene.is-abierta .an-tag {
+        opacity: 1;
     }
     .an-tag b {
         display: grid;
@@ -377,7 +405,7 @@ const barras = [
     .an-l2 .an-tag { background: var(--c2); }
     .an-l3 .an-tag { background: var(--c3); }
     .an-l1 .an-tag {
-        top: 14px; /* dentro: la capa 1 recorta su contenido */
+        top: 14px; /* dentro, sobre la captura */
     }
 
     /* Capa activa: se ilumina; las demás se apagan */
@@ -386,14 +414,10 @@ const barras = [
     .an-scene[data-activo='3'] .an-layer:not(.an-l3) {
         opacity: 0.16;
     }
-    .an-scene[data-activo='1'] .an-l1 {
-        box-shadow: 0 0 0 2px var(--c1), 0 30px 90px -20px color-mix(in srgb, var(--c1) 70%, transparent);
-    }
-    .an-scene[data-activo='2'] .an-l2 {
-        box-shadow: 0 0 0 2px var(--c2), 0 30px 90px -20px color-mix(in srgb, var(--c2) 70%, transparent);
-    }
-    .an-scene[data-activo='3'] .an-l3 {
-        box-shadow: 0 0 0 2px var(--c3), 0 30px 90px -20px color-mix(in srgb, var(--c3) 70%, transparent);
+    .an-scene[data-activo='1'] .an-l1::after,
+    .an-scene[data-activo='2'] .an-l2::after,
+    .an-scene[data-activo='3'] .an-l3::after {
+        opacity: 1;
     }
 
     /* "En producción": solo al final, con la web ya montada */
@@ -409,9 +433,7 @@ const barras = [
         font-size: 0.78rem;
         font-weight: 600;
         color: #fff;
-        background: rgba(0, 0, 0, 0.72);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.78);
         opacity: 0;
         transform: translateY(8px);
         transition:
@@ -633,6 +655,7 @@ const barras = [
         .an-step {
             inset: 0 0 auto 0;
             transform: translateY(24px);
+            filter: none;
         }
         .an-step.is-active {
             transform: none;
@@ -715,7 +738,7 @@ const barras = [
     const scene = section?.querySelector('.an-scene')
     const steps = section ? [...section.querySelectorAll('.an-step')] : []
     const rail = section ? [...section.querySelectorAll('.an-rail li')] : []
-    const glowHost = section?.querySelector('.an-stage')
+    const glow = section?.querySelector('.an-glow')
 
     if (section && scene && !reduceMotion) {
         const clamp = (v) => Math.min(1, Math.max(0, v))
@@ -729,15 +752,30 @@ const barras = [
         //  0.76–0.92  las capas se vuelven a juntar → web terminada
         const PASOS = [0, 0.2, 0.42, 0.62, 0.8]
         let paso = -1
+        let tAntes = ''
+        let sAntes = ''
 
         function pintar(p) {
             const abre = suave(tramo(p, 0.06, 0.24))
             const cierra = suave(tramo(p, 0.76, 0.92))
             const t = abre * (1 - cierra)
             const s = suave(tramo(p, 0.1, 0.26)) * (1 - suave(tramo(p, 0.74, 0.9)))
-            scene.style.setProperty('--t', t.toFixed(4))
-            scene.style.setProperty('--s', s.toFixed(4))
-            glowHost.style.setProperty('--glow', s.toFixed(3))
+            // Solo se escribe si cambia: en la mayor parte del recorrido las capas
+            // están quietas (t = s = 1) y así el navegador no recalcula nada
+            const tTxt = t.toFixed(4)
+            const sTxt = s.toFixed(4)
+            if (tTxt !== tAntes) {
+                scene.style.setProperty('--t', tTxt)
+                tAntes = tTxt
+            }
+            if (sTxt !== sAntes) {
+                scene.style.setProperty('--s', sTxt)
+                // Directo al brillo (una variable en el contenedor obligaba a
+                // recalcular los estilos de toda la escena)
+                glow.style.opacity = (0.35 + s * 0.65).toFixed(3)
+                scene.classList.toggle('is-abierta', s > 0.4)
+                sAntes = sTxt
+            }
 
             let n = 0
             PASOS.forEach((umbral, i) => {
