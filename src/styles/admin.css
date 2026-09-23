@@ -971,3 +971,107 @@ button.a-stat { cursor: pointer; }
   /* Solo se sangra si hay puntito delante (Próximas); en Pasadas va pegada a la izquierda */
   .a-reu-row .a-reu-item + .a-badge { margin-left: calc(9px + 0.7rem); }
 }
+
+/* ================= CALCULADORA DE IVA ================= */
+.a-calc-ctrl { display: flex; flex-direction: column; gap: 1.1rem; }
+.a-calc-row { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+.a-calc-row > .a-label { flex: 0 0 auto; }
+
+.a-chips { display: inline-flex; gap: 0.4rem; flex-wrap: wrap; }
+.a-chip {
+  padding: 0.42rem 0.85rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: border-color var(--dur-fast) ease, color var(--dur-fast) ease, background var(--dur-fast) ease;
+}
+.a-chip.is-on { background: color-mix(in srgb, var(--accent) 12%, var(--bg)); border-color: var(--accent); color: var(--accent); }
+.a-chip:active { transform: scale(0.97); }
+
+/* Campo de "otro tipo": el % va pegado fuera del input */
+.a-calc-pct { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--muted); font-size: 0.85rem; }
+.a-calc-pct .a-input { width: 4.6rem; }
+
+.a-check-label { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; cursor: pointer; }
+.a-check-label input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+/* ---- Líneas ---- */
+.a-calc-lines { display: flex; flex-direction: column; gap: 0.6rem; }
+.a-calc-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 120px minmax(0, 250px) 2rem;
+  grid-template-areas: 'concepto modo importe res borrar';
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.a-calc-concepto { grid-area: concepto; min-width: 0; }
+
+/* Cada línea guarda si hay que añadir o quitar el IVA */
+.a-calc-modo {
+  grid-area: modo;
+  display: inline-flex;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 2px;
+}
+.a-calc-modo-btn {
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.a-calc-modo-btn.is-on { background: color-mix(in srgb, var(--accent) 15%, var(--bg)); color: var(--accent); }
+.a-calc-imp { grid-area: importe; font-variant-numeric: tabular-nums; }
+.a-calc-line .a-icon-btn { grid-area: borrar; }
+.a-calc-res { grid-area: res; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: flex-end; }
+.a-calc-dato { font-size: 0.9rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.a-calc-dato em { font-style: normal; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; margin-right: 0.25rem; }
+/* El dato que se está buscando (según añadir o quitar) */
+.a-calc-dato.is-fuerte { color: var(--fg); font-weight: 600; }
+.a-calc-tip { margin-top: 0.8rem; }
+
+/* ---- Totales ---- */
+.a-calc-totales { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
+.a-calc-bloque + .a-calc-bloque { margin-top: 1.2rem; }
+.a-calc-bloque-tit { font-size: 0.85rem; font-weight: 600; color: var(--muted); margin-bottom: 0.5rem; }
+.a-calc-dif {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1.2rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.a-calc-dif strong { font-size: 1.15rem; }
+.a-calc-nota { flex: 1 1 100%; }
+.a-calc-total { background: color-mix(in srgb, var(--accent) 10%, var(--bg)); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+.a-calc-total strong { color: var(--accent); }
+
+/* Móvil: concepto y borrar arriba; debajo, el +IVA/−IVA con el importe */
+@media (max-width: 720px) {
+  .a-calc-line {
+    grid-template-columns: auto minmax(0, 1fr) 2rem;
+    grid-template-areas:
+      'concepto concepto borrar'
+      'modo importe importe'
+      'res res res';
+  }
+  .a-calc-res { justify-content: flex-start; gap: 0.75rem; }
+}
+@media (max-width: 560px) {
+  .a-calc-row > .a-label { flex: 1 0 100%; }
+}

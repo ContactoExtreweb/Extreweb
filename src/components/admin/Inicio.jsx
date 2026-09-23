@@ -12,6 +12,7 @@ const ICO = {
   mail: 'M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM22 6l-10 7L2 6',
   plus: 'M12 5v14M5 12h14',
   cal: 'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z',
+  calc: 'M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 19h4M16 19h.01',
 }
 
 // "2 mensajes sin leer, 3 proyectos activos y 1.200 € por cobrar."
@@ -118,6 +119,9 @@ export default function Inicio({ go, email }) {
             </button>
             <button className="a-hero-btn" onClick={() => go('calendario', { nueva: true })}>
               <Icon d={ICO.cal} s={18} /> Nueva reunión
+            </button>
+            <button className="a-hero-btn" onClick={() => go('calculadora')}>
+              <Icon d={ICO.calc} s={18} /> Calculadora IVA
             </button>
           </div>
         </div>

@@ -8,12 +8,14 @@ import ClienteDetalle from './ClienteDetalle.jsx'
 import ProyectoDetalle from './ProyectoDetalle.jsx'
 import Calendario from './Calendario.jsx'
 import Mensajes from './Mensajes.jsx'
+import Calculadora from './Calculadora.jsx'
 
 const NAV = [
   { key: 'inicio', label: 'Inicio' },
   { key: 'mensajes', label: 'Mensajes' },
   { key: 'clientes', label: 'Clientes' },
   { key: 'calendario', label: 'Calendario' },
+  { key: 'calculadora', label: 'Calculadora' },
 ]
 
 export default function AdminApp() {
@@ -149,6 +151,7 @@ export default function AdminApp() {
         {nav.view === 'cliente' && <ClienteDetalle clienteId={nav.clienteId} go={go} />}
         {nav.view === 'proyecto' && <ProyectoDetalle proyectoId={nav.proyectoId} clienteId={nav.clienteId} go={go} />}
         {nav.view === 'calendario' && <Calendario go={go} nueva={nav.nueva} />}
+        {nav.view === 'calculadora' && <Calculadora />}
       </main>
     </div>
   )

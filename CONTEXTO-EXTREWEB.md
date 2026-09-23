@@ -5,7 +5,7 @@
 > cometidos y por qué, y lo que queda pendiente.
 > **Léelo entero antes de proponer cambios.**
 >
-> Última actualización: **22/09/2026**.
+> Última actualización: **23/09/2026**.
 
 ---
 
@@ -480,6 +480,7 @@ src/components/admin/
   ├── ClienteDetalle.jsx            ficha, edición, borrado + sus proyectos
   ├── ProyectoDetalle.jsx           presupuestos/partidas + notas + reuniones del proyecto
   ├── Calendario.jsx                rejilla mensual + lista + modal (prop `nueva` abre el modal)
+  ├── Calculadora.jsx               calculadora de IVA/IRPF (no toca Supabase; localStorage)
   ├── CalendarioSync.jsx            ventana "iPhone": enlace webcal + regenerar token
   └── helpers.js                    euro(), fechaCorta(), fechaHora(), soloHora(), rangoReunion(),
                                     paraInputDatetime(), cuandoReunion() ("Hoy · 17:00"), hace()
@@ -488,13 +489,13 @@ src/components/admin/
 ### Layout — HEADER superior
 La **primera versión tenía barra lateral y se descartó**. Header horizontal sticky:
 logo (la "E" en squircle) + "extreweb" + badge "panel" · nav (**Inicio · Mensajes · Clientes ·
-Calendario**, con contador de no leídos) · tema + cerrar sesión + hamburguesa (≤720px, con
+Calendario · Calculadora**, con contador de no leídos) · tema + cerrar sesión + hamburguesa (≤720px, con
 puntito azul si hay mensajes sin leer).
 
 ### Pantallas
 - **Inicio:** saludo según la hora, resumen en una frase (mensajes sin leer, proyectos activos,
-  por cobrar), botones de acción (Ver mensajes / Nuevo cliente / Nueva reunión — abren directamente
-  el formulario). Franja de stats. Rejilla: **Mensajes** (3 últimos) · **Próximas reuniones**
+  por cobrar), botones de acción (Ver mensajes / Nuevo cliente / Nueva reunión / Calculadora IVA
+  — abren directamente el formulario o la pantalla). Franja de stats. Rejilla: **Mensajes** (3 últimos) · **Próximas reuniones**
   ("Hoy"/"Mañana") · **Notas rápidas** · **Cobros pendientes**.
 - **Mensajes:** lista (no leídos en negrita, filtro Todos/Sin leer). Al abrir uno se marca leído.
   Acciones: Responder (mailto), Crear cliente (con el mensaje en notas), Marcar no leído, Eliminar.
@@ -505,6 +506,20 @@ puntito azul si hay mensajes sin leer).
   Lista; en móvil la fecha va bajo el título), modal crear/editar. Botón **iPhone** →
   suscripción `webcal://extreweb.es/calendario.ics?t=…` (solo lectura, aviso 30 min antes,
   el iPhone refresca cada ~1 h). **Importar desde iCloud se descartó.**
+- **Calculadora (23/09):** varias líneas (concepto opcional + importe) para añadir o quitar el IVA.
+  **Cada línea guarda su propio +IVA / −IVA**, así se mezclan ventas y compras sin que unas cambien
+  a las otras. El interruptor de arriba solo decide el modo de las líneas NUEVAS (y el de las que
+  aún están vacías). Tipos 21/10/4/0 % y uno a mano; casilla opcional de retención de IRPF (15/7 %), que se
+  resta de la base en el total. Acepta "1.234,56" y "1234.56". Intro salta a la línea siguiente.
+  "Copiar resumen" lo deja en el portapapeles en texto.
+  - **Totales:** un bloque si todas las líneas son del mismo tipo; si se mezclan, dos bloques
+    (Ventas · IVA añadido / Compras · IVA ya incluido) y la diferencia de IVA (repercutido −
+    soportado), con el aviso de que es orientativo y no el modelo 303.
+  - **No usa Supabase:** los ajustes y las líneas se guardan en `localStorage` (`ew-calc-iva`),
+    así que son de ese navegador y no se comparten entre Pedro y tú.
+  - Cada línea se redondea a céntimos y luego se suman, para que el total cuadre con lo que se ve.
+  - Las funciones `aNumero()` y `calcular()` se exportan por si algún día el presupuesto
+    (partidas) necesita los mismos cálculos.
 
 ---
 
