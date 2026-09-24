@@ -1075,3 +1075,113 @@ button.a-stat { cursor: pointer; }
 @media (max-width: 560px) {
   .a-calc-row > .a-label { flex: 1 0 100%; }
 }
+
+/* ================= VISITAS (analítica propia) ================= */
+.a-vis-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+/* Barras por día: una sola serie, en el azul del panel, apoyadas en la línea base */
+.a-vis-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 170px;
+  padding-top: 1.4rem; /* sitio para el número del día más alto */
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  overflow-y: visible;
+}
+.a-vis-col {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 5px;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+.a-vis-bar {
+  width: 100%;
+  min-height: 2px;
+  background: var(--accent);
+  border-radius: 4px 4px 0 0; /* solo el extremo con datos */
+  transition: filter var(--dur-fast) ease;
+}
+.a-vis-col:hover .a-vis-bar,
+.a-vis-col:focus-within .a-vis-bar { filter: brightness(1.25); }
+.a-vis-bar:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+
+/* El número solo en el día más alto: uno en cada barra sería ruido */
+.a-vis-max {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.a-vis-tip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  z-index: 5;
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+.a-vis-col:hover .a-vis-tip,
+.a-vis-col:focus-within .a-vis-tip { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.a-vis-eje {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* Ranking: el fondo de cada fila es su proporción sobre el total */
+.a-vis-lista { display: flex; flex-direction: column; gap: 0.35rem; }
+.a-vis-fila {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+}
+.a-vis-fila::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--p);
+  min-width: 3px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.a-vis-fila-txt {
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.a-vis-fila-num { position: relative; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Con seis apartados, el menú necesita un poco menos de aire */
+@media (max-width: 1080px) {
+  .a-topnav-link { padding: 0.5rem 0.7rem; font-size: 0.9rem; }
+}

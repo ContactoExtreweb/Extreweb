@@ -5,7 +5,7 @@
 > cometidos y por qué, y lo que queda pendiente.
 > **Léelo entero antes de proponer cambios.**
 >
-> Última actualización: **23/09/2026**.
+> Última actualización: **24/09/2026**.
 
 ---
 
@@ -126,6 +126,7 @@ Navbar/Footer, panel `/admin` y legales. Conviene centralizarlo antes (ver §14)
 |---|---|
 | `submission-created.mjs` | Evento de Netlify Forms → inserta en `mensajes` (idempotente por `netlify_id`). No se puede llamar desde fuera (Netlify firma el evento). |
 | `calendario.mjs` | `GET /calendario.ics?t=TOKEN` → reuniones en formato iCalendar para suscribirse desde el iPhone. Token en la tabla `ajustes`. |
+| `visita.mjs` | `POST /api/visita` → analítica propia: una fila en `visitas` por página vista. Filtra bots, otros orígenes y `/admin`. **No guarda la IP.** |
 
 ### ⚠️ Gotcha crítico: variables de entorno
 Las `PUBLIC_*` de Astro **se incrustan en el momento del build**. Si cambias una variable en
@@ -459,8 +460,9 @@ partidas       id, presupuesto_id→presupuestos, concepto, importe numeric(10,2
 mensajes       id, netlify_id (unique), nombre, email, servicio, mensaje, leido bool, created_at
 notas_rapidas  id, texto, hecha bool, created_at
 ajustes        clave (pk), valor, updated_at        ← 'calendario_token'
+visitas        id, creado, ruta, referente, pais, ciudad, movil bool, visitante (huella del día)
 ```
-Las tres últimas: SQL en `supabase/*.sql` (ya ejecutadas). Todas con la misma RLS.
+Las cuatro últimas: SQL en `supabase/*.sql`. Todas con la misma RLS.
 
 > El dinero funciona así: proyecto → presupuesto(s) → **partidas**. Cada partida se marca
 > pagada/pendiente. Total, cobrado y pendiente se **calculan sumando partidas**, no se guardan.
@@ -481,6 +483,7 @@ src/components/admin/
   ├── ProyectoDetalle.jsx           presupuestos/partidas + notas + reuniones del proyecto
   ├── Calendario.jsx                rejilla mensual + lista + modal (prop `nueva` abre el modal)
   ├── Calculadora.jsx               calculadora de IVA/IRPF (no toca Supabase; localStorage)
+  ├── Visitas.jsx                   analítica propia: resumen, barras por día y rankings
   ├── CalendarioSync.jsx            ventana "iPhone": enlace webcal + regenerar token
   └── helpers.js                    euro(), fechaCorta(), fechaHora(), soloHora(), rangoReunion(),
                                     paraInputDatetime(), cuandoReunion() ("Hoy · 17:00"), hace()
@@ -489,7 +492,7 @@ src/components/admin/
 ### Layout — HEADER superior
 La **primera versión tenía barra lateral y se descartó**. Header horizontal sticky:
 logo (la "E" en squircle) + "extreweb" + badge "panel" · nav (**Inicio · Mensajes · Clientes ·
-Calendario · Calculadora**, con contador de no leídos) · tema + cerrar sesión + hamburguesa (≤720px, con
+Calendario · Calculadora · Visitas**, con contador de no leídos) · tema + cerrar sesión + hamburguesa (≤720px, con
 puntito azul si hay mensajes sin leer).
 
 ### Pantallas
@@ -520,6 +523,22 @@ puntito azul si hay mensajes sin leer).
   - Cada línea se redondea a céntimos y luego se suman, para que el total cuadre con lo que se ve.
   - Las funciones `aNumero()` y `calcular()` se exportan por si algún día el presupuesto
     (partidas) necesita los mismos cálculos.
+- **Visitas (24/09):** analítica propia, sin cookies ni terceros. Periodo de 7 / 30 / 90 días;
+  páginas vistas, visitantes, media al día y % de móvil; barras por día (una sola serie, en el
+  azul del panel, con el número solo en el día más alto) y rankings de páginas, origen y ciudad.
+  - **Cómo entran los datos:** `BaseLayout.astro` lleva un script mínimo que, **solo en
+    extreweb.es**, manda con `navigator.sendBeacon` la ruta, el dominio de origen y el ancho de
+    pantalla a `/api/visita` (`netlify/functions/visita.mjs`), que escribe en `visitas` con la
+    service key. En local y en las previsualizaciones no cuenta nada.
+  - **Privacidad (es lo que permite no poner banner):** no se guarda la IP; `visitante` es
+    SHA-256(sal del día + IP + navegador) y la sal cambia cada día, así que no se puede seguir a
+    nadie. No se escribe nada en el dispositivo. Del referente solo el dominio. Está explicado en
+    la política de cookies (punto 3) y en la de privacidad.
+  - **Variables en Netlify:** usa las que ya hay; `ANALITICA_SAL` es opcional (si no está, la sal
+    sale de la service key).
+  - Las cifras son algo más altas que en Google Analytics: al salir de nuestro dominio, los
+    bloqueadores no la capan. Para las búsquedas de Google sigue haciendo falta Search Console.
+  - Limpieza: borrar lo de más de 12 meses (sentencia comentada al final de `supabase/visitas.sql`).
 
 ---
 
