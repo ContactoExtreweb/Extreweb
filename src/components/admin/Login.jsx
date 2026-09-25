@@ -77,6 +77,10 @@ export default function Login() {
             {loading ? 'Entrando…' : 'Entrar'}
           </button>
         </form>
+
+        <a className="a-login-volver" href="/">
+          ‹ Volver a la web
+        </a>
       </div>
     </div>
   )

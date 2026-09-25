@@ -11,11 +11,14 @@ interface Props {
     title?: string
     description?: string
     canonical?: string
+    /** Página de error: no se indexa y el contador la registra como enlace roto */
+    es404?: boolean
 }
 const {
     title = 'Diseño y desarrollo web en Extremadura — extreweb',
     description = SITE.description,
     canonical,
+    es404 = false,
 } = Astro.props
 
 const canonicalURL =
@@ -71,11 +74,12 @@ const ogImage = new URL(SITE.ogImage, SITE.url).href
             content='#000000'
             media='(prefers-color-scheme: dark)'
         />
-        <meta name='robots' content='index, follow' />
+        <meta name='robots' content={es404 ? 'noindex, follow' : 'index, follow'} />
+        {es404 && <meta name='ew-404' content='1' />}
 
         <title>{title}</title>
         <meta name='description' content={description} />
-        <link rel='canonical' href={canonicalURL} />
+        {!es404 && <link rel='canonical' href={canonicalURL} />}
 
         <meta property='og:type' content='website' />
         <meta property='og:title' content={title} />
@@ -97,35 +101,9 @@ const ogImage = new URL(SITE.ogImage, SITE.url).href
             import '@/lib/motion.js'
         </script>
 
-        <!-- Analítica propia (netlify/functions/visita.mjs → tabla `visitas` → /admin).
-             Sin cookies, sin terceros y sin escribir nada en el dispositivo. -->
-        <script is:inline define:vars={{ hostAnalitica: new URL(SITE.url).host }}>
-            ;(function () {
-                try {
-                    // Solo en producción: ni local, ni previsualizaciones de Netlify
-                    if (location.host !== hostAnalitica) return
-                    if (location.pathname.indexOf('/admin') === 0) return
-                    if (navigator.webdriver) return
-
-                    var enviar = function () {
-                        var cuerpo = JSON.stringify({
-                            ruta: location.pathname,
-                            ref: document.referrer || '',
-                            ancho: window.innerWidth,
-                        })
-                        navigator.sendBeacon(
-                            '/api/visita',
-                            new Blob([cuerpo], { type: 'application/json' }),
-                        )
-                    }
-
-                    // Si el navegador la ha precargado en segundo plano,
-                    // se cuenta cuando la persona la mira de verdad
-                    if (document.visibilityState === 'hidden')
-                        addEventListener('visibilitychange', enviar, { once: true })
-                    else enviar()
-                } catch (e) {}
-            })()
-        </script>
+        <!-- Analítica propia: public/v.js → netlify/functions/visita.mjs → tablas
+             visitas y velocidad → /admin. Sin cookies ni terceros. Es el mismo
+             script que se pega en las webs de clientes. Solo cuenta en producción. -->
+        <script is:inline defer src='/v.js'></script>
     </body>
 </html>

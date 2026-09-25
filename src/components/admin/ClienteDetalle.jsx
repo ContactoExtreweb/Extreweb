@@ -1,6 +1,8 @@
 // src/components/admin/ClienteDetalle.jsx
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/adminClient.js'
+import Renovaciones from './Renovaciones.jsx'
+import { ResenaCliente } from './Resenas.jsx'
 
 export default function ClienteDetalle({ clienteId, go }) {
   const [cliente, setCliente] = useState(null)
@@ -19,7 +21,7 @@ export default function ClienteDetalle({ clienteId, go }) {
     setLoading(true)
     const [{ data: c }, { data: p }] = await Promise.all([
       supabase.from('clientes').select('*').eq('id', clienteId).single(),
-      supabase.from('proyectos').select('id, titulo, estado, descripcion').eq('cliente_id', clienteId).order('created_at', { ascending: false }),
+      supabase.from('proyectos').select('*').eq('cliente_id', clienteId).order('created_at', { ascending: false }),
     ])
     setCliente(c)
     setForm(c || {})
@@ -127,6 +129,8 @@ export default function ClienteDetalle({ clienteId, go }) {
         </div>
       )}
 
+      <ResenaCliente cliente={cliente} onCambio={(nuevo) => setCliente((c) => ({ ...c, ...nuevo }))} />
+
       <div className="a-card">
         <div className="a-card-head">
           <h2 className="a-h2">Proyectos</h2>
@@ -157,7 +161,7 @@ export default function ClienteDetalle({ clienteId, go }) {
               <li key={p.id} className="a-row a-row-click" onClick={() => go('proyecto', { proyectoId: p.id, clienteId })}>
                 <div>
                   <strong>{p.titulo}</strong>
-                  <span className="a-muted a-small">{p.descripcion || '—'}</span>
+                  <span className="a-muted a-small">{p.dominio || p.descripcion || '—'}</span>
                 </div>
                 <span className={`a-badge a-estado-${p.estado}`}>{p.estado}</span>
               </li>
@@ -165,6 +169,8 @@ export default function ClienteDetalle({ clienteId, go }) {
           </ul>
         )}
       </div>
+
+      <Renovaciones clienteId={clienteId} />
     </div>
   )
 }

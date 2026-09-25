@@ -1,0 +1,136 @@
+---
+// src/pages/404.astro — Netlify la sirve sola cuando una dirección no existe.
+// `es404` hace que no se indexe y que el contador la registre como enlace
+// roto (panel → Visitas → Páginas → Enlaces rotos), con la web desde la que llegó.
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Navbar from '@/components/Navbar.astro'
+import Footer from '@/components/Footer.astro'
+
+const atajos = [
+    { href: '/servicios/', titulo: 'Servicios', texto: 'Diseño web, SEO, redes y soporte.' },
+    { href: '/proyectos/', titulo: 'Proyectos', texto: 'Webs reales que hemos hecho.' },
+    { href: '/contacto/', titulo: 'Contacto', texto: 'Cuéntanos qué necesitas.' },
+]
+---
+
+<BaseLayout
+    title='Página no encontrada — extreweb'
+    description='Esta página no existe o ha cambiado de dirección.'
+    es404
+>
+    <Navbar />
+    <main class='e404'>
+        <div class='container e404-inner'>
+            <p class='e404-code fx-in-soft' aria-hidden='true'>404</p>
+            <h1 class='fx-in'>Esta página no existe.</h1>
+            <p class='e404-sub fx-in-soft'>
+                Puede que el enlace esté mal escrito o que la página haya cambiado de sitio.
+                Desde aquí puedes seguir:
+            </p>
+
+            <div class='e404-acciones fx-in-soft'>
+                <a href='/' class='btn btn-accent'>Ir al inicio</a>
+                <a href='/contacto/' class='e404-link'>Escríbenos&nbsp;›</a>
+            </div>
+
+            <ul class='e404-atajos'>
+                {
+                    atajos.map((a, i) => (
+                        <li class='fx-up' style={`--fx-delay: ${i * 90}ms`}>
+                            <a href={a.href}>
+                                <strong>{a.titulo}</strong>
+                                <span>{a.texto}</span>
+                            </a>
+                        </li>
+                    ))
+                }
+            </ul>
+        </div>
+    </main>
+    <Footer />
+</BaseLayout>
+
+<style>
+    .e404 {
+        min-height: 80svh;
+        display: flex;
+        align-items: center;
+        padding: clamp(120px, 18vh, 180px) 0 clamp(60px, 10vh, 100px);
+        background:
+            radial-gradient(closest-side, color-mix(in srgb, var(--accent) 12%, transparent), transparent)
+                50% 0 / 900px 600px no-repeat,
+            var(--bg);
+    }
+    .e404-inner {
+        max-width: 760px;
+        text-align: center;
+    }
+    .e404-code {
+        margin: 0 auto 0.6rem;
+        font-size: clamp(4.5rem, 16vw, 8rem);
+        font-weight: 700;
+        line-height: 1;
+        letter-spacing: -0.05em;
+        background: linear-gradient(120deg, var(--accent), #7c5cff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    h1 {
+        font-size: clamp(2rem, 5vw, 3rem);
+        margin-bottom: 1rem;
+    }
+    .e404-sub {
+        color: var(--muted);
+        font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+        margin: 0 auto 2rem;
+        max-width: 46ch;
+    }
+    .e404-acciones {
+        display: flex;
+        gap: 1.3rem;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+    }
+    .e404-link {
+        color: var(--accent);
+        font-weight: 500;
+    }
+    .e404-atajos {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 0.9rem;
+        text-align: left;
+    }
+    .e404-atajos a {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        height: 100%;
+        padding: 1.1rem 1.2rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--surface);
+        transition:
+            border-color var(--dur-mid) var(--ease-out-quart),
+            translate var(--dur-mid) var(--ease-out-quart);
+    }
+    .e404-atajos strong {
+        color: var(--fg);
+    }
+    .e404-atajos span {
+        color: var(--muted);
+        font-size: 0.92rem;
+    }
+    @media (hover: hover) and (pointer: fine) {
+        .e404-link:hover {
+            text-decoration: underline;
+        }
+        .e404-atajos a:hover {
+            border-color: var(--accent);
+            translate: 0 -3px;
+        }
+    }
+</style>

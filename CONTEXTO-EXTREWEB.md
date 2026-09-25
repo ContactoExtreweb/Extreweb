@@ -5,7 +5,7 @@
 > cometidos y por qué, y lo que queda pendiente.
 > **Léelo entero antes de proponer cambios.**
 >
-> Última actualización: **24/09/2026**.
+> Última actualización: **26/09/2026**.
 
 ---
 
@@ -126,7 +126,7 @@ Navbar/Footer, panel `/admin` y legales. Conviene centralizarlo antes (ver §14)
 |---|---|
 | `submission-created.mjs` | Evento de Netlify Forms → inserta en `mensajes` (idempotente por `netlify_id`). No se puede llamar desde fuera (Netlify firma el evento). |
 | `calendario.mjs` | `GET /calendario.ics?t=TOKEN` → reuniones en formato iCalendar para suscribirse desde el iPhone. Token en la tabla `ajustes`. |
-| `visita.mjs` | `POST /api/visita` → analítica propia: una fila en `visitas` por página vista. Filtra bots, otros orígenes y `/admin`. **No guarda la IP.** |
+| `visita.mjs` | `POST /api/visita` → analítica propia. Lo llama `public/v.js` desde extreweb.es **y desde las webs de clientes dadas de alta en la tabla `sitios`**. Guarda páginas vistas en `visitas` y la velocidad real en `velocidad`. Filtra bots y `/admin`; la web se saca de la cabecera Origin, nunca del cuerpo. **No guarda la IP.** |
 
 ### ⚠️ Gotcha crítico: variables de entorno
 Las `PUBLIC_*` de Astro **se incrustan en el momento del build**. Si cambias una variable en
@@ -449,20 +449,39 @@ La seguridad la da **Supabase Auth + RLS**, no el hecho de ocultar la página.
 
 **Esquema:**
 ```
-clientes       id, nombre, empresa, email, telefono, notas, created_at
-proyectos      id, cliente_id→clientes, titulo, descripcion, estado('activo'|'pausado'|'terminado'), created_at
+clientes       id, nombre, empresa, email, telefono, notas, created_at,
+               resena_pedida_at, resena_canal, resena_recordada_at, resena_recibida_at  ← reseñas (26/09)
+proyectos      id, cliente_id→clientes, titulo, descripcion, estado('activo'|'pausado'|'terminado'),
+               web_url, dominio, registrador, dominio_caduca, alojamiento, repositorio,
+               notas_tecnicas, created_at                       ← ficha técnica (25/09)
 notas          id, proyecto_id→proyectos, contenido, created_at
 reuniones      id, proyecto_id→proyectos(null), cliente_id→clientes(null), titulo, descripcion,
                fecha (inicio), fecha_fin, created_at
-presupuestos   id, proyecto_id→proyectos, titulo, created_at
+presupuestos   id, proyecto_id→proyectos, titulo, estado('borrador'|'enviado'|'aceptado'|'rechazado'),
+               enviado_at, iva (21), con_iva bool (¿las partidas ya llevan IVA?), created_at
 partidas       id, presupuesto_id→presupuestos, concepto, importe numeric(10,2),
-               pagado bool, fecha_pago date, created_at
-mensajes       id, netlify_id (unique), nombre, email, servicio, mensaje, leido bool, created_at
-notas_rapidas  id, texto, hecha bool, created_at
-ajustes        clave (pk), valor, updated_at        ← 'calendario_token'
-visitas        id, creado, ruta, referente, pais, ciudad, movil bool, visitante (huella del día)
+               pagado bool, fecha_pago date, vence date (cuándo cobrarla), created_at
+mensajes       id, netlify_id (unique), nombre, email, servicio, mensaje, leido bool,
+               pagina, origen, respondido_at, created_at
+notas_rapidas  id, texto, hecha bool, fecha date (opcional), created_at
+ajustes        clave (pk), valor, updated_at   ← 'calendario_token', 'empresa_nombre', 'empresa_nif'…,
+                                                  'resenas_url', 'resenas_mensaje', 'resenas_recordatorio'
+visitas        id, creado, sitio, ruta, referente, pais, ciudad, movil bool, visitante (huella
+               del día), campana, fuente, es_404
+velocidad      id, creado, sitio, ruta, movil, lcp, carga, ttfb (ms)
+sitios         dominio (pk), cliente_id→clientes, nombre, activo   ← webs de clientes medidas
+enlaces        id, nombre, url, campana, fuente, created_at          ← enlaces de campaña
+plantillas     id, titulo, asunto, cuerpo ({nombre}), created_at
+renovaciones   id, cliente_id→clientes, concepto, tipo, importe, periodo('mensual'|'trimestral'|
+               'anual'), proxima date, notas, activa, created_at
+checklist      (proyecto_id, clave) pk, hecho_at        ← la lista de puntos está en FichaWeb.jsx
+horas          id, proyecto_id→proyectos, fecha, minutos, nota, created_at
+storage        bucket privado `archivos`, ruta proyectos/<id>/<marca de tiempo>-<nombre>
 ```
-Las cuatro últimas: SQL en `supabase/*.sql`. Todas con la misma RLS.
+SQL en `supabase/*.sql`: `mensajes`, `notas_rapidas`, `ajustes`, `visitas` y
+**`panel-ampliacion.sql`** (todo lo del 25/09; se ejecuta DESPUÉS de `visitas.sql` y se puede
+repetir sin romper nada) y **`resenas.sql`** (26/09: columnas de reseñas en `clientes`). Todas las tablas con la misma RLS. Las tablas que apuntan a `clientes` o
+`proyectos` se crean con el mismo tipo de `id` que tengan (número o uuid): lo detecta el SQL.
 
 > El dinero funciona así: proyecto → presupuesto(s) → **partidas**. Cada partida se marca
 > pagada/pendiente. Total, cobrado y pendiente se **calculan sumando partidas**, no se guardan.
@@ -473,38 +492,100 @@ src/pages/admin.astro               shell mínimo, noindex, script de tema
 src/styles/admin.css                todos los estilos del panel
 src/lib/adminClient.js              cliente de Supabase
 src/components/admin/
-  ├── AdminApp.jsx                  raíz: sesión, HEADER, routing por estado, contador de no leídos
-  ├── Login.jsx                     email + contraseña
-  ├── Inicio.jsx                    hero + resumen + stats + mensajes + reuniones + notas + cobros
-  ├── Mensajes.jsx                  mensajes del formulario (leer, responder, crear cliente, borrar)
-  ├── NotasRapidas.jsx              post-its del Inicio
+  ├── AdminApp.jsx                  raíz: sesión, HEADER, routing por estado, contador de no leídos,
+  │                                 lupa y Ctrl+K (buscador), engranaje (Ajustes)
+  ├── Login.jsx                     email + contraseña + «Volver a la web»
+  ├── rutas.js                      la pantalla en la URL: leerHash() / hashDe()
+  ├── Inicio.jsx                    hero + resumen + stats (con visitas de 7 días) + Pendientes +
+  │                                 mensajes + reuniones + notas + cobros
+  ├── Pendientes.jsx                lo que pide atención: cobros vencidos, renovaciones, dominios,
+  │                                 mensajes olvidados, presupuestos sin respuesta, notas del día
+  ├── Mensajes.jsx                  mensajes del formulario (leer, responder, plantillas, crear
+  │                                 cliente, dar por respondido, borrar) + de dónde llegó
+  ├── NotasRapidas.jsx              post-its del Inicio, con fecha opcional
   ├── Clientes.jsx                  listado + alta (prop `nuevo` abre el formulario)
-  ├── ClienteDetalle.jsx            ficha, edición, borrado + sus proyectos
-  ├── ProyectoDetalle.jsx           presupuestos/partidas + notas + reuniones del proyecto
+  ├── ClienteDetalle.jsx            ficha, edición, borrado + sus proyectos + Renovaciones
+  ├── Renovaciones.jsx              cuotas que se repiten (dominio, alojamiento, mantenimiento)
+  ├── Resenas.jsx                   pedir reseña de extreweb en Google: <PedirResenas> (en Clientes)
+  │                                 y <ResenaCliente> (en la ficha); textos y enlace en Ajustes
+  ├── ProyectoDetalle.jsx           pestañas: Presupuesto · Web · Horas · Archivos · Notas y reuniones
+  ├── PresupuestoPDF.jsx            el presupuesto para imprimir / guardar en PDF (+ totales con IVA)
+  ├── FichaWeb.jsx                  ficha técnica de la web + checklist de lanzamiento
+  ├── Horas.jsx                     horas por proyecto y "sale la hora a…"
+  ├── Archivos.jsx                  subir / ver / descargar / borrar archivos (Supabase Storage)
   ├── Calendario.jsx                rejilla mensual + lista + modal (prop `nueva` abre el modal)
   ├── Calculadora.jsx               calculadora de IVA/IRPF (no toca Supabase; localStorage)
-  ├── Visitas.jsx                   analítica propia: resumen, barras por día y rankings
+  ├── Visitas.jsx                   analítica: selector de web, pestañas Resumen · Páginas · Origen ·
+  │                                 Velocidad · Enlaces, e informe imprimible
+  ├── Ajustes.jsx                   datos de la empresa, plantillas, webs medidas, calendario iPhone
+  ├── Buscador.jsx                  búsqueda en clientes, proyectos, mensajes, notas y reuniones
+  ├── Imprimible.jsx                hoja para imprimir/PDF (portal al <body>; ver §15)
   ├── CalendarioSync.jsx            ventana "iPhone": enlace webcal + regenerar token
   └── helpers.js                    euro(), fechaCorta(), fechaHora(), soloHora(), rangoReunion(),
-                                    paraInputDatetime(), cuandoReunion() ("Hoy · 17:00"), hace()
+                                    paraInputDatetime(), cuandoReunion() ("Hoy · 17:00"), hace(),
+                                    diaISO(), diasHasta(), plazo() ("en 5 días"), sumarPeriodo(),
+                                    duracion() ("3 h 15 min"), segundos(), mediana()
 ```
+
+### Navegación: la pantalla va en la URL (26/09)
+El panel es una sola página, pero la pantalla se apunta en el *hash* de la dirección:
+`#/` Inicio · `#/mensajes/61` · `#/clientes` · `#/cliente/5` · `#/proyecto/11/horas` ·
+`#/visitas/velocidad` · `#/calendario` · `#/calculadora` · `#/ajustes` (`rutas.js`).
+- **Refrescar** deja la misma pantalla (y la misma pestaña en proyecto y visitas).
+- **Atrás/adelante** del navegador recorren las pantallas del panel: `go()` hace
+  `history.pushState` y `AdminApp` escucha `popstate`. Las pestañas usan `replaceState`
+  (se guardan en la URL pero no llenan el historial).
+- Lo de un solo uso (abrir el formulario de nuevo cliente o nueva reunión) **no** va en la URL:
+  al volver atrás no se reabre.
+- El título de la pestaña del navegador cambia con la pantalla («Clientes · Panel extreweb»).
+- Sin Netlify ni redirecciones: el hash no llega al servidor, así que no hace falta configurar nada.
+- ⚠️ Los id que vienen de la URL son **texto** ("61"); los de la base, número. Al comparar,
+  `String(a) === String(b)` (pasó en Mensajes).
 
 ### Layout — HEADER superior
 La **primera versión tenía barra lateral y se descartó**. Header horizontal sticky:
 logo (la "E" en squircle) + "extreweb" + badge "panel" · nav (**Inicio · Mensajes · Clientes ·
-Calendario · Calculadora · Visitas**, con contador de no leídos) · tema + cerrar sesión + hamburguesa (≤720px, con
-puntito azul si hay mensajes sin leer).
+Calendario · Calculadora · Visitas**, con contador de no leídos) · lupa (buscador, también con
+**Ctrl+K**) + engranaje (Ajustes) + tema + cerrar sesión. **Por debajo de 1080 px** el menú pasa a la
+hamburguesa (con seis apartados ya no cabe); en el móvil el engranaje se esconde y "Ajustes" va en
+el menú. Puntito azul en la hamburguesa si hay mensajes sin leer.
 
 ### Pantallas
 - **Inicio:** saludo según la hora, resumen en una frase (mensajes sin leer, proyectos activos,
   por cobrar), botones de acción (Ver mensajes / Nuevo cliente / Nueva reunión / Calculadora IVA
-  — abren directamente el formulario o la pantalla). Franja de stats. Rejilla: **Mensajes** (3 últimos) · **Próximas reuniones**
-  ("Hoy"/"Mañana") · **Notas rápidas** · **Cobros pendientes**.
-- **Mensajes:** lista (no leídos en negrita, filtro Todos/Sin leer). Al abrir uno se marca leído.
-  Acciones: Responder (mailto), Crear cliente (con el mensaje en notas), Marcar no leído, Eliminar.
-- **Clientes / ClienteDetalle:** CRUD de clientes y sus proyectos.
-- **ProyectoDetalle:** resumen económico con barra de progreso, presupuestos con partidas tipo
-  checkbox, notas, reuniones con inicio+fin.
+  — abren directamente el formulario o la pantalla). Franja de stats (con **Visitas de 7 días**,
+  que lleva a Visitas). **Pendientes** (25/09): cobros vencidos, renovaciones en ≤30 días, dominios
+  que caducan en ≤30 días, mensajes sin leer de más de un día, leídos sin responder (3–30 días),
+  presupuestos "enviados" hace más de 7 días y notas rápidas de hoy o atrasadas; lo más urgente
+  arriba y cada fila lleva a su pantalla. Rejilla: **Mensajes** (3 últimos) · **Próximas reuniones**
+  ("Hoy"/"Mañana") · **Notas rápidas** (con fecha opcional) · **Cobros pendientes**.
+- **Mensajes:** lista (no leídos en negrita, filtro Todos / Sin leer / Sin responder). Al abrir
+  uno se marca leído y se ve **desde qué página y web llegó** (campos ocultos `pagina` y `origen`
+  del formulario). Acciones: Responder (mailto) o **Con plantilla…** (Ajustes → Plantillas;
+  `{nombre}` se cambia por el nombre), Crear cliente, **Dar por respondido**, Marcar no leído,
+  Eliminar. Responder marca `respondido_at` (así sale de Pendientes).
+- **Clientes / ClienteDetalle:** CRUD de clientes y sus proyectos. Debajo, **Renovaciones y
+  cuotas**: concepto, tipo, importe, cada cuánto y próxima fecha; "Renovada" pasa la fecha al
+  siguiente periodo; se pueden pausar. Muestra los ingresos recurrentes al año del cliente.
+- **ProyectoDetalle (en pestañas):**
+  - **Presupuesto:** resumen económico + presupuestos. Cada presupuesto tiene **estado**
+    (Borrador/Enviado/Aceptado/Rechazado; al pasar a Enviado se apunta la fecha), **IVA** (si los
+    importes ya lo llevan o no, y el tipo), fecha de cobro por partida (**Vencido** si pasa) y
+    **PDF**. Los totales de siempre (Total/Cobrado/Pendiente) suman los importes tal cual; debajo
+    va el desglose Base · IVA · Total con IVA.
+  - **Web:** ficha técnica (web, dominio, registrador, caducidad, alojamiento, repositorio, notas;
+    **sin contraseñas**) y **checklist de lanzamiento** (15 puntos, en `FichaWeb.jsx`).
+  - **Horas:** apuntar tiempo ("1:30", "1,5", "45 min") y "sale la hora a" = presupuestado sin IVA
+    (sin los rechazados) / horas.
+  - **Archivos:** arrastrar o elegir; enlaces de descarga que caducan en 1 minuto; hasta 50 MB por
+    archivo (límite del plan gratuito). Al borrar el proyecto se borran también sus archivos.
+  - **Notas y reuniones:** como antes.
+- **Presupuesto en PDF:** `Imprimible` + `PresupuestoPDF`: se abre la hoja y se imprime o se
+  guarda como PDF desde el navegador (sin librerías). Número P-AAAA-id, validez 30 días, datos de
+  Ajustes → Datos de la empresa (avisa si falta el nombre o el NIF). ⚠️ **Es un presupuesto, no una
+  factura:** las facturas tienen que salir de un programa que cumpla la normativa de sistemas de
+  facturación (Verifactu, RD 1007/2023): encadenado, QR, registro de eventos… Por eso no se hacen
+  aquí. Las fechas de obligación se han ido aplazando: confirmarlas con la gestoría.
 - **Calendario:** rejilla mensual (lunes→domingo, 42 celdas), Mes/Lista (en móvil arranca en
   Lista; en móvil la fecha va bajo el título), modal crear/editar. Botón **iPhone** →
   suscripción `webcal://extreweb.es/calendario.ics?t=…` (solo lectura, aviso 30 min antes,
@@ -523,13 +604,28 @@ puntito azul si hay mensajes sin leer).
   - Cada línea se redondea a céntimos y luego se suman, para que el total cuadre con lo que se ve.
   - Las funciones `aNumero()` y `calcular()` se exportan por si algún día el presupuesto
     (partidas) necesita los mismos cálculos.
-- **Visitas (24/09):** analítica propia, sin cookies ni terceros. Periodo de 7 / 30 / 90 días;
-  páginas vistas, visitantes, media al día y % de móvil; barras por día (una sola serie, en el
-  azul del panel, con el número solo en el día más alto) y rankings de páginas, origen y ciudad.
-  - **Cómo entran los datos:** `BaseLayout.astro` lleva un script mínimo que, **solo en
-    extreweb.es**, manda con `navigator.sendBeacon` la ruta, el dominio de origen y el ancho de
-    pantalla a `/api/visita` (`netlify/functions/visita.mjs`), que escribe en `visitas` con la
-    service key. En local y en las previsualizaciones no cuenta nada.
+- **Visitas (24/09, ampliada el 25/09):** analítica propia, sin cookies ni terceros. Selector de
+  **web** (la nuestra o la de un cliente de `sitios`), periodo de 7 / 30 / 90 días y pestañas:
+  - **Resumen:** páginas vistas (con **% frente al periodo anterior**), visitantes, media al día,
+    % de móvil, **mensajes del formulario y conversión** (solo en la nuestra) y barras por día.
+  - **Páginas:** más vistas, **páginas de entrada** (la primera de cada visitante) y **enlaces
+    rotos** (404 con la web desde la que llegaron).
+  - **Origen:** de dónde llegan, **campañas** (utm), ciudades y **qué páginas traen mensajes**.
+  - **Velocidad:** LCP real (mediana) en móvil y ordenador con semáforo de Google (≤2,5 s rápida,
+    ≤4 s mejorable, más lenta), % de visitas rápidas, respuesta del servidor y por página.
+  - **Enlaces:** generador de enlaces con utm_source/utm_medium/utm_campaign (Instagram, WhatsApp,
+    ficha de Google, email, QR…), guardados en `enlaces` con sus visitas del periodo.
+  - **Informe:** hoja imprimible (PDF) de la web elegida para mandarla al cliente.
+  - **Cómo entran los datos:** `public/v.js` (lo carga `BaseLayout.astro` y es el MISMO que se
+    pega en las webs de clientes) manda con `navigator.sendBeacon` —como **text/plain**, para que
+    funcione desde otros dominios sin petición CORS previa— la visita al abrir la página y la
+    velocidad al salir, a `/api/visita` (`netlify/functions/visita.mjs`). Solo cuenta en el
+    dominio publicado: nada en local ni en previsualizaciones. Las webs de clientes solo cuentan
+    si su dominio está activo en `sitios` (Ajustes → Webs medidas; la lista se guarda 5 min en
+    memoria en la función).
+  - **Webs de clientes:** en Ajustes → Webs medidas está el `<script>` que hay que pegar y el
+    párrafo para su política de cookies. Como el dato se trata por cuenta del cliente, el contrato
+    de mantenimiento debería incluir la cláusula de encargado del tratamiento.
   - **Privacidad (es lo que permite no poner banner):** no se guarda la IP; `visitante` es
     SHA-256(sal del día + IP + navegador) y la sal cambia cada día, así que no se puede seguir a
     nadie. No se escribe nada en el dispositivo. Del referente solo el dominio. Está explicado en
@@ -538,7 +634,27 @@ puntito azul si hay mensajes sin leer).
     sale de la service key).
   - Las cifras son algo más altas que en Google Analytics: al salir de nuestro dominio, los
     bloqueadores no la capan. Para las búsquedas de Google sigue haciendo falta Search Console.
-  - Limpieza: borrar lo de más de 12 meses (sentencia comentada al final de `supabase/visitas.sql`).
+  - Limpieza: borrar lo de más de 12 meses (sentencias al final de `supabase/panel-ampliacion.sql`).
+  - ⚠️ Supabase devuelve **como mucho 1000 filas por consulta** aunque se pida más: `Visitas.jsx`
+    las pide en tandas (`traerTodo`). Cualquier listado nuevo que pueda pasar de 1000, igual.
+- **Ajustes (engranaje):** datos de la empresa (para el PDF), **reseñas en Google** (enlace
+  «Pedir reseñas» de la ficha de Google y los dos textos), plantillas de respuesta, webs medidas y
+  el calendario del iPhone.
+- **Reseñas en Google (26/09):** pedir a los clientes que dejen reseña de **extreweb**.
+  - En **Clientes**, arriba, la tarjeta con los que tienen la **web publicada** (algún proyecto
+    `terminado` o con `web_url` en su ficha): «1 de 3 os han dejado reseña», y por cliente los
+    botones **WhatsApp** (wa.me con el número con prefijo 34 y el mensaje ya escrito) y **Email**.
+    «Ver todos» enseña también a los que aún no tienen web.
+  - En la **ficha del cliente**, la tarjeta «Reseña en Google» con el estado y «Ver el mensaje».
+  - Estados: Sin pedir → Pedida (a la semana, sale «Recordar» en Pendientes) → Recordada (ya no
+    se insiste más) → Recibida. **Recibida se marca a mano** («Ya la ha dejado ✓»): Google no avisa.
+  - Textos con `{nombre}` (nombre de pila) y `{enlace}` (si falta, se añade al final).
+  - **Normas de Google:** nada a cambio, pedírsela a todos por igual (no solo a los contentos) y
+    nunca escribirla por ellos. Por eso el texto de partida no dice «si estás contento».
+- **Buscador (lupa o Ctrl+K):** clientes, proyectos (también por dominio), mensajes, notas de
+  proyecto y reuniones. Flechas + Intro para abrir.
+- **Página 404** (`src/pages/404.astro`, web pública): no se indexa y el contador la marca como
+  enlace roto (`<meta name="ew-404">` vía la prop `es404` de `BaseLayout`).
 
 ---
 
@@ -617,7 +733,10 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
    genérico.
 
 ### Panel `/admin`
-9. Repaso responsive general (espaciados, tamaños táctiles, modales, partidas).
+0. **Ejecutar `supabase/panel-ampliacion.sql`** (25/09) y rellenar **Ajustes → Datos de la
+   empresa** (nombre fiscal y NIF, los mismos que faltan en el aviso legal).
+9. Repaso responsive general (espaciados, tamaños táctiles, modales). Las partidas y Pendientes ya
+   se revisaron en móvil el 25/09.
 10. **Limpiar CSS muerto en `admin.css`**. Verificado el 18/09 que **no se usan** en ningún `.jsx`:
     `.a-shell`, `.a-side*`, `.a-nav`, `.a-nav-btn`, `.a-nav-logout`, `.a-overlay`, `.a-menu-*`,
     `.a-stats`, `.a-stat`, `.a-stat-num`, `.a-partida`, `.a-partida-add`, `.a-quick*`,
@@ -635,6 +754,14 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
 - Enlaces desde las webs de clientes: GuadiCar enlaza a `www.extreweb.es` (mejor sin `www`);
   Fichar365 y CarMeet no enlazan; Taller Guzmán, al dominio viejo.
 - Mismo nombre, teléfono y web en directorios y redes. Instagram con la web en la bio.
+  ⚠️ La ficha pone «ExtreWeb» y la web «extreweb»: igualarlo (o esperar al rebranding).
+- **Categoría principal de la ficha de Google:** a 26/09 era «Empresa de software». Para salir en
+  "diseño web Villanueva/Don Benito" conviene **«Diseñador de sitios web»** como principal (y
+  «Empresa de software» o «Consultor de marketing» como secundarias). Es de lo que más pesa en
+  las búsquedas locales.
+- Reseñas: se desactivaron porque la ficha tenía la apertura en el futuro («Abre: jue 1 oct»);
+  se cambió la fecha el 26/09 y Google tarda uno o dos días en activarlas. Comprobar en una
+  ventana de incógnito (no con la cuenta que gestiona la ficha) antes de pedirlas.
 - Search Console: pedir indexación de las páginas nuevas y revisar *Rendimiento → Consultas*.
 - ⚠️ Con el rebranding/cambio de dominio: **redirecciones 301 de todas las URLs** para no perder
   lo ganado.
@@ -646,8 +773,11 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
 16. Imágenes responsive: **hecho en la portada** (versiones -800/-1200 con `srcset`). Faltan
     `/proyectos/` y las landings locales, que siguen sirviendo la de 1905 px.
 17. ~~Limpiar el código muerto de `data-reveal`~~ ✅ hecho (22/09): sustituido por `.fx-*`.
-18. Mejoras del panel ya comentadas: buscador de clientes, exportar presupuesto a PDF,
-    subir archivos a proyectos, alta de proyecto más completa.
+18. ~~Buscador, presupuesto en PDF, archivos por proyecto~~ ✅ hecho (25/09). Queda: alta de
+    proyecto más completa. **Facturas:** no en el panel (normativa Verifactu, ver §11); usar un
+    programa que la cumpla o el de la gestoría.
+19. **Search Console dentro del panel:** descartado por ahora (OAuth y credenciales de Google; es un
+    proyecto en sí). Se sigue mirando en Google.
 
 ---
 
@@ -671,6 +801,11 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
 | Scroll a tirones | `backdrop-filter`/`filter: blur` grandes, `box-shadow` o `height` animados | Ver §6 "Reglas de rendimiento" |
 | Titular que parpadea al cargar | `gsap.from()` en la cabecera: se ve, se oculta y vuelve a entrar | Cabeceras con `.fx-in` (CSS) |
 | El hover de una tarjeta ya no se mueve | GSAP deja `transform` en línea tras animar | Apariciones con `.fx-up` (usa `translate`) |
+| Listado que "se corta" en el panel | Supabase devuelve máx. 1000 filas por consulta | Pedir en tandas con `.range()` (`traerTodo` en Visitas.jsx) |
+| Huecos enormes en una pantalla del panel | `global.css` da a todo `<section>` el relleno de la web pública | En el panel usar `<div>` o anular el padding |
+| Botones del panel con letra más pequeña | El navegador da a `<button>` su propio tamaño de letra | Poner `font-size` en la clase del botón |
+| Un campo con `flex-basis: auto` se come la fila | `.a-input` trae `width: 100%` | Añadir `width: auto` o un `flex-basis` fijo |
+| Al imprimir salen páginas en blanco | La hoja estaba dentro del panel | `Imprimible` monta la hoja en el `<body>` (portal) y el CSS de impresión oculta lo demás |
 
 ---
 

@@ -37,6 +37,9 @@ export default async (req) => {
       email: recorta(d.email, 160).toLowerCase(),
       servicio: recorta(d.service, 40) || null,
       mensaje: recorta(d.message, 5000),
+      // Desde qué página de la web y desde qué web externa o campaña llegó
+      pagina: recorta(d.pagina, 300) || null,
+      origen: recorta(d.origen, 160) || null,
     },
     { onConflict: 'netlify_id', ignoreDuplicates: true },
   )

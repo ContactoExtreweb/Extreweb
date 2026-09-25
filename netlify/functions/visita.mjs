@@ -1,13 +1,17 @@
 // netlify/functions/visita.mjs
 //
-// Analítica propia, sin cookies ni terceros. La llama el trozo de script de
-// BaseLayout con navigator.sendBeacon en cada página vista (solo en el dominio
-// de producción) y guarda una fila en la tabla `visitas` de Supabase.
+// Analítica propia, sin cookies ni terceros. La llama public/v.js con
+// navigator.sendBeacon desde extreweb.es y desde las webs de clientes que
+// estén dadas de alta en la tabla `sitios` (panel → Ajustes → Webs medidas).
+//
+// Dos tipos de aviso:
+//   t: 'v' → una página vista      → tabla `visitas`
+//   t: 'r' → cuánto tardó en cargar → tabla `velocidad`
 //
 // Privacidad (esto es lo que la hace legal sin banner de cookies):
 //   · No se guarda la IP. Se usa solo para calcular una huella `visitante`
-//     = SHA-256(sal del día + IP + navegador). Al cambiar la sal cada día, la
-//     misma persona es otra huella mañana: no se puede seguir a nadie.
+//     = SHA-256(sal del día + web + IP + navegador). Al cambiar la sal cada día,
+//     la misma persona es otra huella mañana: no se puede seguir a nadie.
 //   · No se escribe nada en el dispositivo (ni cookies, ni localStorage).
 //   · Del referente se guarda solo el dominio, nunca la URL entera.
 //
@@ -20,19 +24,34 @@ import { createHash } from 'node:crypto'
 
 export const config = { path: '/api/visita' }
 
-const HOST = 'extreweb.es'
+const PROPIA = 'extreweb.es'
 const BOTS = /bot|crawl|spider|slurp|preview|headless|lighthouse|pingdom|monitor|curl|wget|python|axios|node-fetch|facebookexternalhit|whatsapp|telegram/i
 
 const recorta = (v, max) => String(v ?? '').trim().slice(0, max)
+const sinWww = (h) => String(h || '').toLowerCase().replace(/^www\./, '')
 
-// Solo el dominio, y nunca el nuestro (eso es navegación interna, no una visita nueva)
-function dominio(ref) {
+function hostDe(url) {
   try {
-    const h = new URL(ref).hostname.replace(/^www\./, '')
-    return h === HOST || h === 'localhost' ? null : recorta(h, 120)
+    return sinWww(new URL(url).hostname)
   } catch (e) {
-    return null
+    return ''
   }
+}
+
+// Webs de clientes dadas de alta. Se guardan unos minutos en memoria para no
+// consultar la base en cada visita (Netlify reutiliza la función mientras está "caliente")
+let sitiosCache = { hasta: 0, lista: new Set() }
+async function sitiosActivos(supabase) {
+  if (Date.now() < sitiosCache.hasta) return sitiosCache.lista
+  const { data, error } = await supabase.from('sitios').select('dominio').eq('activo', true)
+  if (error) console.error('[visitas] No se pudieron leer los sitios:', error.message)
+  sitiosCache = { hasta: Date.now() + 5 * 60 * 1000, lista: new Set((data || []).map((s) => sinWww(s.dominio))) }
+  return sitiosCache.lista
+}
+
+const numero = (v, max) => {
+  const n = Math.round(Number(v))
+  return Number.isFinite(n) && n > 0 && n < max ? n : null
 }
 
 export default async (req, context) => {
@@ -44,9 +63,9 @@ export default async (req, context) => {
   const ua = req.headers.get('user-agent') || ''
   if (!ua || BOTS.test(ua)) return ok()
 
-  // Solo desde nuestra web (el beacon manda siempre Origin)
-  const origen = req.headers.get('origin') || ''
-  if (origen && !origen.endsWith(HOST)) return ok()
+  // De qué web viene: por la cabecera Origin (o Referer si no la hay). Nunca del cuerpo
+  const sitio = hostDe(req.headers.get('origin')) || hostDe(req.headers.get('referer'))
+  if (!sitio) return ok()
 
   const url = process.env.PUBLIC_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_KEY
@@ -54,10 +73,14 @@ export default async (req, context) => {
     console.error('[visitas] Faltan PUBLIC_SUPABASE_URL o SUPABASE_SERVICE_KEY')
     return ok()
   }
+  const supabase = createClient(url, key, { auth: { persistSession: false } })
 
+  if (sitio !== PROPIA && !(await sitiosActivos(supabase)).has(sitio)) return ok()
+
+  // Llega como text/plain (ver v.js), así que se lee como texto
   let datos
   try {
-    datos = await req.json()
+    datos = JSON.parse(await req.text())
   } catch (e) {
     return ok()
   }
@@ -65,22 +88,47 @@ export default async (req, context) => {
   const ruta = recorta(datos?.ruta, 300)
   if (!ruta.startsWith('/') || ruta.startsWith('/admin')) return ok()
 
+  const ancho = Number(datos?.ancho)
+  const movil = ancho > 0 ? ancho < 768 : /Mobi|Android/i.test(ua)
+
+  // ---------- Velocidad ----------
+  if (datos?.t === 'r') {
+    const fila = {
+      sitio,
+      ruta,
+      movil,
+      lcp: numero(datos.lcp, 120000),
+      carga: numero(datos.carga, 120000),
+      ttfb: numero(datos.ttfb, 60000),
+    }
+    if (!fila.lcp && !fila.carga) return ok()
+    const { error } = await supabase.from('velocidad').insert(fila)
+    if (error) console.error('[visitas] Error guardando la velocidad:', error.message)
+    return ok()
+  }
+
+  // ---------- Página vista ----------
   // Huella anónima del día: misma persona = misma huella solo durante hoy
   const ip = req.headers.get('x-nf-client-connection-ip') || req.headers.get('x-forwarded-for') || ''
   const sal = process.env.ANALITICA_SAL || key
   const dia = new Date().toISOString().slice(0, 10)
-  const visitante = createHash('sha256').update(`${dia}|${sal}|${ip}|${ua}`).digest('hex').slice(0, 32)
+  const visitante = createHash('sha256').update(`${dia}|${sal}|${sitio}|${ip}|${ua}`).digest('hex').slice(0, 32)
 
+  // Referente: solo el dominio, y nunca la propia web (eso es navegación interna)
+  const ref = hostDe(datos?.ref)
   const geo = context?.geo || {}
-  const supabase = createClient(url, key, { auth: { persistSession: false } })
 
   const { error } = await supabase.from('visitas').insert({
+    sitio,
     ruta,
-    referente: dominio(datos?.ref),
+    referente: ref && ref !== sitio && ref !== 'localhost' ? recorta(ref, 120) : null,
     pais: recorta(geo.country?.code, 4) || null,
     ciudad: recorta(geo.city, 80) || null,
-    movil: Number(datos?.ancho) > 0 ? Number(datos.ancho) < 768 : /Mobi|Android/i.test(ua),
+    movil,
     visitante,
+    campana: recorta(datos?.c, 80).toLowerCase() || null,
+    fuente: recorta(datos?.f, 60).toLowerCase() || null,
+    es_404: datos?.e404 === true,
   })
 
   if (error) console.error('[visitas] Error guardando en Supabase:', error.message)

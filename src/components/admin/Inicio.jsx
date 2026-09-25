@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/adminClient.js'
 import { euro, cuandoReunion, hace } from './helpers.js'
 import NotasRapidas from './NotasRapidas.jsx'
+import Pendientes from './Pendientes.jsx'
 
 const Icon = ({ d, s = 20 }) => (
   <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={d} /></svg>
@@ -26,7 +27,7 @@ function resumen({ sinLeer, proyectos, pendiente }) {
 }
 
 export default function Inicio({ go, email }) {
-  const [stats, setStats] = useState({ clientes: 0, proyectos: 0, pendiente: 0, cobrado: 0, sinLeer: 0 })
+  const [stats, setStats] = useState({ clientes: 0, proyectos: 0, pendiente: 0, cobrado: 0, sinLeer: 0, visitas: null })
   const [reuniones, setReuniones] = useState([])
   const [deudores, setDeudores] = useState([])
   const [mensajes, setMensajes] = useState([])
@@ -39,7 +40,7 @@ export default function Inicio({ go, email }) {
 
   async function cargar() {
     setLoading(true)
-    const [cli, pro, reu, proyectosData, msgs, noLeidos] = await Promise.all([
+    const [cli, pro, reu, proyectosData, msgs, noLeidos, vis] = await Promise.all([
       supabase.from('clientes').select('id', { count: 'exact', head: true }),
       supabase.from('proyectos').select('id', { count: 'exact', head: true }).eq('estado', 'activo'),
       supabase
@@ -57,6 +58,13 @@ export default function Inicio({ go, email }) {
         .order('created_at', { ascending: false })
         .limit(3),
       supabase.from('mensajes').select('id', { count: 'exact', head: true }).eq('leido', false),
+      // Páginas vistas de nuestra web en los últimos 7 días
+      supabase
+        .from('visitas')
+        .select('id', { count: 'exact', head: true })
+        .eq('sitio', 'extreweb.es')
+        .eq('es_404', false)
+        .gte('creado', new Date(Date.now() - 7 * 864e5).toISOString()),
     ])
 
     if (cli.error || proyectosData.error) {
@@ -84,7 +92,14 @@ export default function Inicio({ go, email }) {
 
     deuda.sort((a, b) => b.pendiente - a.pendiente)
 
-    setStats({ clientes: cli.count || 0, proyectos: pro.count || 0, pendiente, cobrado, sinLeer: noLeidos.count || 0 })
+    setStats({
+      clientes: cli.count || 0,
+      proyectos: pro.count || 0,
+      pendiente,
+      cobrado,
+      sinLeer: noLeidos.count || 0,
+      visitas: vis.error ? null : vis.count || 0,
+    })
     setReuniones(reu.data || [])
     setDeudores(deuda.slice(0, 5))
     setMensajes(msgs.data || [])
@@ -154,7 +169,15 @@ export default function Inicio({ go, email }) {
               <span className="a-stripe-num a-ok">{euro(stats.cobrado)}</span>
               <span className="a-stripe-label">Cobrado</span>
             </div>
+            <span className="a-stripe-div" />
+            <button className="a-stripe-item a-stripe-click a-stripe-visitas" onClick={() => go('visitas')}>
+              <span className="a-stripe-num">{stats.visitas ?? '—'}</span>
+              <span className="a-stripe-label">Visitas (7 días)</span>
+            </button>
           </div>
+
+          {/* LO QUE PIDE ATENCIÓN */}
+          <Pendientes go={go} />
 
           <div className="a-home-grid">
             {/* ÚLTIMOS MENSAJES */}

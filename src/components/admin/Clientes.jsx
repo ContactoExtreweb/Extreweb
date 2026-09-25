@@ -1,6 +1,7 @@
 // src/components/admin/Clientes.jsx
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/adminClient.js'
+import { PedirResenas } from './Resenas.jsx'
 
 export default function Clientes({ go, nuevo = false }) {
   const [clientes, setClientes] = useState([])
@@ -78,6 +79,9 @@ export default function Clientes({ go, nuevo = false }) {
           </div>
         </form>
       )}
+
+      {/* Pedir reseñas de extreweb a los que ya tienen la web publicada */}
+      <PedirResenas go={go} />
 
       {loading ? (
         <p className="a-muted">Cargando…</p>

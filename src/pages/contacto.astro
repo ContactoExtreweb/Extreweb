@@ -82,6 +82,10 @@ const seoDesc =
                                         /></label
                                     >
                                 </p>
+                                <!-- Desde qué página y qué web llegó (lo rellena el script;
+                                     se ve en el panel → Mensajes y en Visitas → Origen) -->
+                                <input type='hidden' name='pagina' />
+                                <input type='hidden' name='origen' />
 
                                 <div class='form-group'>
                                     <label for='name'>Me llamo...</label>
@@ -630,6 +634,20 @@ const seoDesc =
     const submitBtn = form?.querySelector('[data-form-submit]')
     const submitLabel = submitBtn?.querySelector('[data-label]')
 
+    // Desde dónde llega quien escribe: la página anterior de nuestra web, o la web
+    // externa / campaña si entró directo a contacto. Nada se guarda en el dispositivo
+    if (form) {
+        try {
+            const q = new URLSearchParams(location.search)
+            const ref = document.referrer ? new URL(document.referrer) : null
+            const interna = ref && ref.host === location.host
+            if (interna && ref.pathname !== location.pathname) form.pagina.value = ref.pathname
+            const campana = q.get('utm_campaign')
+            if (campana) form.origen.value = `campaña: ${campana}${q.get('utm_source') ? ` (${q.get('utm_source')})` : ''}`
+            else if (ref && !interna) form.origen.value = ref.hostname.replace(/^www\./, '')
+        } catch (e) {}
+    }
+
     // Si viene del configurador de la home, dejamos el mensaje empezado (una sola vez)
     try {
         const raw = sessionStorage.getItem('ew-configurador')
@@ -684,7 +702,10 @@ const seoDesc =
             })
             if (!res.ok) throw new Error('HTTP ' + res.status)
 
+            // reset() vaciaría también el origen: se conserva por si escribe otra vez
+            const origen = [form.pagina.value, form.origen.value]
             form.reset()
+            ;[form.pagina.value, form.origen.value] = origen
             form.hidden = true
             done.hidden = false
             // El formulario encoge al ocultarse: llevamos la vista al mensaje
