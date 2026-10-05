@@ -22,15 +22,18 @@ const anillo = [0, 4, 1, 2, 3, 5, 6, 3, 4, 2].map((n) => PROYECTOS[n].image.repl
              (la foto) y la de dentro (la misma foto girada 180° y apagada), así
              las de detrás se leen bien y no salen en espejo -->
         <div class='hero-anillo' aria-hidden='true'>
+            <!-- .anillo inclina, .giro gira: separados para que el giro no lleve variables (ver CSS) -->
             <div class='anillo'>
-                {
-                    anillo.map((src, i) => (
-                        <div class='tarjeta' style={`--i: ${i}`}>
-                            <img class='cara' src={src} alt='' width='800' height='400' decoding='async' fetchpriority='low' />
-                            <img class='dorso' src={src} alt='' width='800' height='400' decoding='async' fetchpriority='low' />
-                        </div>
-                    ))
-                }
+                <div class='giro'>
+                    {
+                        anillo.map((src, i) => (
+                            <div class='tarjeta' style={`--i: ${i}`}>
+                                <img class='cara' src={src} alt='' width='800' height='400' decoding='async' fetchpriority='low' />
+                                <img class='dorso' src={src} alt='' width='800' height='400' decoding='async' fetchpriority='low' />
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
         </div>
 
@@ -64,11 +67,14 @@ const anillo = [0, 4, 1, 2, 3, 5, 6, 3, 4, 2].map((n) => PROYECTOS[n].image.repl
            se ve la mitad de delante (detrás no hay sitio sin tapar el texto).
            Escritorio, más abajo: rodea todo el texto. */
         --radio: 300px; /* radio del anillo */
-        --tw: 140px; /* ancho de cada tarjeta */
-        --incl: -18deg; /* inclinación: negativo = lo vemos desde arriba */
+        --tw: 170px; /* ancho de cada tarjeta */
+        --incl: -12deg; /* inclinación: negativo = lo vemos desde arriba (poca en móvil: la de delante sube) */
         --persp: 1100px;
-        --cy: 210px; /* centro del anillo respecto al centro del texto */
-        --vuelta: 50s;
+        /* Móvil: centro del anillo respecto al FINAL del texto (justo bajo los botones).
+           Antes iba a 210px del centro del texto: en DevTools (iPhone de 844px de alto)
+           se veía, pero en un móvil real, con las barras del navegador, quedaba bajo
+           el pliegue y dentro del degradado de abajo */
+        --cy: 20px;
 
         position: relative;
         min-height: 100svh;
@@ -80,12 +86,13 @@ const anillo = [0, 4, 1, 2, 3, 5, 6, 3, 4, 2].map((n) => PROYECTOS[n].image.repl
         padding: clamp(96px, 15vh, 150px) var(--pad) clamp(150px, 24vh, 230px);
         overflow: hidden;
     }
-    /* Las tarjetas de delante se funden con el fondo en vez de cortarse en seco */
+    /* Las tarjetas de delante se funden con el fondo en vez de cortarse en seco.
+       En móvil, solo el borde (escritorio: 18%): un 18% tapaba justo las tarjetas */
     .hero::after {
         content: '';
         position: absolute;
         inset: auto 0 0;
-        height: 18%;
+        height: 40px;
         background: linear-gradient(transparent, var(--bg));
         pointer-events: none;
     }
@@ -209,7 +216,7 @@ const anillo = [0, 4, 1, 2, 3, 5, 6, 3, 4, 2].map((n) => PROYECTOS[n].image.repl
     .hero-anillo {
         position: absolute;
         left: 50%;
-        top: calc(50% + var(--cy));
+        top: calc(100% + var(--cy)); /* escritorio: 50%, ver más abajo */
         width: 0;
         height: 0;
         perspective: var(--persp);
@@ -219,8 +226,15 @@ const anillo = [0, 4, 1, 2, 3, 5, 6, 3, 4, 2].map((n) => PROYECTOS[n].image.repl
     .anillo {
         position: absolute;
         transform-style: preserve-3d;
-        transform: rotateX(var(--incl)) rotateY(0deg);
-        animation: anilloGira var(--vuelta) linear infinite;
+        transform: rotateX(var(--incl));
+    }
+    /* El giro va en su propio elemento y con valores FIJOS en los fotogramas (y en la
+       duración). Antes era un solo elemento con rotateX(var(--incl)) dentro del
+       @keyframes: Chrome lo anima, pero en Safari del iPhone se quedaba quieto */
+    .giro {
+        position: absolute;
+        transform-style: preserve-3d;
+        animation: anilloGira 50s linear infinite;
     }
     .tarjeta {
         position: absolute;
@@ -250,8 +264,11 @@ const anillo = [0, 4, 1, 2, 3, 5, 6, 3, 4, 2].map((n) => PROYECTOS[n].image.repl
     }
 
     @keyframes anilloGira {
+        from {
+            transform: rotateY(0deg);
+        }
         to {
-            transform: rotateX(var(--incl)) rotateY(-360deg);
+            transform: rotateY(-360deg);
         }
     }
     @keyframes anilloIn {
@@ -298,8 +315,16 @@ const anillo = [0, 4, 1, 2, 3, 5, 6, 3, 4, 2].map((n) => PROYECTOS[n].image.repl
             --incl: -38deg;
             --persp: 2600px;
             --cy: calc(var(--radio) * -0.02);
-            --vuelta: 70s;
             padding-bottom: clamp(140px, 20vh, 220px);
+        }
+        .hero::after {
+            height: 18%;
+        }
+        .giro {
+            animation-duration: 70s;
+        }
+        .hero-anillo {
+            top: calc(50% + var(--cy));
         }
         .dorso {
             display: block;
@@ -329,13 +354,30 @@ const anillo = [0, 4, 1, 2, 3, 5, 6, 3, 4, 2].map((n) => PROYECTOS[n].image.repl
         .hero-sub,
         .hero-actions,
         .hero-anillo,
-        .anillo {
+        .giro {
             animation: none;
         }
     }
     @media (max-width: 600px) {
         .hero-title {
             font-size: clamp(2.4rem, 11vw, 3.6rem);
+        }
+    }
+    /* Móvil: algo menos de aire entre líneas para que el anillo quepa en la primera
+       pantalla de un móvil real (~664px visibles con las barras del navegador) */
+    @media (max-width: 899px) {
+        .hero-oferta,
+        .hero-kicker {
+            margin-bottom: 1rem;
+        }
+        .hero-title {
+            margin-bottom: 1.1rem;
+        }
+        .hero-sub {
+            margin-bottom: 1.6rem;
+        }
+        .hero-actions {
+            row-gap: 0.8rem;
         }
     }
 </style>

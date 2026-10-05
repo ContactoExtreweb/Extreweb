@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar.astro'
 import Cta from '@/components/Cta.astro'
 import Footer from '@/components/Footer.astro'
 import ServiceSchema from '@/components/seo/ServiceSchema.astro'
+import RedesAnimadas from '@/components/RedesAnimadas.astro'
 
 const seoTitle = 'Gestión de Redes Sociales en Extremadura — extreweb'
 const seoDesc =
@@ -37,45 +38,7 @@ const seoDesc =
             </div>
         </section>
 
-        <section class='svc-features'>
-            <div class='container'>
-                <div class='feat-grid'>
-                    <div class='feat-card fx-up'>
-                        <div class='f-icon'>🎯</div>
-                        <h3>Estrategia Real</h3>
-                        <p>
-                            No publicamos por publicar. Definimos qué redes
-                            tienen sentido para tu negocio y qué contenido
-                            genera interés de verdad en tu audiencia.
-                        </p>
-                    </div>
-                    <div
-                        class='feat-card fx-up'
-                        style='transition-delay: 0.1s;'
-                    >
-                        <div class='f-icon'>📸</div>
-                        <h3>Contenido Premium</h3>
-                        <p>
-                            Diseño gráfico profesional, copy persuasivo y
-                            formatos adaptados (Reels, Carruseles) para que tu
-                            marca se vea impecable y actual.
-                        </p>
-                    </div>
-                    <div
-                        class='feat-card fx-up'
-                        style='transition-delay: 0.2s;'
-                    >
-                        <div class='f-icon'>📈</div>
-                        <h3>Social Ads</h3>
-                        <p>
-                            Invertimos tu presupuesto de forma inteligente en
-                            Facebook, Instagram o Google Ads para atraer tráfico
-                            hipersegmentado a tu web.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <RedesAnimadas />
 
         <Cta />
     </main>
@@ -145,50 +108,5 @@ const seoDesc =
         color: var(--muted);
         max-width: 700px;
         margin: 0 auto;
-    }
-
-    .svc-features {
-        padding-bottom: clamp(100px, 15vh, 150px);
-        position: relative;
-        z-index: 10;
-    }
-    .feat-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2.5rem;
-    }
-    .feat-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 24px;
-        padding: 3rem 2rem;
-        text-align: center;
-        transition:
-            transform 0.3s ease,
-            border-color 0.3s ease;
-    }
-    .feat-card:hover {
-        transform: translateY(-5px);
-        border-color: var(--accent);
-    }
-    .f-icon {
-        font-size: 3rem;
-        margin-bottom: 1.5rem;
-    }
-    .feat-card h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        color: var(--fg);
-    }
-    .feat-card p {
-        font-size: 1.1rem;
-        color: var(--muted);
-        line-height: 1.6;
-    }
-
-    @media (max-width: 900px) {
-        .feat-grid {
-            grid-template-columns: 1fr;
-        }
     }
 </style>

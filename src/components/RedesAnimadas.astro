@@ -1,0 +1,245 @@
+---
+// src/components/RedesAnimadas.astro
+// Sustituye a las tres tarjetas de servicios/redes-sociales.astro.
+// 1 · "Un mes de tu perfil": calendario → perfil del móvil 3D → informe del mes.
+// 2 · "Formatos en acción": publicación, carrusel, reel e historia, que se tocan en el propio móvil.
+// Sin JS (o con "reducir movimiento") se ve el calendario, el informe y la lista de formatos, sin el móvil.
+// La animación (Three.js) se descarga solo cuando la sección se acerca: src/lib/redes-animadas.js.
+// Portada: <RedesAnimadas solo='formatos'> con su propia cabecera en el slot "cabecera".
+import '@fontsource-variable/fraunces'
+import { MES, PRIMERO, DIAS, INFORME } from '@/lib/redes-datos.js'
+
+interface Props {
+    solo?: 'mes' | 'formatos'
+}
+const { solo } = Astro.props
+
+const dias = Array.from({ length: DIAS }, (_, i) => i + 1)
+const pubDe = (d: number) => MES.find((p) => p.dia === d)
+const mil = (v: number) => `${(v / 1000).toLocaleString('es-ES', { maximumFractionDigits: 1 })} mil`
+const num = (v: number) => v.toLocaleString('es-ES', { useGrouping: 'always' } as Intl.NumberFormatOptions)
+const FORMATOS = [
+    { f: 'post', t: 'Publicación', x: 'Una imagen diseñada para tu marca y un texto que invita a hacer algo: pasarse por la tienda, comentar o encargar.' },
+    { f: 'carrusel', t: 'Carrusel', x: 'Varias diapositivas para contar más: tu catálogo, un paso a paso o antes y después. Es de lo que más se guarda y se comparte.' },
+    { f: 'reel', t: 'Reel', x: 'Vídeo vertical corto, con ritmo y texto en pantalla, pensado para llegar a gente que aún no te sigue.' },
+    { f: 'historia', t: 'Historia', x: 'Contenido del día a día que dura 24 horas: novedades, encuestas y enlaces para que te pidan directamente.' },
+]
+---
+
+<div class='redes-anim'>
+    <!-- 1 · Un mes de tu perfil -->
+    {solo !== 'formatos' && (
+    <section class='bloque' id='redes-mes'>
+        <div class='container'>
+            <div class='bloque-head'>
+                <span class='eyebrow'>Así trabajamos</span>
+                <h2>Un mes de tu perfil, sin que tengas que tocarlo.</h2>
+                <p>Planificamos el mes, diseñamos y escribimos cada publicación, la subimos a tus redes y te contamos qué ha funcionado.</p>
+            </div>
+        </div>
+        <div class='container rejilla'>
+            <div>
+                <div class='cal'>
+                    <div class='cal-top'><h3>Octubre</h3><span data-cuenta>{MES.length} publicaciones</span></div>
+                    <div class='cal-sem' aria-hidden='true'><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+                    <div class='cal-dias' data-dias>
+                        {Array.from({ length: PRIMERO }, () => <span class='dia vacio'></span>)}
+                        {dias.map((d) => {
+                            const p = pubDe(d)
+                            return p ? (
+                                <span class='dia pasado publicado sin-mini' title={p.pie}>
+                                    <b>{d}</b>
+                                    <span class='redes'>{p.redes.map((r) => <i class={r}></i>)}</span>
+                                </span>
+                            ) : (
+                                <span class='dia pasado'><b>{d}</b></span>
+                            )
+                        })}
+                    </div>
+                    <div class='cal-pie'>
+                        <div class='leyenda'><span><i style='background:#e1306c'></i>Instagram</span><span><i style='background:#1877f2'></i>Facebook</span></div>
+                        <span class='solo-js'>Toca un día publicado para verlo</span>
+                    </div>
+                </div>
+                <div class='informe listo' data-informe aria-live='polite'>
+                    <div class='inf-top'><h3>Informe de octubre</h3><span>Datos de ejemplo</span></div>
+                    <div class='inf-datos'>
+                        <div><b data-cifra={INFORME.publicaciones}>{INFORME.publicaciones}</b><small>publicaciones</small></div>
+                        <div><b data-cifra={INFORME.redes}>{INFORME.redes}</b><small>redes</small></div>
+                        <div><b data-cifra={INFORME.alcance} data-mil>{mil(INFORME.alcance)}</b><small>personas alcanzadas</small></div>
+                        <div><b data-cifra={INFORME.interacciones}>{num(INFORME.interacciones)}</b><small>interacciones</small></div>
+                    </div>
+                    <div class='inf-barras' aria-hidden='true'>
+                        {INFORME.semanas.map((h, i) => <div><i style={`--h:${h}`}></i><small>S{i + 1}</small></div>)}
+                    </div>
+                    <p class='inf-mejor'>La que mejor funcionó: <b>la oferta de barra + café</b>. El mes que viene repetimos formato.</p>
+                </div>
+                <div class='acciones-mes'>
+                    <a href='/contacto/' class='btn btn-accent'>Quiero que lo llevéis vosotros</a>
+                    <button class='btn btn-suave solo-js' type='button' data-repetir>Ver el mes otra vez</button>
+                </div>
+            </div>
+            <div class='movil3d' data-movil='mes'>
+                <div class='glow' aria-hidden='true'></div>
+                <canvas aria-label='Perfil de ejemplo de un obrador en un móvil' role='img'></canvas>
+                <span class='ejemplo'>Perfil de ejemplo</span>
+            </div>
+        </div>
+    </section>
+    )}
+
+    <!-- 2 · Formatos en acción -->
+    {solo !== 'mes' && (
+    <section class='bloque' id='redes-formatos'>
+        <div class='container'>
+            <div class='bloque-head'>
+                <slot name='cabecera'>
+                    <span class='eyebrow'>Contenido</span>
+                    <h2>Cada formato, hecho para que se pare el dedo.</h2>
+                    <p>Diseño, textos y ritmo pensados para cada red. <span class='solo-js'>Pruébalos en el móvil.</span></p>
+                </slot>
+            </div>
+            <div class='formatos solo-js' role='group' aria-label='Formato' data-formatos>
+                {FORMATOS.map((f, i) => <button class='formato' type='button' data-f={f.f} aria-pressed={String(i === 0)}>{f.t}</button>)}
+            </div>
+        </div>
+        <div class='container rejilla al-reves'>
+            <div>
+                <div class='fmt-info solo-js' data-fmt-info aria-live='polite'>
+                    <h3 data-fmt-titulo>{FORMATOS[0].t}</h3>
+                    <p data-fmt-texto>{FORMATOS[0].x}</p>
+                    <span class='gesto' data-fmt-gesto>Toca la foto para darle me gusta</span>
+                </div>
+                <!-- Sin JS: la lista de formatos -->
+                <dl class='fmt-lista'>
+                    {FORMATOS.map((f) => <div><dt>{f.t}</dt><dd>{f.x}</dd></div>)}
+                </dl>
+                <p class='ads'><b>¿Quieres llegar a más gente?</b> Montamos campañas de anuncios en Instagram, Facebook o Google para que te vean quienes están cerca y buscan lo que vendes.</p>
+            </div>
+            <div class='movil3d' data-movil='formatos'>
+                <div class='glow' aria-hidden='true'></div>
+                <canvas aria-label='Formatos de contenido de ejemplo en un móvil' role='img'></canvas>
+                <span class='ejemplo'>Contenido de ejemplo</span>
+            </div>
+        </div>
+    </section>
+    )}
+</div>
+
+<!-- Global pero todo cuelga de .redes-anim: las celdas del calendario las crea el JS y no llevan el atributo de Astro -->
+<style is:global>
+    .redes-anim .bloque { padding-block: clamp(3rem, 9vh, 6rem); }
+    .redes-anim .bloque-head { max-width: 40rem; margin-bottom: clamp(1.5rem, 4vh, 2.5rem); }
+    .redes-anim .bloque-head h2 { font-size: clamp(2rem, 4.6vw, 3.4rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.05; text-wrap: balance; margin-bottom: 0.8rem; }
+    .redes-anim .bloque-head p { color: var(--muted); max-width: 46ch; }
+    .redes-anim .bloque-head > a { display: inline-block; margin-top: 0.9rem; color: var(--accent); font-weight: 500; }
+    @media (hover: hover) and (pointer: fine) { .redes-anim .bloque-head > a:hover { text-decoration: underline; } }
+    .redes-anim .rejilla { display: grid; gap: clamp(1.5rem, 4vw, 3rem); align-items: center; }
+    .redes-anim .btn-suave { border: 1px solid var(--border); }
+    @media (hover: hover) and (pointer: fine) { .redes-anim .btn-suave:hover { background: var(--surface); } }
+
+    /* Móvil 3D (solo con JS) */
+    .redes-anim .movil3d { display: none; position: relative; height: min(118vw, 600px); }
+    html.js-motion .redes-anim .movil3d { display: block; }
+    .redes-anim .movil3d canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; cursor: grab; }
+    .redes-anim .movil3d canvas.sobre { cursor: pointer; }
+    .redes-anim .movil3d .glow { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(40% 45% at 50% 55%, color-mix(in srgb, #d08a4a 18%, transparent), transparent 72%); }
+    .redes-anim .ejemplo { position: absolute; left: 50%; bottom: 0; translate: -50% 0; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+    .redes-anim .sin-3d canvas { display: none; }
+    html:not(.js-motion) .redes-anim .solo-js { display: none; }
+    html.js-motion .redes-anim .fmt-lista { display: none; }
+
+    /* 1 · Calendario */
+    .redes-anim .cal { border: 1px solid var(--border); border-radius: 22px; padding: clamp(1rem, 3vw, 1.6rem); background: var(--bg); }
+    .redes-anim .cal-top { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+    .redes-anim .cal-top h3 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; }
+    .redes-anim .cal-top span { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .redes-anim .cal-sem, .redes-anim .cal-dias { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .redes-anim .cal-sem { font-size: 0.72rem; font-weight: 600; color: var(--muted); text-align: center; margin-bottom: 6px; }
+    .redes-anim .dia { position: relative; aspect-ratio: 1; border-radius: 10px; font-size: 0.78rem; font-weight: 500; color: var(--muted); background: var(--surface); display: grid; place-items: start; padding: 5px 6px; overflow: hidden; transition: color 0.2s, box-shadow 0.2s; }
+    .redes-anim .dia.vacio { background: none; }
+    .redes-anim .dia.hoy { box-shadow: inset 0 0 0 2px var(--fg); color: var(--fg); }
+    .redes-anim .dia.pasado { color: var(--fg); }
+    .redes-anim .dia canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; scale: 0.6; transition: opacity 0.35s var(--ease-out-quart), scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .redes-anim .dia.publicado canvas { opacity: 1; scale: 1; }
+    .redes-anim .dia.publicado:not(.sin-mini) { color: #fff; }
+    .redes-anim .dia.sin-mini.publicado { background: color-mix(in srgb, #c65d3b 18%, var(--surface)); }
+    .redes-anim .dia b { position: relative; z-index: 1; font-weight: 600; }
+    .redes-anim .dia.publicado:not(.sin-mini) b { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35); }
+    .redes-anim .dia .redes { position: absolute; right: 4px; bottom: 4px; z-index: 1; display: flex; gap: 2px; opacity: 0; transition: opacity 0.3s 0.15s; }
+    .redes-anim .dia.publicado .redes { opacity: 1; }
+    .redes-anim .dia .redes i { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid #fff; }
+    .redes-anim .dia .redes i.ig { background: #e1306c; }
+    .redes-anim .dia .redes i.fb { background: #1877f2; }
+    .redes-anim .dia.elegido { box-shadow: 0 0 0 2px var(--accent); }
+    .redes-anim button.dia { cursor: pointer; }
+    .redes-anim button.dia:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .redes-anim .cal-pie { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; align-items: center; justify-content: space-between; margin-top: 1rem; font-size: 0.8rem; color: var(--muted); }
+    .redes-anim .leyenda { display: flex; gap: 0.9rem; }
+    .redes-anim .leyenda span { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .redes-anim .leyenda i { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* 1 · Informe */
+    .redes-anim .informe { margin-top: 1.4rem; border-radius: 22px; padding: clamp(1rem, 3vw, 1.6rem); background: var(--surface); transition: opacity 0.6s var(--ease-out-quart), filter 0.6s; }
+    html.js-motion .redes-anim .informe:not(.listo) { opacity: 0.35; filter: saturate(0); }
+    .redes-anim .inf-top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1rem; }
+    .redes-anim .inf-top h3 { font-size: 1.1rem; font-weight: 700; }
+    .redes-anim .inf-top span { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+    .redes-anim .inf-datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 0.8rem; margin-bottom: 1.1rem; }
+    .redes-anim .inf-datos div { display: grid; }
+    .redes-anim .inf-datos b { white-space: nowrap; font-size: clamp(1.2rem, 3vw, 1.6rem); font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .redes-anim .inf-datos small { font-size: 0.75rem; color: var(--muted); }
+    .redes-anim .inf-barras { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; align-items: end; height: 74px; }
+    .redes-anim .inf-barras div { display: flex; flex-direction: column; justify-content: flex-end; gap: 0.3rem; height: 100%; }
+    .redes-anim .inf-barras i { display: block; height: calc(var(--h) * 0.8%); min-height: 3px; border-radius: 6px 6px 3px 3px; background: var(--accent); transform-origin: bottom; transition: transform 0.8s var(--ease-out-quart); }
+    html.js-motion .redes-anim .informe:not(.listo) .inf-barras i { transform: scaleY(0); }
+    .redes-anim .inf-barras div:nth-child(2) i { transition-delay: 0.08s; }
+    .redes-anim .inf-barras div:nth-child(3) i { transition-delay: 0.16s; }
+    .redes-anim .inf-barras div:nth-child(4) i { transition-delay: 0.24s; }
+    .redes-anim .inf-barras div:nth-child(5) i { transition-delay: 0.32s; }
+    .redes-anim .inf-barras small { font-size: 0.7rem; color: var(--muted); text-align: center; }
+    .redes-anim .inf-mejor { margin-top: 1rem; font-size: 0.85rem; color: var(--muted); }
+    .redes-anim .inf-mejor b { color: var(--fg); }
+    .redes-anim .acciones-mes { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 1.2rem; }
+
+    /* 2 · Formatos */
+    .redes-anim .formatos { display: flex; gap: 0.4rem; padding: 4px; border-radius: 980px; background: var(--surface); border: 1px solid var(--border); width: fit-content; max-width: 100%; overflow-x: auto; scrollbar-width: none; margin-bottom: 1.4rem; }
+    .redes-anim .formato { position: relative; overflow: hidden; min-height: 40px; padding: 0 1.1rem; border-radius: 980px; font-size: 0.9rem; font-weight: 500; color: var(--muted); white-space: nowrap; transition: background 0.24s, color 0.24s; }
+    .redes-anim .formato[aria-pressed='true'] { background: var(--bg); color: var(--fg); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14); }
+    .redes-anim .formato::after { content: ''; position: absolute; left: 14px; right: 14px; bottom: 5px; height: 2px; border-radius: 2px; background: var(--accent); transform-origin: left; transform: scaleX(0); }
+    .redes-anim .auto .formato[aria-pressed='true']::after { animation: redes-avance 7s linear forwards; }
+    @keyframes redes-avance { to { transform: scaleX(1); } }
+    .redes-anim .formato:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .redes-anim .fmt-info h3 { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+    .redes-anim .fmt-info p { color: var(--muted); max-width: 40ch; }
+    .redes-anim .fmt-info .gesto { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1rem; font-size: 0.85rem; color: var(--fg); padding: 0.35rem 0.8rem; border-radius: 980px; border: 1px dashed var(--border); }
+    .redes-anim .fmt-info { transition: opacity 0.2s, translate 0.2s var(--ease-out-quart); }
+    .redes-anim .fmt-info.cambiando { opacity: 0; translate: 0 6px; }
+    .redes-anim .fmt-lista { display: grid; gap: 1rem; }
+    .redes-anim .fmt-lista dt { font-weight: 700; }
+    .redes-anim .fmt-lista dd { color: var(--muted); }
+    .redes-anim .ads { margin-top: 1.8rem; padding-top: 1.4rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.95rem; max-width: 44ch; }
+    .redes-anim .ads b { color: var(--fg); }
+
+    @media (max-width: 899px) { .redes-anim .rejilla > .movil3d { order: -1; } }
+    @media (min-width: 900px) {
+        .redes-anim .rejilla { grid-template-columns: 1.05fr 0.95fr; }
+        .redes-anim .rejilla.al-reves > :first-child { order: 2; }
+        .redes-anim .movil3d { height: min(80svh, 700px); }
+    }
+    @media (prefers-reduced-motion: reduce) { .redes-anim .dia canvas, .redes-anim .informe, .redes-anim .inf-barras i { transition: none; } }
+</style>
+
+<script>
+    // Three.js y la animación solo se descargan cuando la sección se acerca a la pantalla
+    const raiz = document.querySelector('.redes-anim')
+    if (raiz && document.documentElement.classList.contains('js-motion')) {
+        const io = new IntersectionObserver(async (entradas) => {
+            if (!entradas.some((e) => e.isIntersecting)) return
+            io.disconnect()
+            const { iniciarRedes } = await import('@/lib/redes-animadas.js')
+            iniciarRedes()
+        }, { rootMargin: '600px 0px' })
+        io.observe(raiz)
+    }
+</script>

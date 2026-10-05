@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "src/components/Hero.astro"
+        ],
+        "createdAt": "2026-10-05T19:30:24.524Z",
+        "reason": "Approved hero design documented in CONTEXTO-EXTREWEB.md §9: 'reales' with linear-gradient(120deg, accent, #7c5cff)"
+      }
+    ]
+  }
+}

@@ -4,8 +4,12 @@
 //
 // link: null mientras la web no esté publicada (o no sepamos su dirección): la
 // tarjeta se enseña igual, pero sin enlace.
+//
+// id: nombre de sus capturas del escaparate de la portada (Projects.astro), que
+// solo enseña los que tienen link. Capturas: node scripts/capturas.mjs <id>
 export const PROYECTOS = [
   {
+    id: 'carmeet',
     title: 'CarMeet',
     category: 'Comunidad Automotriz',
     image: '/proyectos/Car-MeetESP.webp',
@@ -14,6 +18,7 @@ export const PROYECTOS = [
     desc: 'Diseño de interfaz moderna para gestión de eventos, rutas y perfiles.',
   },
   {
+    id: 'fichar365',
     title: 'Fichar365',
     category: 'SaaS / RRHH',
     image: '/proyectos/Fichar.webp',
@@ -22,6 +27,7 @@ export const PROYECTOS = [
     desc: 'Software integral con enfoque en la usabilidad y rapidez para empresas.',
   },
   {
+    id: 'guadicar',
     title: 'Guadicar Multimarcas',
     category: 'Concesionario',
     image: '/proyectos/Guadicar.webp',
@@ -30,6 +36,7 @@ export const PROYECTOS = [
     desc: 'Catálogo digital avanzado con optimización extrema para SEO local.',
   },
   {
+    id: 'imtex',
     title: 'IMTEX',
     category: 'Impermeabilización y estructuras',
     image: '/proyectos/Imtex.webp',
@@ -38,6 +45,7 @@ export const PROYECTOS = [
     desc: 'Web técnica con una cubierta en 3D que enseña, paso a paso, cómo se repara e impermeabiliza.',
   },
   {
+    id: 'fisicas-elite',
     title: 'Físicas Élite',
     category: 'Academia de oposiciones',
     image: '/proyectos/Fisicas-Elite.webp',
@@ -46,6 +54,7 @@ export const PROYECTOS = [
     desc: 'Preparación física de oposiciones en Cáceres, con área de alumnos, pago online y el temario en vídeo.',
   },
   {
+    id: 'guzman',
     title: 'Taller M. Guzmán',
     category: 'Chapa y pintura',
     image: '/proyectos/Guzman.webp',
@@ -54,6 +63,7 @@ export const PROYECTOS = [
     desc: 'Web del taller con galería de trabajos y presupuesto por formulario o WhatsApp.',
   },
   {
+    id: 'toldos-pallares',
     title: 'Toldos Pallares',
     category: 'Web Corporativa',
     image: '/proyectos/Toldos-Pallares.webp',

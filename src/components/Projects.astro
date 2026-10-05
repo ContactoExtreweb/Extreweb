@@ -1,390 +1,346 @@
 ---
 // src/components/Projects.astro
-import { PROYECTOS as projects } from '@/lib/proyectos.js'
+// Escaparate 3D de proyectos (sustituye al scroll horizontal).
+// - Con JS: el proyecto activo sale grande, de frente y nítido (capturas reales, no texturas 3D),
+//   la web se recorre sola y con la rueda; los vecinos giran a los lados en perspectiva (CSS 3D).
+// - Sin JS o con "reducir movimiento": lista horizontal normal que se desliza con el dedo.
+// Sin dependencias: CSS 3D + un poco de JS. Capturas: public/proyectos/capturas (scripts/capturas.mjs).
+import { PROYECTOS } from '@/lib/proyectos.js'
+// Solo las webs publicadas: sin link no hay nada que capturar ni que visitar
+const projects = PROYECTOS.filter((p) => p.link)
+const n = projects.length
+const dominio = (url: string) => new URL(url).hostname.replace(/^www\./, '')
+// Distancia de cada proyecto al activo (−2…2) para que el primer pintado ya salga colocado
+const kDe = (i: number) => (i > n / 2 ? i - n : i)
+const p0 = projects[0]
 ---
 
-<section class='projects' id='proyectos'>
-    <div class='container p-head'>
+<section class='pj' id='proyectos' style={`--proj: ${p0.color}`}>
+    <div class='container pj-head'>
         <span class='eyebrow'>Nuestro Trabajo</span>
         <h2>Proyectos que<br />marcan la diferencia.</h2>
     </div>
 
-    <!-- Con JS, .projects-pin es tan alto como el recorrido horizontal y
-         .projects-wrapper se queda fija dentro (sticky) mientras pasan las tarjetas.
-         Sin JS o con "reducir movimiento": carrusel nativo que se desliza con el dedo -->
-    <div class='projects-pin'>
-        <div class='projects-wrapper'>
-            <div class='projects-track'>
-            
-                {projects.map((p) => { const Card = p.link ? 'a' : 'div'; return (
-                    <!-- Toda la tarjeta es el enlace: así funciona al tocar en móvil
-                         (antes el botón solo aparecía con hover) y con teclado.
-                         Sin link (web aún sin publicar), la tarjeta no enlaza -->
-                    <Card
-                        class='project-card'
-                        {...(p.link ? { href: p.link, target: '_blank', rel: 'noopener noreferrer' } : {})}
-                    >
-                        <div class='p-image'>
+    <div class='pj-glow' aria-hidden='true'></div>
+    <div class='esc' data-esc data-vista='movil'>
+        <div class='esc-pista'>
+            {projects.map((p, i) => (
+                <article
+                    class:list={['esc-item', { activo: i === 0 }]}
+                    style={`--c: ${p.color}; --k: ${kDe(i)}`}
+                    data-titulo={p.title}
+                    data-cat={p.category}
+                    data-desc={p.desc}
+                    data-link={p.link}
+                    data-color={p.color}
+                >
+                    <div class='ventana'>
+                        <div class='barra' aria-hidden='true'>
+                            <i></i><i></i><i></i>
+                            <span class='url'>
+                                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><rect x='5' y='11' width='14' height='10' rx='2'></rect><path d='M8 11V7a4 4 0 0 1 8 0v4'></path></svg>
+                                {dominio(p.link)}
+                            </span>
+                        </div>
+                        <!-- data-lenis-prevent: sin él, Lenis se come la rueda y mueve la página -->
+                        <div class='pantalla' tabindex={i === 0 ? 0 : -1} data-lenis-prevent>
                             <img
-                                src={p.image}
-                                srcset={`${p.image.replace('.webp', '-800.webp')} 800w, ${p.image.replace('.webp', '-1200.webp')} 1200w, ${p.image} 1905w`}
-                                sizes='(max-width: 768px) 80vw, (min-width: 1637px) 900px, 55vw'
-                                alt={`Web de ${p.title}`}
-                                width="1905"
-                                height="953"
-                                loading="lazy"
-                                decoding="async"
+                                src={`/proyectos/capturas/${p.id}-escritorio.webp`}
+                                alt={`Web de ${p.title} vista en un ordenador`}
+                                width='1800' height='2475'
+                                loading='lazy'
+                                decoding='async'
+                                draggable='false'
                             />
-                            {p.link && (
-                                <div class='p-overlay' style={`--hover-c: ${p.color}`} aria-hidden="true">
-                                    <span class='p-btn'>Visitar proyecto</span>
-                                </div>
-                            )}
                         </div>
-                        <div class='p-info'>
-                            <span class='p-cat'>{p.category} {p.link && <span class='p-ext' aria-hidden="true">↗</span>}</span>
-                            <h3>{p.title}</h3>
-                        </div>
-                    </Card>
-                )})}
-
-                <!-- Card final de Call to Action -->
-                <div class='projects-end'>
-                    <div class='end-content'>
-                        <div class='end-icon'>
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-                        </div>
-                        <h3>¿Tienes un proyecto en mente?</h3>
-                        <p>Hablemos sobre cómo podemos escalar tu negocio al siguiente nivel.</p>
-                        <a href='/proyectos/' class='btn btn-accent btn-large'>Ver todos los proyectos</a>
                     </div>
-                </div>
+                    <div class='telefono'>
+                        <div class='tel-pantalla'>
+                            <div class='tel-scroll'>
+                                <img
+                                    src={`/proyectos/capturas/${p.id}-movil.webp`}
+                                    alt={`Web de ${p.title} vista en un móvil`}
+                                    width='780' height='3544'
+                                    loading='lazy'
+                                    decoding='async'
+                                    draggable='false'
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Solo sin JS: cada tarjeta dice qué es y enlaza a la web -->
+                    <p class='esc-pie'>
+                        <b>{p.title}</b> · {p.category}
+                        <a href={p.link} target='_blank' rel='noopener'>Visitar&nbsp;↗</a>
+                    </p>
+                </article>
+            ))}
+        </div>
+    </div>
+    <div class='vista' role='group' aria-label='Ver la web en'>
+        <button type='button' data-vista='movil' aria-pressed='true'>Versión móvil</button>
+        <button type='button' data-vista='escritorio' aria-pressed='false'>Versión ordenador</button>
+    </div>
 
-            </div>
+    <div class='pj-pie'>
+        <div class='pj-info' aria-live='polite'>
+            <span class='pj-num'><i></i><span data-num>01 / {String(n).padStart(2, '0')}</span></span>
+            <h3 class='pj-titulo' data-titulo>{p0.title}</h3>
+            <p class='pj-desc' data-desc><b>{p0.category}.</b> {p0.desc}</p>
+            <a class='btn btn-accent' data-visitar href={p0.link} target='_blank' rel='noopener'>
+                Visitar web
+                <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M7 17 17 7M8 7h9v9'></path></svg>
+            </a>
+            <p class='pj-pista'>Desliza para cambiar de proyecto · usa la rueda sobre la web para recorrerla</p>
+        </div>
+        <div class='pj-nav'>
+            <button class='pj-flecha' type='button' data-dir='-1' aria-label='Proyecto anterior'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M15 18l-6-6 6-6'></path></svg></button>
+            <button class='pj-flecha' type='button' data-dir='1' aria-label='Proyecto siguiente'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M9 18l6-6-6-6'></path></svg></button>
         </div>
     </div>
 </section>
 
 <style>
-    .projects {
-        padding: clamp(80px, 12vh, 140px) 0;
-        background: var(--bg);
-        overflow: clip; /* recorta el carril; con hidden, el sticky de dentro no funcionaría */
+    @property --proj { syntax: '<color>'; inherits: true; initial-value: #f43f5e; }
+    .pj {
+        --sombra: 0 30px 80px -20px rgba(0, 0, 0, 0.28), 0 12px 30px -12px rgba(0, 0, 0, 0.18);
         position: relative;
-    }
-    
-    .p-head {
-        margin-bottom: clamp(2rem, 5vh, 4rem);
-    }
-    .eyebrow {
-        color: var(--accent);
-        font-weight: 600;
-        font-size: 0.95rem;
-        letter-spacing: 0.05em;
-        margin-bottom: 0.8rem;
-        display: block;
-        text-transform: uppercase;
-    }
-    .p-head h2 {
-        font-size: clamp(2.8rem, 6vw, 4.5rem);
-        font-weight: 600;
-        letter-spacing: -0.04em;
-        line-height: 1.05;
-        color: var(--fg);
-    }
-
-    /* --- HORIZONTAL SCROLL TRACK ---
-       Por defecto (sin JS o con "reducir movimiento"): carrusel nativo que se
-       desliza con el dedo y se imanta a cada tarjeta. */
-    .projects-wrapper {
-        display: flex;
-        align-items: center;
-        overflow-x: auto;
-        overscroll-behavior-x: contain;
-        scroll-snap-type: x mandatory;
-        padding-block: 1rem 2.5rem; /* sitio para la sombra de las tarjetas */
-    }
-    .project-card,
-    .projects-end {
-        scroll-snap-align: center;
-    }
-    @media (pointer: coarse) {
-        .projects-wrapper {
-            scrollbar-width: none;
-        }
-        .projects-wrapper::-webkit-scrollbar {
-            display: none;
-        }
-    }
-    /* Con JS, en móvil y en escritorio: la sección se queda fija y las tarjetas
-       pasan en horizontal al bajar. Se fija con position: sticky (lo hace el
-       navegador, sin los saltos del "pin" de GSAP al entrar y salir).
-       El recorrido (--recorrido) lo mide el script */
-    :global(html.js-motion) .projects-pin {
-        height: calc(100svh + var(--recorrido, 0px));
-    }
-    :global(html.js-motion) .projects-wrapper {
-        position: sticky;
-        top: 0;
-        height: 100svh;
-        overflow: visible;
-        scroll-snap-type: none;
-        padding-block: 0;
-    }
-    /* Navegadores con animaciones ligadas al scroll (Chrome, Edge, Safari 26+):
-       el carril lo mueve CSS en la GPU, sin JavaScript en cada frame.
-       En el resto lo mueve GSAP (ver script) */
-    @supports (animation-timeline: view()) {
-        :global(html.js-motion) .projects-pin {
-            view-timeline: --proyectos block;
-        }
-        :global(html.js-motion) .projects-track {
-            animation: proyectos-x linear both;
-            animation-duration: 1ms; /* ignorada con scroll; algunos la exigen > 0 */
-            animation-timeline: --proyectos;
-            /* del momento en que se fija al momento en que se suelta */
-            animation-range: contain 0% contain 100%;
-        }
-    }
-    @keyframes proyectos-x {
-        to {
-            transform: translateX(calc(-1 * var(--recorrido, 0px)));
-        }
-    }
-    .projects-track {
-        display: flex;
-        gap: clamp(2rem, 5vw, 6rem);
-        padding: 0 10vw; /* Margen inicial para que la primera tarjeta no esté pegada al borde */
-        width: max-content;
-        align-items: center;
-    }
-
-    /* --- CARDS --- */
-    .project-card {
-        width: 55vw;
-        max-width: 900px;
-        min-width: 320px;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-    
-    .p-image {
-        width: 100%;
-        aspect-ratio: 16 / 10;
-        border-radius: 24px;
         overflow: hidden;
-        position: relative;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        transform: translateZ(0); /* Forzar aceleración hardware */
+        transition: --proj 0.9s var(--ease-out-quart);
     }
-    .p-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    
-    /* Overlay y Botón al hacer Hover */
-    .p-overlay {
+    :global(html[data-theme='dark']) .pj { --sombra: 0 30px 80px -20px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.06); }
+    .pj-head { text-align: center; margin-bottom: clamp(1rem, 3vh, 2rem); }
+    .pj-head h2 { font-size: clamp(2.2rem, 6vw, 4rem); letter-spacing: -0.04em; line-height: 1.04; text-wrap: balance; }
+    .pj-glow { position: absolute; left: 0; right: 0; top: 18%; height: 70%; pointer-events: none; background: radial-gradient(45% 50% at 50% 50%, color-mix(in srgb, var(--proj) 14%, transparent), transparent 72%); }
+
+    /* ── Sin JS: lista horizontal ── */
+    .esc { position: relative; }
+    /* Relleno generoso: el overflow recorta la sombra de las ventanas (se veía el corte) */
+    .esc-pista { display: flex; gap: 1.2rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 2.5rem var(--pad) 5rem; }
+    .esc-item { flex: 0 0 min(86vw, 760px); scroll-snap-align: center; position: relative; }
+    .ventana { border-radius: 12px; overflow: hidden; background: var(--surface); box-shadow: var(--sombra); }
+    .barra { display: flex; align-items: center; gap: 6px; height: 34px; padding-inline: 12px; background: color-mix(in srgb, var(--surface) 70%, var(--border)); border-bottom: 1px solid var(--border); }
+    .barra i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
+    .barra i:nth-child(2) { background: #febc2e; }
+    .barra i:nth-child(3) { background: #28c840; }
+    .url { margin-inline: auto; display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.75rem; font-weight: 500; color: var(--muted); padding: 0.15rem 0.9rem; border-radius: 7px; background: var(--bg); max-width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .url svg { width: 10px; height: 10px; flex-shrink: 0; }
+    .pantalla { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #fff; }
+    .pantalla img, .tel-scroll img { width: 100%; height: auto; }
+    .telefono { display: none; }
+    .esc-pie { margin-top: 0.8rem; font-size: 0.9rem; color: var(--muted); }
+    .esc-pie b { color: var(--fg); }
+    .esc-pie a { color: var(--accent); font-weight: 500; margin-left: 0.4rem; }
+
+    /* ── Con JS: escaparate en 3D ── */
+    :global(html.js-motion) .esc { height: var(--alto-esc, min(64vw, 640px)); perspective: 1800px; perspective-origin: 50% 40%; touch-action: pan-y; }
+    /* pointer-events: la pista está en z = 0 y los vecinos detrás (translateZ negativo): sin esto se come sus clics */
+    :global(html.js-motion) .esc-pista { display: block; overflow: visible; padding: 0; height: 100%; transform-style: preserve-3d; pointer-events: none; }
+    :global(html.js-motion) .esc-pie { display: none; }
+    :global(html.js-motion) .esc-item {
+        --ak: max(var(--k), calc(var(--k) * -1));
+        --ancho: var(--ancho-ventana, min(76vw, 900px));
         position: absolute;
-        inset: 0;
-        background: color-mix(in srgb, var(--hover-c) 20%, rgba(0,0,0,0.4));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+        left: 50%;
+        top: 0;
+        width: var(--ancho);
+        margin-left: calc(var(--ancho) / -2);
+        transform-style: preserve-3d;
+        transform: translateX(calc(var(--k) * var(--paso, 56%) + var(--arrastre, 0px))) translateZ(calc(var(--ak) * -340px)) rotateY(calc(var(--k) * -34deg));
+        transition: transform 1s var(--ease-out-expo), opacity 0.6s var(--ease-out-quart);
+        opacity: clamp(0, calc(1.6 - var(--ak) * 0.55), 1);
+        z-index: calc(10 - var(--ak));
+        cursor: pointer;
+        pointer-events: auto;
+        will-change: transform;
     }
-    .p-btn {
-        background: #fff;
-        color: #000;
-        padding: 1rem 2rem;
-        border-radius: 100px;
-        font-weight: 600;
-        font-size: 1.05rem;
-        transform: translateY(20px);
-        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        text-decoration: none;
-    }
-    html[data-theme='light'] .p-btn {
-        background: #000;
-        color: #fff;
-    }
-    
-    /* Efectos Hover Desktop */
-    @media (hover: hover) and (pointer: fine) {
-        a.project-card:hover .p-image img {
-            transform: scale(1.06);
-        }
-        .project-card:hover .p-overlay {
-            opacity: 1;
-        }
-        .project-card:hover .p-btn {
-            transform: translateY(0);
-        }
-    }
-    /* Teclado: el mismo efecto al llegar con Tab */
-    .project-card:focus-visible {
-        outline: none;
-    }
-    .project-card:focus-visible .p-image {
-        outline: 3px solid var(--accent);
-        outline-offset: 4px;
-    }
-    .project-card:focus-visible .p-overlay {
-        opacity: 1;
-    }
-    .project-card:focus-visible .p-btn {
-        transform: translateY(0);
-    }
-    .p-image {
-        transition: transform var(--dur-fast) var(--ease-out-quart);
-    }
-    a.project-card:active .p-image {
-        transform: scale(0.98);
-    }
-    .p-ext {
-        color: var(--accent);
-        font-weight: 700;
+    :global(html.js-motion) .esc-item.activo { cursor: default; }
+    :global(html.js-motion) .esc-item.salto { transition: none; opacity: 0; }
+    :global(html.js-motion) .esc.arrastrando .esc-item { transition: opacity 0.6s; }
+    /* Entrada: llegan girando desde el fondo cuando la sección aparece */
+    :global(html.js-motion) .esc:not(.visto) .esc-item { transform: translateX(calc(var(--k) * 30%)) translateZ(-900px) rotateY(calc(var(--k) * -60deg + 25deg)); opacity: 0; }
+    :global(html.js-motion) .esc.visto .esc-item { transition-delay: calc(var(--ak) * 90ms); }
+    :global(html.js-motion) .esc.visto.listo .esc-item { transition-delay: 0s; }
+    /* Vecinos algo apagados: una capa encima (sin filter, que es caro) */
+    :global(html.js-motion) .esc-item::after { content: ''; position: absolute; inset: 0; border-radius: 12px; background: var(--bg); opacity: calc(var(--ak) * 0.28); pointer-events: none; transition: opacity 0.8s var(--ease-out-quart); }
+    :global(html.js-motion) .esc-item.activo::after { opacity: 0; }
+    :global(html.js-motion) .esc-item.activo .ventana { transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 0.5s var(--ease-out-quart); }
+    :global(html.js-motion) .pantalla { overflow-y: auto; scrollbar-width: none; }
+    :global(html.js-motion) .pantalla::-webkit-scrollbar { display: none; }
+    :global(html.js-motion) .esc-item:not(.activo) .pantalla { overflow: hidden; pointer-events: none; }
+    /* Móvil encima de la ventana con la versión móvil */
+    :global(html.js-motion) .telefono { display: block; position: absolute; right: -3%; bottom: -9%; width: 23%; aspect-ratio: 390 / 820; border-radius: 13% / 6.2%; padding: 2.4%; background: #1d1d1f; box-shadow: var(--sombra), inset 0 0 0 1.5px #5a5a5e; transform: translateZ(90px) rotateY(-14deg); transition: transform 0.8s var(--ease-out-expo), opacity 0.5s; }
+    :global(html.js-motion) .esc-item:not(.activo) .telefono { opacity: 0; transform: translateZ(0) rotateY(0); }
+    .tel-pantalla { position: relative; height: 100%; border-radius: 10.5% / 5%; overflow: hidden; background: #fff; }
+    .tel-pantalla::before { content: ''; position: absolute; z-index: 1; left: 50%; top: 1.6%; width: 30%; height: 3.4%; translate: -50% 0; border-radius: 99px; background: #000; }
+    .tel-scroll { height: 100%; overflow: hidden; }
+
+    .vista { display: none; width: fit-content; margin: 1rem auto 0; padding: 3px; border-radius: 980px; background: var(--surface); border: 1px solid var(--border); }
+    .vista button { min-height: 36px; padding: 0 1rem; border-radius: 980px; font-size: 0.82rem; font-weight: 500; color: var(--muted); white-space: nowrap; }
+    .vista button[aria-pressed='true'] { background: var(--bg); color: var(--fg); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14); }
+
+    @media (max-width: 699px) {
+        /* En el móvil del visitante manda la versión móvil (es la que se lee a ese tamaño) */
+        :global(html.js-motion) .esc { height: var(--alto-esc, 132vw); }
+        :global(html.js-motion) .esc-item { --ancho-ventana: 62vw; --paso: 74%; }
+        :global(html.js-motion) .esc-item .ventana { display: none; }
+        :global(html.js-motion) .esc-item .telefono { position: relative; right: auto; bottom: auto; width: 100%; transform: none; opacity: 1; }
+        :global(html.js-motion) .esc-item::after { border-radius: 11% / 5.2%; }
+        :global(html.js-motion) .esc[data-vista='escritorio'] .esc-item { --ancho-ventana: 92vw; --paso: 96%; }
+        :global(html.js-motion) .esc[data-vista='escritorio'] .esc-item .ventana { display: block; }
+        :global(html.js-motion) .esc[data-vista='escritorio'] .esc-item .telefono { display: none; }
+        :global(html.js-motion) .vista { display: flex; }
     }
 
-    .p-info {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    .p-cat {
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: var(--muted);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    .p-info h3 {
-        font-size: clamp(1.8rem, 3vw, 2.5rem);
-        font-weight: 600;
-        letter-spacing: -0.02em;
-        color: var(--fg);
-    }
-
-    /* --- END CARD CTA --- */
-    .projects-end {
-        width: 40vw;
-        min-width: 320px;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 4rem;
-    }
-    .end-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 1.5rem;
-    }
-    .end-icon {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        background: color-mix(in srgb, var(--accent) 15%, transparent);
-        color: var(--accent);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 1rem;
-    }
-    .end-content h3 {
-        font-size: clamp(2rem, 3vw, 3rem);
-        font-weight: 600;
-        letter-spacing: -0.03em;
-        color: var(--fg);
-    }
-    .end-content p {
-        color: var(--muted);
-        font-size: 1.15rem;
-        max-width: 400px;
-        margin-bottom: 1rem;
-    }
-    .btn-large {
-        padding: 1rem 2.5rem;
-        font-size: 1.1rem;
-    }
-
-    /* --- RESPONSIVE MOBILE --- */
-    @media (max-width: 768px) {
-        /* 80vw centrada: asoma un trozo de la siguiente para invitar a deslizar */
-        .projects-track {
-            gap: 1rem;
-            padding: 0 10vw;
-        }
-        .project-card {
-            width: 80vw;
-            min-width: 0;
-        }
-        .projects-end {
-            width: 80vw;
-            min-width: 0;
-            padding: 0 1rem;
-        }
-        .p-btn { display: none; }
+    .pj-pie { position: relative; max-width: 1040px; margin: clamp(1.5rem, 4vh, 2.5rem) auto 0; padding-inline: var(--pad); display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; }
+    .pj-info { min-width: 0; transition: opacity 0.2s, translate 0.2s var(--ease-out-quart); }
+    .pj-info.is-cambiando { opacity: 0; translate: 0 6px; }
+    .pj-num { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.04em; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .pj-num i { width: 8px; height: 8px; border-radius: 50%; background: var(--proj); }
+    .pj-titulo { font-size: clamp(1.7rem, 4vw, 2.6rem); letter-spacing: -0.035em; line-height: 1.1; margin: 0.2rem 0 0.35rem; }
+    .pj-desc { color: var(--muted); max-width: 46ch; margin-bottom: 1.1rem; }
+    .pj-desc :global(b) { color: var(--fg); font-weight: 600; }
+    .pj-nav { display: flex; gap: 0.6rem; flex-shrink: 0; }
+    .pj-flecha { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border); display: grid; place-items: center; transition: background 0.24s, border-color 0.24s, transform 0.14s; }
+    .pj-flecha:active { transform: scale(0.94); }
+    .pj-flecha svg { width: 20px; height: 20px; }
+    @media (hover: hover) and (pointer: fine) { .pj-flecha:hover { background: var(--surface); border-color: var(--fg); } }
+    .pj-pista { font-size: 0.8rem; color: var(--muted); margin-top: 0.6rem; }
+    :global(html:not(.js-motion)) .pj-nav, :global(html:not(.js-motion)) .pj-pista, :global(html:not(.js-motion)) .pj-info { display: none; }
+    @media (max-width: 699px) {
+        .pj-pie { flex-direction: column; align-items: stretch; }
+        .pj-info .btn { width: 100%; }
+        .pj-nav { position: absolute; right: var(--pad); top: 0; }
+        .pj-titulo { padding-right: 7rem; }
     }
 </style>
 
 <script>
-    // @ts-nocheck
-    import { gsap } from '@/lib/motion.js'
+    const seccion = document.getElementById('proyectos')
+    const conMovimiento = () => document.documentElement.classList.contains('js-motion')
+    if (seccion) {
+        const esc = seccion.querySelector<HTMLElement>('[data-esc]')!
+        const info = seccion.querySelector<HTMLElement>('.pj-info')!
+        const items = [...seccion.querySelectorAll<HTMLElement>('.esc-item')]
+        const N = items.length
+        const AUTO = 8 // segundos por proyecto en la reproducción automática
+        let actual = 0
 
-    const pin = document.querySelector('.projects-pin')
-    const wrapper = pin?.querySelector('.projects-wrapper')
-    const track = pin?.querySelector('.projects-track')
-
-    if (pin && wrapper && track) {
-        // Las capturas se piden un poco antes de llegar a la sección. Con
-        // loading="lazy" solo se pedían al asomar y aparecían de golpe
-        // mientras las tarjetas ya iban pasando
-        const imgs = track.querySelectorAll('img[loading="lazy"]')
-        new IntersectionObserver(
-            (entries, io) => {
-                if (!entries[0].isIntersecting) return
-                imgs.forEach((img) => (img.loading = 'eager'))
-                io.disconnect()
-            },
-            { rootMargin: '100% 0px' },
-        ).observe(pin)
-
-        // Con "reducir movimiento" no hay js-motion: se queda el carrusel nativo
-        if (document.documentElement.classList.contains('js-motion')) {
-            // Recorrido = lo que sobra del carril respecto a la pantalla.
-            // Cambia con el ancho de la ventana: se vuelve a medir solo
-            const recorrido = () => Math.max(0, track.scrollWidth - wrapper.clientWidth)
-            const medir = () => pin.style.setProperty('--recorrido', recorrido() + 'px')
-            medir()
-            const ro = new ResizeObserver(medir)
-            ro.observe(track)
-            ro.observe(wrapper)
-
-            // Sin animaciones ligadas al scroll en CSS (Firefox, Safari antiguo): GSAP
-            if (!CSS.supports('animation-timeline: view()')) {
-                gsap.to(track, {
-                    x: () => -recorrido(),
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: pin,
-                        start: 'top top', // se fija
-                        end: 'bottom bottom', // se suelta
-                        scrub: 0.4,
-                        invalidateOnRefresh: true,
-                    },
-                })
-            }
+        // ── Colocación: k = distancia al activo (−2…2); el CSS hace el 3D con --k
+        const kDe = (i: number) => { let k = i - actual; if (k > N / 2) k -= N; if (k < -N / 2) k += N; return k }
+        function colocar() {
+            items.forEach((el, i) => {
+                const k = kDe(i), antes = Number(el.style.getPropertyValue('--k') || k)
+                if (Math.abs(k - antes) > 2) {
+                    // da la vuelta por detrás, sin cruzar el escenario
+                    el.classList.add('salto'); el.style.setProperty('--k', String(k))
+                    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove('salto')))
+                } else el.style.setProperty('--k', String(k))
+                el.classList.toggle('activo', k === 0)
+                el.querySelector<HTMLElement>('.pantalla')!.tabIndex = k === 0 ? 0 : -1
+            })
         }
+        function pintarInfo(i: number) {
+            const d = items[i].dataset
+            seccion!.style.setProperty('--proj', d.color!)
+            info.classList.add('is-cambiando')
+            // Buscar dentro de .pj-info: las <article> también llevan data-titulo y data-desc
+            setTimeout(() => {
+                info.querySelector('[data-num]')!.textContent = `${String(i + 1).padStart(2, '0')} / ${String(N).padStart(2, '0')}`
+                info.querySelector('[data-titulo]')!.textContent = d.titulo!
+                const desc = info.querySelector('[data-desc]')!
+                desc.replaceChildren(Object.assign(document.createElement('b'), { textContent: `${d.cat}.` }), ` ${d.desc}`)
+                info.querySelector<HTMLAnchorElement>('[data-visitar]')!.href = d.link!
+                info.classList.remove('is-cambiando')
+            }, 200)
+        }
+        function ir(i: number) {
+            i = (i + N) % N
+            if (i === actual) return
+            actual = i
+            colocar(); pintarInfo(i); recorrido.reiniciar(); reiniciarAuto()
+        }
+        seccion.querySelectorAll<HTMLElement>('[data-dir]').forEach((b) => b.addEventListener('click', () => { pararAuto(); ir(actual + Number(b.dataset.dir)) }))
+        seccion.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { pararAuto(); ir(actual + (e.key === 'ArrowRight' ? 1 : -1)) } })
+        seccion.querySelectorAll<HTMLElement>('.vista [data-vista]').forEach((b) => b.addEventListener('click', () => {
+            esc.dataset.vista = b.dataset.vista
+            seccion.querySelectorAll('.vista [data-vista]').forEach((o) => o.setAttribute('aria-pressed', String(o === b)))
+            pararAuto(); medir(); recorrido.reiniciar()
+        }))
+        items.forEach((el, i) => el.addEventListener('click', () => { if (!el.classList.contains('activo') && !arrastrado) { pararAuto(); ir(i) } }))
+
+        // ── Reproducción automática hasta que el visitante toca algo
+        let auto = true, relojAuto = 0, seVe = false
+        function reiniciarAuto() { clearTimeout(relojAuto); if (auto && seVe && conMovimiento()) relojAuto = window.setTimeout(() => ir(actual + 1), AUTO * 1000) }
+        function pararAuto() { auto = false; clearTimeout(relojAuto) }
+
+        // ── La web activa se recorre sola (baja, se para y sube); la rueda la toma a mano
+        const recorrido = (() => {
+            let t = 0, manual = false, raf = 0, ultimo = 0
+            const suave = (x: number) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2)
+            const tramo = (v: number, a: number, b: number) => Math.min(1, Math.max(0, (v - a) / (b - a)))
+            const curva = (c: number) => suave(tramo(c, 1.5, 8.5)) * (1 - suave(tramo(c, 10, 14.5)))
+            function paso(ahora: number) {
+                raf = 0
+                const dt = Math.min((ahora - (ultimo || ahora)) / 1000, 0.05); ultimo = ahora
+                if (!seVe || manual || !conMovimiento()) { ultimo = 0; return }
+                t += dt
+                const el = items[actual], c = t % 16
+                const pan = el.querySelector<HTMLElement>('.pantalla')!, tel = el.querySelector<HTMLElement>('.tel-scroll')!
+                pan.scrollTop = curva(c) * (pan.scrollHeight - pan.clientHeight)
+                tel.scrollTop = curva(c - 0.4) * (tel.scrollHeight - tel.clientHeight)
+                raf = requestAnimationFrame(paso)
+            }
+            const arrancar = () => { if (!raf) raf = requestAnimationFrame(paso) }
+            return {
+                reiniciar() { t = 0; manual = false; items.forEach((el) => { el.querySelector('.pantalla')!.scrollTop = 0; el.querySelector('.tel-scroll')!.scrollTop = 0 }); arrancar() },
+                tomar() { manual = true; pararAuto() },
+                arrancar,
+            }
+        })()
+        items.forEach((el) => el.querySelector('.pantalla')!.addEventListener('wheel', () => recorrido.tomar(), { passive: true }))
+
+        // ── Arrastrar para cambiar de proyecto (táctil y ratón) + inclinación leve con el ratón
+        let arrastre: { x0: number; id: number } | null = null, arrastrado = false
+        esc.addEventListener('pointerdown', (e) => { if (conMovimiento()) { arrastre = { x0: e.clientX, id: e.pointerId }; arrastrado = false } })
+        esc.addEventListener('pointermove', (e) => {
+            if (arrastre) {
+                const dx = e.clientX - arrastre.x0
+                if (Math.abs(dx) > 8 && !arrastrado) { arrastrado = true; esc.classList.add('arrastrando'); esc.setPointerCapture(arrastre.id) }
+                if (arrastrado) items.forEach((el) => el.style.setProperty('--arrastre', `${dx * 0.6}px`))
+            } else if (e.pointerType === 'mouse') {
+                const r = esc.getBoundingClientRect()
+                esc.style.setProperty('--ry', `${((e.clientX - r.left) / r.width - 0.5) * 6}deg`)
+                esc.style.setProperty('--rx', `${((e.clientY - r.top) / r.height - 0.5) * -4}deg`)
+            }
+        })
+        const soltar = (e: PointerEvent) => {
+            if (!arrastre) return
+            const dx = e.clientX - arrastre.x0
+            arrastre = null
+            esc.classList.remove('arrastrando')
+            items.forEach((el) => el.style.setProperty('--arrastre', '0px'))
+            if (arrastrado && Math.abs(dx) > 60) { pararAuto(); ir(actual + (dx < 0 ? 1 : -1)) }
+            setTimeout(() => { arrastrado = false }, 0)
+        }
+        esc.addEventListener('pointerup', soltar)
+        esc.addEventListener('pointercancel', soltar)
+        esc.addEventListener('pointerleave', () => { esc.style.setProperty('--rx', '0deg'); esc.style.setProperty('--ry', '0deg') })
+
+        // ── El escenario mide lo que ocupa el activo (ventana + móvil que sobresale)
+        function medir() {
+            if (!conMovimiento()) return
+            const el = items[actual], movil = innerWidth < 700 && esc.dataset.vista !== 'escritorio'
+            const alto = movil ? el.querySelector<HTMLElement>('.telefono')!.offsetHeight : el.querySelector<HTMLElement>('.ventana')!.offsetHeight * 1.1
+            if (alto) esc.style.setProperty('--alto-esc', `${Math.round(alto + 24)}px`)
+        }
+        new ResizeObserver(medir).observe(esc)
+
+        // ── Al aparecer la sección, las ventanas llegan girando; se pausa fuera de pantalla
+        new IntersectionObserver(([e]) => {
+            seVe = e.intersectionRatio >= 0.35
+            if (seVe && !esc.classList.contains('visto')) { esc.classList.add('visto'); setTimeout(() => esc.classList.add('listo'), 1400) }
+            if (seVe) { recorrido.arrancar(); reiniciarAuto() } else clearTimeout(relojAuto)
+        }, { threshold: [0, 0.35] }).observe(esc)
     }
 </script>

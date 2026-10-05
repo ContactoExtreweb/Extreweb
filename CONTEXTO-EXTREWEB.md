@@ -5,7 +5,8 @@
 > cometidos y por qué, y lo que queda pendiente.
 > **Léelo entero antes de proponer cambios.**
 >
-> Última actualización: **26/09/2026**.
+> Última actualización: **05/10/2026** (escaparate 3D de Proyectos, Redes animadas en su página y en
+> la portada, anillo del Hero arreglado en móvil; §17 = cómo se prueba).
 
 ---
 
@@ -78,6 +79,12 @@ Navbar/Footer, panel `/admin` y legales. Conviene centralizarlo antes (ver §14)
 - JS vanilla en los `<script>` de componentes, con `// @ts-nocheck`.
 - Dependencias sin usar en `package.json`: `@fontsource-variable/space-grotesk` y
   `@fontsource/space-mono` (no se importan; inofensivas).
+- **`three` 0.186** (05/10, con permiso): SOLO para los móviles 3D de Redes (`lib/redes-animadas.js`),
+  con import dinámico al acercarse la sección → archivo aparte de ~150 KB comprimidos que no carga
+  ninguna otra página ni la portada al abrirse. **`@fontsource-variable/fraunces`**: la tipografía de
+  las publicaciones de ejemplo (solo la importa `RedesAnimadas.astro`).
+- **No** se instaló (se valoró en la entrega del 30/09): R3F/drei (meterían React en la web pública),
+  Spline (>1 MB), glTF-transform y vite-plugin-glsl (no hacen falta).
 
 ---
 
@@ -149,7 +156,8 @@ En `public/proyectos/`, referenciadas **sin** `/public/` (ej. `/proyectos/Guadic
 `Fichar.webp`, `Guzman.webp`, `Toldos-Pallares.webp`. Todas ~1905×952; los `<img>` llevan
 `width`/`height` para evitar saltos de maquetación.
 Cada una tiene versiones **`-800.webp`** (~20 KB) y **`-1200.webp`** (~35 KB), generadas con `sharp`,
-que la portada usa con `srcset` (Showcase y Projects): el móvil ya no baja la de ~85 KB.
+que la portada usa con `srcset` (Showcase; el anillo del Hero usa las `-800`): el móvil ya no baja
+la de ~85 KB. El escaparate de Projects usa otras: `public/proyectos/capturas/` (ver §8).
 **Si se cambia o se añade una captura, generar también sus dos versiones.**
 
 ---
@@ -221,7 +229,7 @@ Al importarse arranca (`boot()`, marca `data-motion-ready` en `<html>`):
   se pintaba, desaparecía al cargar GSAP y volvía a entrar (el "parpadeo" de las páginas interiores).
 
 ### GSAP se queda solo para lo que va pegado al scroll
-Showcase (capas), Services (baraja, **solo ≥901 px**), Projects (solo como respaldo, ver abajo),
+Showcase (capas), Services (baraja, **solo ≥901 px**),
 Trust (contadores), Nosotros (contadores), Proceso (línea con `scaleY`),
 Proyectos (baraja fijada) y las pestañas de Servicios. Usar `gsap.matchMedia()` para los
 efectos que dependen del ancho (se activan/desactivan solos al cambiar la ventana).
@@ -245,7 +253,10 @@ efectos que dependen del ancho (se activan/desactivan solos al cambiar la ventan
   `transform` + `opacity`; barras = `scaleY`.
 - **No mezclar `transition: transform` en CSS con GSAP animando el mismo elemento.**
 - `will-change` solo donde de verdad se anima (y por media query si solo es en escritorio).
-- Imágenes de un scroll horizontal: se pasan a `loading="eager"` al acercarse (Projects).
+- Imágenes pesadas lejos del principio: `loading="lazy"` y nada de `eager` (el escaparate bajaba
+  1 MB de capturas al abrir la portada por tres `eager`).
+- **Safari no anima bien un `transform` con `var()` dentro de `@keyframes`** (el anillo del Hero se
+  quedaba quieto en el iPhone): fotogramas con valores fijos; lo variable, en otro elemento.
 
 ## 7. Principios de diseño que rigen el proyecto
 
@@ -274,7 +285,10 @@ src/
 │   ├── motion.js                  motor de animación
 │   ├── proyectos.js               ⭐ LISTA ÚNICA de proyectos (portada, /proyectos/ y anillo del
 │   │                              hero). Captura en 3 tamaños en public/proyectos/ + una entrada.
-│   │                              `link: null` = web sin publicar → tarjeta sin enlace
+│   │                              `link: null` = web sin publicar → tarjeta sin enlace.
+│   │                              `id` = nombre de sus capturas del escaparate (public/proyectos/capturas/)
+│   ├── redes-datos.js             el mes de ejemplo de Redes ("Horno Almendro", obrador INVENTADO)
+│   ├── redes-animadas.js          móviles 3D de Redes (Three.js + pantalla dibujada en canvas 2D)
 │   └── site.js                    datos NAP + constantes SEO (+ instagram, locality, oferta)
 ├── layouts/BaseLayout.astro       <head> SEO + Schema + anti-FOUC + preload fuente + motion.js
 ├── components/
@@ -287,8 +301,10 @@ src/
 │   │                              web (sector, nombre, foto, color, estilo, extras) y la maqueta
 │   │                              FUNCIONA (reservar/comprar, WhatsApp) → "Quiero una web así"
 │   ├── Services.astro             tarjetas apiladas con sticky (se encogen solo en escritorio)
-│   ├── Projects.astro             scroll horizontal al bajar (móvil y escritorio) · cada
-│   │                              tarjeta es un <a> al proyecto (un <div> si no tiene link)
+│   ├── RedesAnimadas.astro        ⭐ Redes: "Un mes de tu perfil" + "Formatos en acción" (prop
+│   │                              `solo='mes'|'formatos'`; slot `cabecera`). Ver abajo
+│   ├── Projects.astro             ⭐ escaparate 3D en CSS (05/10; sustituye al scroll horizontal):
+│   │                              capturas reales de cada web en ventana + móvil. Ver abajo
 │   ├── Trust.astro                stats con contadores
 │   ├── Process.astro
 │   ├── Areas.astro                zonas → enlaza a las 3 landings locales
@@ -310,13 +326,15 @@ src/
     ├── diseno-web-villanueva-de-la-serena.astro │ (~700 palabras únicas cada una,
     ├── diseno-web-caceres.astro                ┘ proyectos reales de la zona, FAQs locales)
     └── aviso-legal.astro · privacidad.astro · cookies.astro
-netlify/functions/                 submission-created.mjs · calendario.mjs (ver §4)
+netlify/functions/                 submission-created.mjs · calendario.mjs · visita.mjs (ver §4)
 supabase/                          SQL de las tablas nuevas (ya ejecutadas en producción)
-public/_redirects · public/_headers
+scripts/capturas.mjs               capturas del escaparate, en directo con el Chrome instalado (abajo)
+public/proyectos/capturas/         <id>-escritorio.webp (1800 px) y <id>-movil.webp (780 px)
+public/_redirects · public/_headers · public/v.js (contador de visitas)
 ```
 
 **Orden de la home (`index.astro`):**
-`Navbar → Hero → Showcase → Configurador → Services → Projects → Trust → Process → Areas → Faq → Cta → Footer`
+`Navbar → Hero → Showcase → Configurador → Services → RedesAnimadas (solo 'formatos') → Projects → Trust → Process → Areas → Faq → Cta → Footer`
 
 **Showcase (`Showcase.astro`) — cómo funciona:**
 - Un proxy `{ p }` animado con ScrollTrigger (`scrub: 0.8`) suaviza el scroll; `pintar(p)` calcula
@@ -330,15 +348,51 @@ public/_redirects · public/_headers
   cambia de opacidad. Las etiquetas aparecen con la clase `.is-abierta`. El script solo escribe
   `--t`/`--s` si cambian. En móvil, el texto cambia sin `filter: blur`.
 
-**Projects (`Projects.astro`) — cómo funciona:**
-- `.projects-pin` mide `100svh + --recorrido` (lo que sobra del carril; lo mide el script y lo
-  vuelve a medir si cambia la ventana). Dentro, `.projects-wrapper` es **sticky**: la fija el
-  navegador, sin los saltos del "pin" de GSAP al entrar y salir (el motivo de los tirones en móvil).
-- El carril lo mueve **CSS con `animation-timeline`** (Chrome, Edge, Safari 26+; va en la GPU,
-  sin JS por frame). Donde no existe (Firefox, Safari antiguo), lo mueve **GSAP** con el mismo
-  inicio y final.
-- `.projects` usa `overflow: clip` (con `hidden` el sticky de dentro no funciona).
-- Sin JS o con "reducir movimiento": carrusel nativo que se desliza con el dedo.
+**Projects (`Projects.astro`) — escaparate 3D (05/10; preparado fuera del repo el 30/09):**
+- Lee `lib/proyectos.js` y enseña **solo los que tienen `link`** (IMTEX entra cuando se publique).
+- El activo sale grande y de frente en una ventana de navegador con su dominio real + un móvil con
+  su versión móvil; los vecinos giran a los lados (CSS 3D: `perspective`, `translateZ`, `rotateY`
+  con `--k` = distancia al activo). **Son imágenes, no texturas 3D**: el texto de cada web se lee.
+- La web activa baja sola (sube, para, vuelve). En ordenador se recorre con la rueda (por eso la
+  `.pantalla` lleva `data-lenis-prevent`). Cambiar: deslizar, flechas, teclado ←→ o tocar un vecino.
+  Avanza solo cada 8 s hasta que el visitante toca algo.
+- En el móvil del visitante (<700 px) manda la versión móvil; botón «Versión ordenador».
+- Sin JS o con "reducir movimiento": lista horizontal con título y «Visitar ↗» en cada tarjeta.
+- Capturas: `node scripts/capturas.mjs` (todas) o `node scripts/capturas.mjs <id>` (una). Usa el
+  Chrome instalado sin ventana y lee la lista de `lib/proyectos.js` (solo los que tienen link).
+  Escritorio 1440 px ×1,25 y móvil 390 px ×2, dos pantallas de alto, sin avisos de cookies.
+  **Si cambia una web o se añade un proyecto, rehacer sus capturas.**
+- Peso: las capturas van todas en `loading="lazy"`: 0 KB al abrir la portada; al llegar a la sección,
+  ~850 KB en móvil (solo versiones móviles) y ~2 MB en escritorio.
+- Arreglos sobre la entrega (05/10): `pintarInfo()` busca dentro de `.pj-info` (las `<article>`
+  también llevan `data-titulo`/`data-desc` y se borraba la primera tarjeta); `pointer-events: none`
+  en `.esc-pista` (en 3D estaba delante de los vecinos y se comía su clic); `draggable="false"` en
+  las capturas (el ratón arrastraba la imagen); relleno mayor en la lista sin JS (se cortaba la sombra).
+- ⚠️ Se perdió la tarjeta final «¿Tienes un proyecto en mente? / Ver todos los proyectos»; a
+  `/proyectos/` siguen enlazando el Hero y el menú.
+
+**RedesAnimadas (`RedesAnimadas.astro` + `lib/redes-animadas.js`) — cómo funciona (05/10):**
+- En `/servicios/redes-sociales/` (sustituye a las 3 tarjetas con emojis) van los dos bloques; en la
+  **portada**, después de Services, solo «Formatos» con su propia cabecera (slot `cabecera`):
+  «Tu web atrae clientes. Tus redes, también.» + enlace a la página de Redes.
+- **1 · Un mes de tu perfil:** calendario de octubre por el que avanza un cursor (0,26 s por día);
+  las 8 publicaciones caen en su día (Instagram/Facebook) y a la vez se llena el perfil del móvil 3D;
+  al acabar se anima el informe. Tocar un día (o una ficha del perfil) abre esa publicación.
+  **Arranca cuando el móvil se ve al 45 %.** "Ver el mes otra vez" lo repite.
+- **2 · Formatos en acción:** publicación (toca la foto → me gusta), carrusel (se desliza), reel
+  (toca → pausa) e historia (encuesta que se vota; tocar los lados avanza). Cambia sola cada 7 s
+  hasta que el visitante toca algo.
+- Arrastrar fuera de la pantalla del móvil 3D lo gira. El móvil cambia con claro/oscuro.
+- Marca de ejemplo **inventada** («Horno Almendro») y todo rotulado «Perfil/Contenido/Datos de
+  ejemplo»: **nunca presentar esas cifras como resultados nuestros.** El paquete de referencia es
+  «2 redes · 8 publicaciones al mes + informe»: si el estándar es otro, cambiar `redes-datos.js`.
+- Three.js se descarga solo al acercarse (`import()` con IntersectionObserver de 600 px). Las dos
+  partes arrancan solo si su sección está en la página (`#redes-mes`, `#redes-formatos`).
+- Sin JS o con "reducir movimiento": calendario con las publicaciones, informe con las cifras y
+  lista de formatos; el móvil no aparece.
+- Requisitos: WebGL2 (si falla, la pantalla se ve en 2D sin el móvil) y **iOS 16+** (`roundRect`).
+- Arreglo sobre la entrega: al tocar un día futuro a mitad de mes, el recuadro de «hoy» se quedaba
+  en el día de antes.
 
 **Configurador (`Configurador.astro`) — cómo funciona:**
 - **El nombre del negocio es el titular** de la web simulada (el eslogan va debajo); la primera vez
@@ -413,11 +467,22 @@ Se dedicaron **muchísimas** iteraciones. Ideas **descartadas definitivamente**:
 - **Anillo 3D de proyectos (05/10, elegido por Saúl entre 4 propuestas):** 10 tarjetas con las
   capturas `-800.webp` de los 7 proyectos de `src/lib/proyectos.js` girando solas alrededor del
   texto. CSS puro: un punto con `perspective` en el centro del bloque de texto (`.hero-anillo`) y
-  dentro el anillo inclinado (`rotateX(--incl)`) que gira con `rotateY` (`anilloGira`, 50–70 s).
+  dentro el anillo inclinado (`.anillo`, `rotateX(--incl)`) y, dentro, `.giro`, que gira con `rotateY`
+  (`anilloGira`, 50–70 s). ⚠️ Inclinación y giro van en **elementos distintos** y los fotogramas del
+  giro llevan **valores fijos** (sin `var()`): con `rotateX(var(--incl))` dentro del `@keyframes`, en
+  Chrome giraba pero en los móviles se quedaba quieto (05/10).
   - Cada tarjeta tiene **dos caras**: `.cara` (fuera) y `.dorso` (la misma foto con `rotateY(180°)`
     y `opacity: .3`), así las de detrás se leen al derecho y apagadas sin animar nada más.
-  - **Móvil (<900 px):** el anillo va DEBAJO de los botones (`--cy: 210px`) y sin dorsos: arriba no
-    hay sitio sin tapar el texto. **Escritorio:** rodea el texto (detrás, por encima de la pastilla;
+  - **Móvil (<900 px):** el anillo va DEBAJO de los botones y sin dorsos: arriba no hay sitio sin
+    tapar el texto. Se ancla al FINAL del texto (`top: calc(100% + --cy)`, `--cy: 20px`), radio
+    300 px, tarjetas de 170 px (la de delante sale de ~235 px), inclinación −12° (con poca, la de
+    delante sube) y degradado de abajo de solo 40 px. En móvil el texto del hero tiene algo menos
+    de margen entre líneas para que quepa. Comprobado girando una vuelta: 13 px de hueco bajo
+    «Ver proyectos» y la de delante se ve entera sin bajar desde ~740 px de alto (72% en ~664). ⚠️ (05/10) Antes iba a 210 px del
+    centro del texto con un degradado del 18 %: en DevTools (iPhone de 844 px) se veía, pero en un
+    móvil real, con las barras del navegador (~664 px visibles), quedaba bajo el pliegue y apagado
+    → "en el móvil no carga". **Probar siempre con la altura visible real**, no con la de DevTools.
+    **Escritorio:** rodea el texto (detrás, por encima de la pastilla;
     delante, bajo los botones) y su radio va con la ALTURA (`clamp(480px, 70vh, 680px)`).
     Portátiles bajos: tarjetas más pequeñas (≤780 px de alto) y más inclinación (≤700 px).
   - Comprobado girando una vuelta entera de 360×780 a 1920×1080: ninguna tarjeta pisa el texto
@@ -827,6 +892,20 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
 19. **Search Console dentro del panel:** descartado por ahora (OAuth y credenciales de Google; es un
     proyecto en sí). Se sigue mirando en Google.
 
+### Escaparate de Proyectos y Redes (subidos el 05/10)
+20. **Probar en un iPhone real:** deslizar el escaparate, el carrusel y la encuesta de Redes, y la
+    **fluidez** de los dos móviles 3D (materiales de cristal/metal; si va a tirones, simplificarlos).
+21. **Lighthouse** de la portada y de `/servicios/redes-sociales/` (en local no se hizo: el servidor
+    de desarrollo de Saúl estaba arrancado; el build se comprobó en una copia limpia: 18 páginas OK).
+22. **Dos piezas 3D con las mismas capturas en la portada** (anillo del Hero + escaparate). Se avisó:
+    va contra "gastar el descaro en UN solo sitio". Valorar quitar una.
+23. **IMTEX** no sale en el escaparate (sin link). Al publicarse: link en `lib/proyectos.js` y
+    `node scripts/capturas.mjs imtex`. Mismo paso si Físicas Élite o Taller Guzmán cambian de dominio.
+24. Revisar las **descripciones** de `lib/proyectos.js` (las usan escaparate y `/proyectos/`; alguna
+    es de relleno: "Presencia digital líder…"). La entrega traía otras sacadas de cada web.
+25. Escritorio de Redes: el móvil 3D va centrado junto a un calendario más alto; al llegar está
+    abajo y el mes tarda un poco en arrancar. Si molesta: móvil `sticky` mientras pasa el calendario.
+
 ---
 
 ## 15. Resumen de gotchas (los que ya nos han mordido)
@@ -854,12 +933,18 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
 | Botones del panel con letra más pequeña | El navegador da a `<button>` su propio tamaño de letra | Poner `font-size` en la clase del botón |
 | Un campo con `flex-basis: auto` se come la fila | `.a-input` trae `width: 100%` | Añadir `width: auto` o un `flex-basis` fijo |
 | Al imprimir salen páginas en blanco | La hoja estaba dentro del panel | `Imprimible` monta la hoja en el `<body>` (portal) y el CSS de impresión oculta lo demás |
+| Animación que en DevTools va y en el móvil real no | 1) DevTools usa toda la altura (844 px) y el móvil real enseña ~664 · 2) `var()` dentro de un `@keyframes` de `transform` | Probar con la altura visible real · fotogramas con valores fijos; lo variable, en otro elemento |
+| La rueda mueve la página y no el bloque con scroll propio | Lenis (escritorio) se come la rueda | `data-lenis-prevent` en el elemento con scroll (Configurador, escaparate) |
+| En un carrusel 3D no se puede tocar a los vecinos | Con `preserve-3d`, el contenedor está en z = 0 y los vecinos detrás | `pointer-events: none` en el contenedor y `auto` en las tarjetas |
+| Al cambiar de proyecto se borraba una tarjeta | `querySelector('[data-titulo]')` encontraba antes la `<article>` con ese atributo | Buscar dentro del bloque que toca, no en toda la sección |
+| En `npm run dev` parece que las imágenes `lazy` se cargan al abrir | La barra de desarrollo de Astro (`audit-*.js`) pide todas las imágenes; además tapa lo que hay abajo en el centro | Medir con la barra bloqueada o en el build; en producción no existe |
 
 ---
 
 ## 16. Lo que NO hay que tocar
 
-- `package.json`, `netlify.toml`, `tsconfig.json`.
+- `package.json`, `netlify.toml`, `tsconfig.json`. (05/10: se añadieron `three` y
+  `@fontsource-variable/fraunces` con permiso, para Redes. Nada más sin preguntar.)
 - `astro.config.mjs` — **solo** se añadió el filtro del sitemap (`/admin` fuera), con permiso.
 - El **Hero** (está aprobado y es CSS puro a propósito). El 22/09 solo se le quitó el
   `backdrop-filter` al marquee y se le puso `data-anim-pausa` (rendimiento, mismo aspecto).
@@ -867,3 +952,37 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
   pegado al scroll, nada de desenfoques grandes. Si algo va a tirones, mirar §6 antes de tocar.
 - Los **registros MX/SPF/DKIM de Zoho** en el DNS.
 - La **RLS** de Supabase (las tablas nuevas siguen la misma política; no se ha cambiado ninguna).
+
+---
+
+## 17. Cómo se prueba (notas para Claude, en cualquier PC)
+
+- **Servidor de desarrollo:** antes de usar o parar el 4321, mirar QUÉ proyecto es (a veces es el de
+  IMTEX, `Desktop\Extreweb\Imtex\web`). extreweb tiene `astro-dev-4323` en `.claude/launch.json`.
+  Si el de Saúl (extreweb) está arrancado, **probar contra el suyo**: dos servidores del mismo
+  proyecto comparten `node_modules/.vite`.
+- **Nunca `npm run build` con su servidor arrancado** (rompe `node_modules/.vite`, ver §15). Para
+  comprobar el build: copia limpia en una carpeta temporal (`git ls-files -co --exclude-standard`
+  → tar → `npm ci` → `npm run build`).
+- **Navegador:** el panel de navegador integrado a veces deja de pintar (`requestAnimationFrame` a
+  0: capturas negras o descuadradas; no es un fallo de la web). Lo fiable: **Chrome sin ventana por
+  DevTools Protocol** sin dependencias (Node 24 trae WebSocket): `chrome.exe --headless=new
+  --remote-debugging-port=… --user-data-dir=<temporal>` y `Emulation.setDeviceMetricsOverride`,
+  `Emulation.setEmulatedMedia` (oscuro, `prefers-reduced-motion`), `Runtime.evaluate`,
+  `Input.dispatchMouseEvent/TouchEvent` y `Page.captureScreenshot`.
+  - Bloquear la barra de Astro: `Network.setBlockedURLs(['*dev-toolbar*','*/audit-*','*/toolbar*'])`.
+  - Con Lenis activo, para bajar: `window.__lenis.scrollTo(y, { immediate: true })`.
+  - Móviles con la **altura visible real**: 390×664 (iPhone en Safari), 375×553 (SE), 430×740 (Pro
+    Max), 412×780 y 360×640 (Android). DevTools (390×844) engaña.
+  - WebGL sin ventana va por software (`--enable-unsafe-swiftshader --use-angle=swiftshader`) a
+    ~1 fps: sirve para ver que funciona, no para medir fluidez.
+  - Animaciones CSS: pausar con `el.getAnimations()[0].pause()` y mover `currentTime` para revisar
+    todas las posiciones (así se comprobó que el anillo del Hero no pisa el texto).
+- **Panel `/admin` sin la contraseña** (nunca se usan las credenciales de Saúl): Chrome sin ventana
+  con `--disable-web-security`; `Page.addScriptToEvaluateOnNewDocument` mete una sesión falsa en
+  `localStorage['sb-<ref>-auth-token']` (JWT sin firmar con `exp` lejano) y `Fetch.enable` sobre la
+  URL de Supabase responde desde un mini-PostgREST en memoria (filtros eq/gte/lt/is/in/ilike/or,
+  order/limit/offset, HEAD con `content-range` para contar, `.single()`). Nada llega al Supabase real.
+  Los `confirm()` se aceptan con `Page.handleJavaScriptDialog`.
+- Lo que no se puede comprobar aquí (Safari/iPhone, fluidez real): decírselo a Saúl y que lo pruebe
+  en su móvil con `npm run dev -- --host` (misma wifi, dirección «Network»).

@@ -5,6 +5,7 @@ import Hero from '@/components/Hero.astro'
 import Configurador from '@/components/Configurador.astro'
 import Showcase from '@/components/Showcase.astro'
 import Services from '@/components/Services.astro'
+import RedesAnimadas from '@/components/RedesAnimadas.astro'
 import Projects from '@/components/Projects.astro'
 import Trust from '@/components/Trust.astro'
 import Process from '@/components/Process.astro'
@@ -21,6 +22,18 @@ import Footer from '@/components/Footer.astro'
 		<Showcase />
 		<Configurador />
 		<Services />
+		<!-- Redes sociales: el móvil interactivo de /servicios/redes-sociales/ (solo "Formatos") -->
+		<RedesAnimadas solo='formatos'>
+			<Fragment slot='cabecera'>
+				<span class='eyebrow'>Redes sociales</span>
+				<h2>Tu web atrae clientes. Tus redes, también.</h2>
+				<p>
+					Te llevamos Instagram y Facebook cada mes: ideas, diseño, textos, publicación y un
+					informe de lo que ha funcionado. <span class='solo-js'>Toca el móvil y prueba cada formato.</span>
+				</p>
+				<a href='/servicios/redes-sociales/'>Ver cómo llevamos tus redes&nbsp;›</a>
+			</Fragment>
+		</RedesAnimadas>
 		<Projects />
 		<Trust />
 		<Process />
