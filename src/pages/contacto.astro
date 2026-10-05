@@ -2,6 +2,14 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import Navbar from '@/components/Navbar.astro'
 import Footer from '@/components/Footer.astro'
+import { SITE } from '@/lib/site.js'
+
+const { oferta } = SITE
+// WhatsApp con el código ya escrito: así sabemos que viene de la web
+const whatsapp =
+    'https://wa.me/' +
+    SITE.telephone.replace('+', '') +
+    (oferta ? '?text=' + encodeURIComponent(`Hola, vengo de vuestra web (${oferta.codigo}). `) : '')
 
 const seoTitle = 'Contacto — extreweb, tu agencia web'
 const seoDesc =
@@ -27,6 +35,23 @@ const seoDesc =
                             puedes enviarnos un WhatsApp si lo prefieres.
                         </p>
 
+                        {
+                            oferta && (
+                                <div class='c-oferta fx-in-soft' id='oferta'>
+                                    <span class='c-oferta-num'>−{oferta.descuento}%</span>
+                                    <div>
+                                        <strong>Por contactar desde la web</strong>
+                                        <p>
+                                            En tu nueva web o en tu servicio de redes
+                                            sociales. Por el formulario o WhatsApp se
+                                            aplica solo; si nos llamas, di «{oferta.codigo}».
+                                        </p>
+                                        <small>{oferta.condiciones}</small>
+                                    </div>
+                                </div>
+                            )
+                        }
+
                         <div class='c-info-list fx-in-soft'>
                             <div class='c-info-item'>
                                 <span class='c-icon'>✉️</span>
@@ -42,7 +67,7 @@ const seoDesc =
                                 <div>
                                     <strong>WhatsApp / Teléfono</strong>
                                     <a
-                                        href='https://wa.me/34628775619'
+                                        href={whatsapp}
                                         target='_blank'
                                         rel='noopener'>Escríbenos por WhatsApp</a
                                     >
@@ -312,6 +337,46 @@ const seoDesc =
         color: var(--muted);
         margin-bottom: 4rem;
         max-width: 500px;
+    }
+
+    /* Oferta (SITE.oferta); el hero de la portada enlaza aquí */
+    .c-oferta {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.25rem;
+        max-width: 500px;
+        margin: -1.5rem 0 3.5rem;
+        padding: 1.4rem 1.5rem;
+        border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+        scroll-margin-top: 120px;
+    }
+    .c-oferta-num {
+        flex-shrink: 0;
+        font-size: 2.2rem;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        color: var(--accent);
+    }
+    .c-oferta strong {
+        display: block;
+        font-size: 1.1rem;
+        color: var(--fg);
+        margin-bottom: 0.4rem;
+    }
+    .c-oferta p {
+        font-size: 1rem;
+        line-height: 1.55;
+        color: var(--fg);
+        margin-bottom: 0.6rem;
+    }
+    .c-oferta small {
+        display: block;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        color: var(--muted);
     }
 
     .c-info-list {
@@ -593,6 +658,11 @@ const seoDesc =
         }
     }
     @media (max-width: 480px) {
+        /* El número arriba: si no, deja el texto en una columna estrecha */
+        .c-oferta {
+            flex-direction: column;
+            gap: 0.6rem;
+        }
         .form-card {
             padding: 1.5rem 1.25rem;
         }

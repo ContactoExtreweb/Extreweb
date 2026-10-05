@@ -3,49 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import Navbar from '@/components/Navbar.astro'
 import Cta from '@/components/Cta.astro'
 import Footer from '@/components/Footer.astro'
-
-const projects = [
-    {
-        title: 'CarMeet',
-        category: 'Comunidad Automotriz',
-        image: '/proyectos/Car-MeetESP.webp',
-        link: 'https://carmeet.es',
-        color: '#f43f5e',
-        desc: 'Diseño de interfaz moderna para gestión de eventos, rutas y perfiles.'
-    },
-    {
-        title: 'Fichar365',
-        category: 'SaaS / RRHH',
-        image: '/proyectos/Fichar.webp',
-        link: 'https://fichar365.com',
-        color: '#3b82f6',
-        desc: 'Software integral con enfoque en la usabilidad y rapidez para empresas.'
-    },
-    {
-        title: 'Guadicar',
-        category: 'Concesionario',
-        image: '/proyectos/Guadicar.webp',
-        link: 'https://guadicar.es',
-        color: '#eab308',
-        desc: 'Catálogo digital avanzado con optimización extrema para SEO local.'
-    },
-    {
-        title: 'Taller M. Guzmán',
-        category: 'Chapa y pintura',
-        image: '/proyectos/Guzman.webp',
-        link: 'https://project-r5m3o.vercel.app/',
-        color: '#10b981',
-        desc: 'Web del taller con galería de trabajos y presupuesto por formulario o WhatsApp.'
-    },
-    {
-        title: 'Toldos Pallares',
-        category: 'Web Corporativa',
-        image: '/proyectos/Toldos-Pallares.webp',
-        link: 'https://toldospallares.com',
-        color: '#a855f7',
-        desc: 'Presencia digital líder centrada en destacar captación de leads.'
-    }
-]
+import { PROYECTOS as projects } from '@/lib/proyectos.js'
 ---
 
 <BaseLayout 
@@ -88,10 +46,12 @@ const projects = [
                             
                             <div class="c-right">
                                 <p>{p.desc}</p>
-                                <a href={p.link} target="_blank" rel="noopener noreferrer" class="c-btn">
-                                    Ver Proyecto
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                                </a>
+                                {p.link && (
+                                    <a href={p.link} target="_blank" rel="noopener noreferrer" class="c-btn">
+                                        Ver Proyecto
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                    </a>
+                                )}
                             </div>
                         </div>
                         

@@ -38,6 +38,7 @@
 | **Físicas Élite** | Next.js + Supabase + Stripe + Bunny Stream | Traspasado a Pedro |
 | **toldospallares.com** | WordPress + Elementor | Cliente |
 | **Taller Guzmán** | Astro 6 + Tailwind | Cliente (aún en `project-r5m3o.vercel.app`) |
+| **IMTEX** — imtexsl.com (impermeabilización, Villanueva) | Astro | Cliente; la nueva aún sin publicar (05/10) |
 
 > Nota: **sí uso React y Tailwind** en otros proyectos (CarMeet, taller Guzmán), aunque en
 > extreweb.es el sitio público va en Astro vanilla. Si la web lo menciona como servicio, es honesto.
@@ -271,11 +272,14 @@ src/
 ├── styles/global.css              tokens + reset + modo oscuro + utilidades
 ├── lib/
 │   ├── motion.js                  motor de animación
-│   └── site.js                    datos NAP + constantes SEO (+ instagram, locality)
+│   ├── proyectos.js               ⭐ LISTA ÚNICA de proyectos (portada, /proyectos/ y anillo del
+│   │                              hero). Captura en 3 tamaños en public/proyectos/ + una entrada.
+│   │                              `link: null` = web sin publicar → tarjeta sin enlace
+│   └── site.js                    datos NAP + constantes SEO (+ instagram, locality, oferta)
 ├── layouts/BaseLayout.astro       <head> SEO + Schema + anti-FOUC + preload fuente + motion.js
 ├── components/
 │   ├── Navbar.astro               toggle de tema, menú móvil, sección activa normalizada
-│   ├── Hero.astro                 ⭐ CSS PURO, sin JS (ver §9) + marquee
+│   ├── Hero.astro                 ⭐ CSS PURO, sin JS (ver §9): oferta + anillo 3D de proyectos
 │   ├── Showcase.astro             "Anatomía de una web que vende" (420vh; 360vh en móvil): la web
 │   │                              REAL de GuadiCar se abre en 3 capas (diseño · Google · velocidad)
 │   │                              y se vuelve a montar al final. Datos de Google = los reales.
@@ -284,7 +288,7 @@ src/
 │   │                              FUNCIONA (reservar/comprar, WhatsApp) → "Quiero una web así"
 │   ├── Services.astro             tarjetas apiladas con sticky (se encogen solo en escritorio)
 │   ├── Projects.astro             scroll horizontal al bajar (móvil y escritorio) · cada
-│   │                              tarjeta es un <a> al proyecto
+│   │                              tarjeta es un <a> al proyecto (un <div> si no tiene link)
 │   ├── Trust.astro                stats con contadores
 │   ├── Process.astro
 │   ├── Areas.astro                zonas → enlaza a las 3 landings locales
@@ -299,7 +303,7 @@ src/
     ├── index.astro
     ├── admin.astro                ⭐ panel interno (ver §11)
     ├── servicios/{index, diseno-web, seo, redes-sociales, sistemas-soporte}.astro
-    ├── proyectos/index.astro      array `projects` → enlaces EXTERNOS a las webs en vivo
+    ├── proyectos/index.astro      lee `lib/proyectos.js` → enlaces EXTERNOS a las webs en vivo
     ├── nosotros.astro             bios reales de los dos socios
     ├── proceso.astro · contacto.astro
     ├── diseno-web-don-benito.astro            ┐ solo contenido; usan LocalLanding.astro
@@ -393,19 +397,46 @@ Se dedicaron **muchísimas** iteraciones. Ideas **descartadas definitivamente**:
    además eliminaba los CTAs. Estuvo como `Playground.astro` más abajo en la home; el 18/09/2026
    se sustituyó por el **Configurador** (ver §8), que sí tiene un objetivo: acabar en contacto.
 
-### ✅ HERO ACTUAL (aprobado — "simple pero funcional")
+### ✅ HERO ACTUAL (05/10: titular + oferta + anillo 3D de proyectos)
 - **Estilo Apple**, **100% CSS, SIN JavaScript** (por eso es imposible que se rompa).
 - `h1`: **"Vendemos soluciones reales."** — "reales" con
   `linear-gradient(120deg, var(--accent), #7c5cff)` + `background-clip: text`.
 - Kicker eyebrow: "Diseño y desarrollo web · Extremadura".
 - Sub: "A medida, rápidas y pensadas para vender. Sin plantillas, sin atajos."
 - 2 CTAs: **Empezar proyecto** (/contacto/) y **Ver proyectos** (/proyectos/).
-- Chevron de scroll animado abajo + marquee infinito de especialidades.
+- **Oferta (05/10):** pastilla encima del kicker «−10% en tu web o redes sociales ›» que lleva a
+  `/contacto/#oferta`, donde está la caja con las condiciones. Todo sale de **`SITE.oferta`**
+  (`site.js`: descuento, código `WEB10` y condiciones); `oferta: null` la quita de las dos páginas.
+  Quien escribe por el formulario ya viene de la web; el código es para identificar **las
+  llamadas** (y el WhatsApp de contacto lo lleva ya escrito). Va en una línea (`nowrap`): Chrome
+  la calculaba ~4px corta y partía el texto.
+- **Anillo 3D de proyectos (05/10, elegido por Saúl entre 4 propuestas):** 10 tarjetas con las
+  capturas `-800.webp` de los 7 proyectos de `src/lib/proyectos.js` girando solas alrededor del
+  texto. CSS puro: un punto con `perspective` en el centro del bloque de texto (`.hero-anillo`) y
+  dentro el anillo inclinado (`rotateX(--incl)`) que gira con `rotateY` (`anilloGira`, 50–70 s).
+  - Cada tarjeta tiene **dos caras**: `.cara` (fuera) y `.dorso` (la misma foto con `rotateY(180°)`
+    y `opacity: .3`), así las de detrás se leen al derecho y apagadas sin animar nada más.
+  - **Móvil (<900 px):** el anillo va DEBAJO de los botones (`--cy: 210px`) y sin dorsos: arriba no
+    hay sitio sin tapar el texto. **Escritorio:** rodea el texto (detrás, por encima de la pastilla;
+    delante, bajo los botones) y su radio va con la ALTURA (`clamp(480px, 70vh, 680px)`).
+    Portátiles bajos: tarjetas más pequeñas (≤780 px de alto) y más inclinación (≤700 px).
+  - Comprobado girando una vuelta entera de 360×780 a 1920×1080: ninguna tarjeta pisa el texto
+    (en 1280×720 roza 5 px por detrás del botón; en 1280×650 la parte de delante queda casi fuera).
+    Si se toca la geometría, repetir esa prueba (medir con `getBoundingClientRect` cada tarjeta
+    pausando la animación con `getAnimations()` y `currentTime`).
+  - El orden de las 10 tarjetas (`anillo` en `Hero.astro`) evita que una web quede enfrente o al
+    lado de sí misma. **Si cambia la lista de proyectos, revisarlo.**
+  - Se para fuera de pantalla (`data-anim-pausa`). Con «reducir movimiento», `animation: none`
+    explícito: `global.css` pone las animaciones a 0,01 ms y un giro infinito parpadearía.
+  - Un degradado abajo (`.hero::after`) funde las tarjetas de delante con el fondo.
+  - Se quitaron el **marquee** (jerga: Headless, WPO…; además competía con el anillo) y la
+    **flecha** de scroll (las tarjetas de delante pasan por ahí).
+  - La pastilla de la oferta es opaca porque por detrás pasan tarjetas.
 - `min-height: 100svh`, `@keyframes heroIn` con delays escalonados, `prefers-reduced-motion`
-  respetado. Funciona perfecto en claro y oscuro.
+  respetado. Funciona en claro y oscuro.
 
-> ⚠️ **No propongas volver a meter el navegador/mini-web en el hero.** Si hay que mejorarlo,
-> que sea sobre esta base tipográfica.
+> ⚠️ **No propongas volver a meter el navegador/mini-web en el hero.** El anillo enseña capturas
+> de webs reales como tarjetas, no una web maquetada dentro de otra.
 
 ---
 
@@ -623,6 +654,10 @@ el menú. Puntito azul en la hamburguesa si hay mensajes sin leer.
     dominio publicado: nada en local ni en previsualizaciones. Las webs de clientes solo cuentan
     si su dominio está activo en `sitios` (Ajustes → Webs medidas; la lista se guarda 5 min en
     memoria en la función).
+  - **No nos cuenta a nosotros (05/10):** al entrar al panel se guarda `ew-yo` en el
+    `localStorage` de ese navegador y `v.js` no cuenta sus visitas. Hay que entrar al panel una vez
+    en cada navegador/móvil que uséis. Solo vale en extreweb.es (en las webs de clientes sí os
+    cuenta). Las visitas vuestras de antes del 05/10 siguen en los datos.
   - **Webs de clientes:** en Ajustes → Webs medidas está el `<script>` que hay que pegar y el
     párrafo para su política de cookies. Como el dato se trata por cuenta del cliente, el contrato
     de mantenimiento debería incluir la cláusula de encargado del tratamiento.
@@ -661,8 +696,11 @@ el menú. Puntito azul en la hamburguesa si hay mensajes sin leer.
 ## 12. SEO — lo que ya está hecho
 
 - **`src/lib/site.js`** → objeto `SITE`: name, url, description, email (Gmail), telephone
-  (`+34628775619`), `instagram`, **`sameAs: [instagram]`** (solo perfiles externos, nunca la
-  propia web), `locality: 'Villanueva de la Serena'`, region, country, `areaServed`, `founders`,
+  (`+34628775619`), `instagram`, **`googleMaps`** (enlace `?cid=` de la ficha de Google; 05/10),
+  **`sameAs: [instagram, googleMaps]`** (solo perfiles externos, nunca la propia web). La ficha va
+  además como `hasMap` en el schema del negocio y como icono de Maps en el pie: así Google sabe que
+  la web y la ficha son el mismo negocio. Si cambia la ficha (p. ej. con el rebranding), cambiar
+  el cid aquí. `locality: 'Villanueva de la Serena'`, region, country, `areaServed`, `founders`,
   `ogImage: '/og-portada.jpg'` (existe, 1200×630).
 - **`seo/Schema.astro`** → JSON-LD `@graph` con **Organization + ProfessionalService + WebSite**,
   sitewide. La dirección lleva `addressLocality`.
@@ -705,8 +743,8 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
 ## 14. PENDIENTE
 
 ### Bloqueado por datos
-1. **Aviso legal:** falta **razón social + NIF** (y datos registrales si es S.L.) de la empresa
-   tal como se registró fiscalmente. **Lo exige la LSSI.** Los tiene que pasar Pedro.
+1. **Aviso legal:** la razón social es **FG Digital SL** (dicho por Saúl el 05/10); falta el
+   **NIF** y los datos registrales (Registro Mercantil). **Lo exige la LSSI.**
 2. **Rebranding** (§2): cuando se decida el nombre. Antes conviene **centralizar la marca**:
    un `Logo.astro` único para Navbar y Footer + usar `SITE.name` en títulos y textos.
 
@@ -717,9 +755,16 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
    - `servicios/index`: "matemáticamente inmune a hackeos masivos", "<0.8s", "24/7".
    - `Faq.astro`: "100/100", "24/7".
    - `Trust.astro`: "+5 años de experiencia" (¿real?) y "4 proyectos en producción" (la home
-     enseña 5).
-4. **Jerga que el cliente local no entiende:** "Headless", "WPO", "UI/UX", "Edge" en el marquee
-   del hero y en servicios. Mejor beneficios en cristiano.
+     enseña 7 desde el 05/10; publicadas de verdad: GuadiCar, Toldos Pallares, Fichar365 y
+     CarMeet → el 4 cuadra hasta que salgan IMTEX y Físicas Élite).
+4. **Jerga que el cliente local no entiende:** "Headless", "WPO", "UI/UX", "Edge" en servicios
+   (el marquee del hero que la tenía se quitó el 05/10). Mejor beneficios en cristiano.
+4b. **Enlaces provisionales de proyectos (05/10):**
+   - **IMTEX** va con `link: null` en `lib/proyectos.js`: la nueva aún no está en imtexsl.com
+     (sigue la antigua). Al publicarse, poner el link y añadirla a las páginas de **Villanueva** y
+     **Don Benito** (es de Villanueva; no se añadió porque dicen «webs que puedes abrir ahora»).
+   - **Físicas Élite** enlaza a `fisicaelite.vercel.app` porque aún no han pagado el dominio.
+     Cuando lo tengan, cambiarlo en `lib/proyectos.js` y en `diseno-web-caceres.astro`.
 5. **Páginas de servicio muy finas** (~150 palabras). Las de ciudad ya están hechas (18/09).
    Siguiente pieza SEO: servicios → páginas por sector (concesionarios, talleres, instalación)
    → guía de precios ("¿cuánto cuesta una web?").
@@ -759,9 +804,12 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
   "diseño web Villanueva/Don Benito" conviene **«Diseñador de sitios web»** como principal (y
   «Empresa de software» o «Consultor de marketing» como secundarias). Es de lo que más pesa en
   las búsquedas locales.
-- Reseñas: se desactivaron porque la ficha tenía la apertura en el futuro («Abre: jue 1 oct»);
-  se cambió la fecha el 26/09 y Google tarda uno o dos días en activarlas. Comprobar en una
-  ventana de incógnito (no con la cuenta que gestiona la ficha) antes de pedirlas.
+- Reseñas: estuvieron desactivadas porque la ficha tenía la apertura en el futuro; se cambió la
+  fecha el 26/09 y ya están **activas (05/10: 5 reseñas, 5,0)**. Antes de pedirlas desde el panel,
+  marcar «Ya la ha dejado ✓» a los clientes que ya la dejaron. El panel del negocio aún no sale al
+  buscar «extreweb» en Google.
+- ⚠️ Un competidor de Don Benito (9technology.com, categoría «Diseñador de sitios web») **paga
+  anuncios en Google por la búsqueda «extreweb»** (05/10): sale por encima de vosotros.
 - Search Console: pedir indexación de las páginas nuevas y revisar *Rendimiento → Consultas*.
 - ⚠️ Con el rebranding/cambio de dominio: **redirecciones 301 de todas las URLs** para no perder
   lo ganado.

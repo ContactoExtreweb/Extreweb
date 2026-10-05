@@ -1,42 +1,6 @@
 ---
 // src/components/Projects.astro
-const projects = [
-    {
-        title: 'CarMeet',
-        category: 'Comunidad Automotriz',
-        image: '/proyectos/Car-MeetESP.webp',
-        link: 'https://carmeet.es',
-        color: '#f43f5e'
-    },
-    {
-        title: 'Fichar365',
-        category: 'SaaS / RRHH',
-        image: '/proyectos/Fichar.webp',
-        link: 'https://fichar365.com',
-        color: '#3b82f6'
-    },
-    {
-        title: 'Guadicar Multimarcas',
-        category: 'Concesionario',
-        image: '/proyectos/Guadicar.webp',
-        link: 'https://guadicar.es',
-        color: '#eab308'
-    },
-    {
-        title: 'Taller M. Guzmán',
-        category: 'Automoción',
-        image: '/proyectos/Guzman.webp',
-        link: 'https://project-r5m3o.vercel.app/',
-        color: '#10b981'
-    },
-    {
-        title: 'Toldos Pallares',
-        category: 'Web Corporativa',
-        image: '/proyectos/Toldos-Pallares.webp',
-        link: 'https://toldospallares.com',
-        color: '#a855f7'
-    }
-]
+import { PROYECTOS as projects } from '@/lib/proyectos.js'
 ---
 
 <section class='projects' id='proyectos'>
@@ -52,14 +16,13 @@ const projects = [
         <div class='projects-wrapper'>
             <div class='projects-track'>
             
-                {projects.map((p, i) => (
+                {projects.map((p) => { const Card = p.link ? 'a' : 'div'; return (
                     <!-- Toda la tarjeta es el enlace: así funciona al tocar en móvil
-                         (antes el botón solo aparecía con hover) y con teclado -->
-                    <a
+                         (antes el botón solo aparecía con hover) y con teclado.
+                         Sin link (web aún sin publicar), la tarjeta no enlaza -->
+                    <Card
                         class='project-card'
-                        href={p.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        {...(p.link ? { href: p.link, target: '_blank', rel: 'noopener noreferrer' } : {})}
                     >
                         <div class='p-image'>
                             <img
@@ -72,16 +35,18 @@ const projects = [
                                 loading="lazy"
                                 decoding="async"
                             />
-                            <div class='p-overlay' style={`--hover-c: ${p.color}`} aria-hidden="true">
-                                <span class='p-btn'>Visitar proyecto</span>
-                            </div>
+                            {p.link && (
+                                <div class='p-overlay' style={`--hover-c: ${p.color}`} aria-hidden="true">
+                                    <span class='p-btn'>Visitar proyecto</span>
+                                </div>
+                            )}
                         </div>
                         <div class='p-info'>
-                            <span class='p-cat'>{p.category} <span class='p-ext' aria-hidden="true">↗</span></span>
+                            <span class='p-cat'>{p.category} {p.link && <span class='p-ext' aria-hidden="true">↗</span>}</span>
                             <h3>{p.title}</h3>
                         </div>
-                    </a>
-                ))}
+                    </Card>
+                )})}
 
                 <!-- Card final de Call to Action -->
                 <div class='projects-end'>
@@ -254,7 +219,7 @@ const projects = [
     
     /* Efectos Hover Desktop */
     @media (hover: hover) and (pointer: fine) {
-        .project-card:hover .p-image img {
+        a.project-card:hover .p-image img {
             transform: scale(1.06);
         }
         .project-card:hover .p-overlay {
@@ -281,7 +246,7 @@ const projects = [
     .p-image {
         transition: transform var(--dur-fast) var(--ease-out-quart);
     }
-    .project-card:active .p-image {
+    a.project-card:active .p-image {
         transform: scale(0.98);
     }
     .p-ext {

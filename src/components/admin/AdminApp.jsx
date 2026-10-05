@@ -46,6 +46,11 @@ export default function AdminApp() {
     return () => sub.subscription.unsubscribe()
   }, [])
 
+  // Este navegador es nuestro: v.js deja de contar sus visitas a la web
+  useEffect(() => {
+    if (session) try { localStorage.setItem('ew-yo', '1') } catch (e) {}
+  }, [session])
+
   // Contador de mensajes sin leer (se refresca al cambiar de sección)
   const cargarSinLeer = useCallback(async () => {
     const { count } = await supabase

@@ -8,8 +8,18 @@ export const SITE = {
   email: 'contactoextreweb@gmail.com',
   telephone: '+34628775619',   // formato internacional (lo pide el schema de Google)
   instagram: 'https://instagram.com/extreweb',
+  // Ficha de Google (Perfil de Empresa). El cid sale del enlace de Maps de la ficha
+  googleMaps: 'https://maps.google.com/?cid=15465466821035549424',
   // Perfiles EXTERNOS de la marca (Instagram, LinkedIn, Google Business…), nunca la propia web
-  sameAs: ['https://instagram.com/extreweb'],
+  sameAs: ['https://instagram.com/extreweb', 'https://maps.google.com/?cid=15465466821035549424'],
+
+  // Oferta para quien nos contacta desde la web (portada + contacto). Para quitarla: oferta: null
+  oferta: {
+    descuento: 10,
+    codigo: 'WEB10', // lo dicen al llamar; en WhatsApp ya va escrito
+    condiciones:
+      'Para webs nuevas y servicios de redes sociales contratados tras contactar desde la web. En una web, sobre el importe total; en redes sociales, sobre la primera mensualidad. No acumulable con otras ofertas.',
+  },
 
   locality: 'Villanueva de la Serena',
   region: 'Extremadura',

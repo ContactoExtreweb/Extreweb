@@ -37,6 +37,8 @@ const business = {
     description: SITE.description,
     priceRange: '€€',
     parentOrganization: { '@id': SITE.url + '/#organization' },
+    // Une la web con su ficha de Google
+    hasMap: SITE.googleMaps,
     areaServed: areaServedSchema,
     address: {
         '@type': 'PostalAddress',

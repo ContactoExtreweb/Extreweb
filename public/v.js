@@ -17,6 +17,10 @@
     if (!h || h === 'localhost' || h === '127.0.0.1' || /\.local$|--.*\.netlify\.app$/.test(h)) return
     if (location.pathname.indexOf('/admin') === 0) return
     if (navigator.webdriver) return
+    // Nosotros: el panel marca el navegador al entrar (ew-yo) para no contarnos
+    try {
+      if (localStorage.getItem('ew-yo')) return
+    } catch (e) {}
 
     var yo = document.currentScript && document.currentScript.src
     var destino = (yo ? new URL(yo).origin : '') + '/api/visita'

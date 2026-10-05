@@ -14,7 +14,7 @@ interface Proyecto {
     sector: string
     lugar: string
     img: string
-    url: string
+    url?: string // sin url (web aún sin publicar), la tarjeta no enlaza
     texto: string
 }
 interface Props {
@@ -117,12 +117,10 @@ const schema = [
                 {p.proyectosIntro && <p class='ll-lead'>{p.proyectosIntro}</p>}
                 <div class:list={['ll-cases', { 'is-single': p.proyectos.length === 1 }]}>
                     {
-                        p.proyectos.map((pr) => (
-                            <a
+                        p.proyectos.map((pr) => { const Caso = pr.url ? 'a' : 'div'; return (
+                            <Caso
                                 class='ll-case'
-                                href={pr.url}
-                                target='_blank'
-                                rel='noopener'
+                                {...(pr.url ? { href: pr.url, target: '_blank', rel: 'noopener' } : {})}
                             >
                                 <div class='ll-case-img'>
                                     <img
@@ -140,12 +138,12 @@ const schema = [
                                     </span>
                                     <h3>
                                         {pr.nombre}{' '}
-                                        <span class='ll-ext' aria-hidden='true'>↗</span>
+                                        {pr.url && <span class='ll-ext' aria-hidden='true'>↗</span>}
                                     </h3>
                                     <p>{pr.texto}</p>
                                 </div>
-                            </a>
-                        ))
+                            </Caso>
+                        )})
                     }
                 </div>
             </div>
@@ -351,7 +349,7 @@ const schema = [
         transition: transform var(--dur-fast) var(--ease-out-quart),
             border-color var(--dur-mid) var(--ease-out-quart);
     }
-    .ll-case:active {
+    a.ll-case:active {
         transform: scale(0.99);
     }
     .ll-case-img {
@@ -411,10 +409,10 @@ const schema = [
         }
     }
     @media (hover: hover) and (pointer: fine) {
-        .ll-case:hover {
+        a.ll-case:hover {
             border-color: var(--accent);
         }
-        .ll-case:hover .ll-case-img img {
+        a.ll-case:hover .ll-case-img img {
             transform: scale(1.03);
         }
     }
