@@ -1,0 +1,237 @@
+---
+// src/components/Ofrecemos.astro
+// "Lo que hacemos" en pestañas (05/10): sustituye a Showcase, la web que se descomponía al hacer
+// scroll (420vh fijados con GSAP: pesaba mucho y no contaba qué ofrecemos).
+// - Sin JS: todos los paneles, uno debajo de otro (el contenido nunca depende del JS).
+// - Con JS: pestañas accesibles (role=tab, flechas del teclado). La entrada es CSS.
+// Los ejemplos con captura son trabajos reales de src/lib/proyectos.js. No inventar clientes ni cifras.
+import { SITE } from '@/lib/site.js'
+import { PROYECTOS } from '@/lib/proyectos.js'
+
+const { oferta } = SITE
+const proyecto = (id: string) => {
+    const p = PROYECTOS.find((x) => x.id === id)!
+    return { nombre: p.title, img: p.image.replace('.webp', '-800.webp'), href: p.link }
+}
+
+const SERVICIOS = [
+    {
+        id: 'web',
+        tab: 'Web a medida',
+        titulo: 'Una web hecha para tu negocio',
+        para: 'Para negocios que quieren que les llamen, les escriban o les pidan presupuesto desde el móvil.',
+        incluye: [
+            'Diseño propio para tu marca, sin plantillas',
+            'Pensada primero para el móvil',
+            'Formulario y botón de WhatsApp con el mensaje ya escrito',
+            'Rápida: programada a medida, sin constructores pesados',
+            'Lista para Google desde el primer día',
+            'Dominio, alojamiento y certificado de seguridad configurados',
+        ],
+        mas: '/servicios/diseno-web/',
+        ejemplo: { ...proyecto('imtex'), texto: 'Web técnica con una cubierta en 3D que enseña, paso a paso, cómo se repara e impermeabiliza.' },
+    },
+    {
+        id: 'tienda',
+        tab: 'Tienda online',
+        titulo: 'Vende o cobra por internet',
+        para: 'Para vender productos, planes o reservas y cobrarlos online, sin intermediarios.',
+        incluye: [
+            'Catálogo de productos o planes con sus precios',
+            'Pago con tarjeta seguro (Stripe)',
+            'Área privada para tus clientes',
+            'Pensada para comprar desde el móvil',
+        ],
+        mas: '/servicios/diseno-web/',
+        ejemplo: { ...proyecto('fisicas-elite'), texto: 'Los alumnos eligen su plan, pagan online y ven el temario en vídeo desde su área.' },
+    },
+    {
+        id: 'seo',
+        tab: 'SEO local',
+        titulo: 'Que te encuentren en tu zona',
+        para: 'Para salir en Google cuando alguien de tu ciudad busca lo que vendes.',
+        incluye: [
+            'Ficha de Google (Perfil de Empresa) completa y unida a tu web',
+            'Páginas pensadas para tu ciudad y tus servicios',
+            'Velocidad y datos estructurados para que Google entienda tu web',
+            'Seguimiento en Search Console de cómo te buscan',
+        ],
+        mas: '/servicios/seo/',
+        ejemplo: { nombre: 'Nuestra propia web', img: null, href: '/diseno-web-villanueva-de-la-serena/', texto: 'Páginas para Villanueva, Don Benito y Cáceres, cada una con sus proyectos reales.' },
+    },
+    {
+        id: 'redes',
+        tab: 'Redes sociales',
+        titulo: 'Tus redes, al día sin que tengas que tocarlas',
+        para: 'Para que tu negocio se vea activo en Instagram y Facebook sin quitarte tiempo.',
+        incluye: [
+            'Plan de publicaciones de cada mes',
+            'Diseño y textos: publicaciones, carruseles, reels e historias',
+            'Las subimos nosotros a tus redes',
+            'Informe mensual de lo que ha funcionado',
+            'Anuncios para llegar a más gente, si los quieres',
+        ],
+        mas: '/servicios/redes-sociales/',
+        ejemplo: { nombre: 'Un mes de trabajo, en un móvil', img: null, href: '/servicios/redes-sociales/', texto: 'Con un perfil de ejemplo: tócalo y prueba cada formato.' },
+    },
+    {
+        id: 'mantenimiento',
+        tab: 'Mantenimiento',
+        titulo: 'Tu web y tus equipos, siempre a punto',
+        para: 'Para olvidarte de la parte técnica cuando la web ya está publicada.',
+        incluye: [
+            'Cambios de textos, fotos y precios',
+            'Renovación del dominio y del alojamiento a tiempo',
+            'Informe de visitas de tu web cada mes, sin cookies',
+            'Copias de seguridad',
+            'Soporte de los ordenadores y la red de tu oficina',
+        ],
+        mas: '/servicios/sistemas-soporte/',
+        ejemplo: { ...proyecto('guadicar'), texto: 'La seguimos cuidando desde que se publicó.' },
+    },
+]
+const externo = (href: string | null) => (href?.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})
+---
+
+<section class='of' id='ofrecemos'>
+    <div class='container'>
+        <div class='of-head'>
+            <span class='eyebrow'>Lo que hacemos</span>
+            <h2>Todo lo que tu negocio necesita en internet.</h2>
+            <p>Elige lo que te hace falta: te contamos qué incluye y te enseñamos un ejemplo.</p>
+        </div>
+
+        <!-- Solo con JS (sin él se ven todos los paneles) -->
+        <div class='of-tabs' role='tablist' aria-label='Servicios'>
+            {SERVICIOS.map((s, i) => (
+                <button type='button' role='tab' id={`of-tab-${s.id}`} aria-controls={`of-${s.id}`} aria-selected={String(i === 0)} tabindex={i === 0 ? 0 : -1}>
+                    {s.tab}
+                </button>
+            ))}
+        </div>
+
+        {SERVICIOS.map((s) => (
+            <div class='of-panel' id={`of-${s.id}`} role='tabpanel' aria-labelledby={`of-tab-${s.id}`}>
+                <div class='of-texto'>
+                    <h3>{s.titulo}</h3>
+                    <p class='of-para'>{s.para}</p>
+                    <ul class='of-lista'>
+                        {s.incluye.map((x, k) => <li style={`--n: ${k}`}>{x}</li>)}
+                    </ul>
+                    <div class='of-acciones'>
+                        <a class='btn btn-accent' href='/contacto/'>Pedir presupuesto</a>
+                        <a class='of-mas' href={s.mas}>Ver más&nbsp;›</a>
+                    </div>
+                </div>
+                {s.ejemplo.href ? (
+                    <a class='of-ejemplo' href={s.ejemplo.href} {...externo(s.ejemplo.href)}>
+                        {s.ejemplo.img && <img src={s.ejemplo.img} alt={`Web de ${s.ejemplo.nombre}`} width='800' height='400' loading='lazy' decoding='async' />}
+                        <span class='of-ej-tag'>{s.ejemplo.img ? 'Trabajo real' : 'Míralo'}</span>
+                        <b>{s.ejemplo.nombre}&nbsp;›</b>
+                        <span>{s.ejemplo.texto}</span>
+                    </a>
+                ) : (
+                    <!-- Proyecto sin link (aún sin publicar): la tarjeta no enlaza -->
+                    <div class='of-ejemplo'>
+                        {s.ejemplo.img && <img src={s.ejemplo.img} alt={`Web de ${s.ejemplo.nombre}`} width='800' height='400' loading='lazy' decoding='async' />}
+                        <span class='of-ej-tag'>Trabajo real · aún sin publicar</span>
+                        <b>{s.ejemplo.nombre}</b>
+                        <span>{s.ejemplo.texto}</span>
+                    </div>
+                )}
+            </div>
+        ))}
+
+        {oferta && (
+            <p class='of-oferta'>
+                <span>−{oferta.descuento}%</span> si nos escribes desde la web. <a href='/contacto/#oferta'>Ver condiciones</a>
+            </p>
+        )}
+    </div>
+</section>
+
+<style>
+    .of-head { max-width: 42rem; margin-bottom: clamp(1.5rem, 4vh, 2.5rem); }
+    .of-head h2 { font-size: clamp(2rem, 4.6vw, 3.4rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.05; text-wrap: balance; margin: 0.4rem 0 0.8rem; }
+    .of-head p { color: var(--muted); max-width: 46ch; }
+
+    /* Pestañas: pastilla como las de Redes; en móvil se deslizan de lado */
+    .of-tabs { display: none; gap: 0.3rem; padding: 4px; border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--border); width: fit-content; max-width: 100%; overflow-x: auto; scrollbar-width: none; margin-bottom: clamp(1.5rem, 4vh, 2.2rem); }
+    .of-tabs::-webkit-scrollbar { display: none; }
+    .of-tabs button { flex-shrink: 0; min-height: 44px; padding: 0 1.1rem; border-radius: var(--radius-pill); font-size: 0.92rem; font-weight: 500; color: var(--muted); white-space: nowrap; transition: background var(--dur-mid), color var(--dur-mid); }
+    .of-tabs button[aria-selected='true'] { background: var(--bg); color: var(--fg); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14); }
+    .of-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (hover: hover) and (pointer: fine) { .of-tabs button[aria-selected='false']:hover { color: var(--fg); } }
+
+    /* Panel: texto + ejemplo. Sin JS van todos seguidos */
+    .of-panel { display: grid; gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center; }
+    .of-panel + .of-panel { margin-top: 3rem; }
+    .of-texto h3 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.5rem; }
+    .of-para { color: var(--muted); max-width: 46ch; margin-bottom: 1.3rem; }
+    .of-lista { list-style: none; padding: 0; display: grid; gap: 0.7rem; margin-bottom: 1.8rem; }
+    .of-lista li { position: relative; padding-left: 2rem; line-height: 1.45; }
+    .of-lista li::before { content: '✓'; position: absolute; left: 0; top: 0.05em; width: 1.35rem; height: 1.35rem; border-radius: 50%; display: grid; place-items: center; font-size: 0.75rem; font-weight: 700; color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+    .of-acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.4rem; }
+    .of-mas { color: var(--accent); font-weight: 500; }
+    @media (hover: hover) and (pointer: fine) { .of-mas:hover { text-decoration: underline; } }
+
+    .of-ejemplo { display: grid; gap: 0.35rem; align-content: start; padding: 1rem; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--surface); color: var(--fg); transition: border-color var(--dur-mid); }
+    .of-ejemplo img { width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; object-position: top; border-radius: 12px; margin-bottom: 0.6rem; background: var(--bg); }
+    .of-ejemplo b { font-size: 1.05rem; }
+    .of-ejemplo span:last-child { color: var(--muted); font-size: 0.92rem; }
+    .of-ej-tag { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+    a.of-ejemplo:active { scale: 0.99; }
+    @media (hover: hover) and (pointer: fine) { a.of-ejemplo:hover { border-color: var(--accent); } }
+
+    .of-oferta { margin-top: 2.2rem; font-size: 0.92rem; color: var(--muted); }
+    .of-oferta span { display: inline-block; padding: 0.15rem 0.55rem; margin-right: 0.3rem; border-radius: var(--radius-pill); background: var(--accent); color: var(--accent-fg); font-weight: 700; }
+    .of-oferta a { color: var(--accent); font-weight: 500; }
+
+    @media (min-width: 900px) {
+        .of-panel { grid-template-columns: 1.25fr 0.75fr; }
+    }
+
+    /* ── Con JS: pestañas ── */
+    .of.con-js .of-tabs { display: flex; }
+    .of.con-js .of-panel:not(.is-on) { display: none; }
+    .of.con-js .of-panel + .of-panel { margin-top: 0; }
+    /* Entrada del panel y de cada punto (valores fijos en los fotogramas: ver CONTEXTO §6) */
+    .of.con-js .of-panel.is-on .of-texto,
+    .of.con-js .of-panel.is-on .of-ejemplo { animation: of-entra 0.45s var(--ease-out-quart) both; }
+    .of.con-js .of-panel.is-on .of-ejemplo { animation-delay: 0.08s; }
+    .of.con-js .of-panel.is-on .of-lista li { animation: of-entra 0.4s var(--ease-out-quart) both; animation-delay: calc(0.1s + var(--n) * 0.045s); }
+    @keyframes of-entra {
+        from { opacity: 0; translate: 0 12px; }
+    }
+</style>
+
+<script>
+    const of = document.getElementById('ofrecemos')
+    if (of) {
+        const barra = of.querySelector<HTMLElement>('[role=tablist]')!
+        const tabs = [...of.querySelectorAll<HTMLButtonElement>('[role=tab]')]
+        const paneles = [...of.querySelectorAll<HTMLElement>('.of-panel')]
+        function elegir(i: number, foco = false) {
+            tabs.forEach((t, k) => {
+                t.setAttribute('aria-selected', String(k === i))
+                t.tabIndex = k === i ? 0 : -1
+            })
+            paneles.forEach((p, k) => p.classList.toggle('is-on', k === i))
+            if (foco) tabs[i].focus({ preventScroll: true })
+            // En móvil la barra se desliza de lado: que la pestaña elegida quede a la vista (sin mover la página)
+            const t = tabs[i]
+            barra.scrollTo({ left: t.offsetLeft - (barra.clientWidth - t.offsetWidth) / 2, behavior: 'smooth' })
+        }
+        tabs.forEach((t, i) => t.addEventListener('click', () => elegir(i)))
+        barra.addEventListener('keydown', (e) => {
+            const i = tabs.indexOf(document.activeElement as HTMLButtonElement)
+            if (i < 0) return
+            const destino = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key]
+            if (destino == null) return
+            e.preventDefault()
+            elegir((destino + tabs.length) % tabs.length, true)
+        })
+        of.classList.add('con-js')
+        paneles[0].classList.add('is-on')
+    }
+</script>

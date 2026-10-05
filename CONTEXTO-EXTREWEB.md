@@ -5,7 +5,8 @@
 > cometidos y por qué, y lo que queda pendiente.
 > **Léelo entero antes de proponer cambios.**
 >
-> Última actualización: **05/10/2026** (escaparate 3D de Proyectos, Redes animadas en su página y en
+> Última actualización: **05/10/2026** (escaparate 3D de Proyectos con IMTEX, «Lo que hacemos» en lugar de
+> Showcase, Redes animadas en su página y en
 > la portada, anillo del Hero arreglado en móvil; §17 = cómo se prueba).
 
 ---
@@ -156,7 +157,7 @@ En `public/proyectos/`, referenciadas **sin** `/public/` (ej. `/proyectos/Guadic
 `Fichar.webp`, `Guzman.webp`, `Toldos-Pallares.webp`. Todas ~1905×952; los `<img>` llevan
 `width`/`height` para evitar saltos de maquetación.
 Cada una tiene versiones **`-800.webp`** (~20 KB) y **`-1200.webp`** (~35 KB), generadas con `sharp`,
-que la portada usa con `srcset` (Showcase; el anillo del Hero usa las `-800`): el móvil ya no baja
+que usaba Showcase con `srcset` (borrado el 05/10; el anillo del Hero y "Lo que hacemos" usan las `-800`): el móvil ya no baja
 la de ~85 KB. El escaparate de Projects usa otras: `public/proyectos/capturas/` (ver §8).
 **Si se cambia o se añade una captura, generar también sus dos versiones.**
 
@@ -229,7 +230,7 @@ Al importarse arranca (`boot()`, marca `data-motion-ready` en `<html>`):
   se pintaba, desaparecía al cargar GSAP y volvía a entrar (el "parpadeo" de las páginas interiores).
 
 ### GSAP se queda solo para lo que va pegado al scroll
-Showcase (capas), Services (baraja, **solo ≥901 px**),
+Services (baraja, **solo ≥901 px**),
 Trust (contadores), Nosotros (contadores), Proceso (línea con `scaleY`),
 Proyectos (baraja fijada) y las pestañas de Servicios. Usar `gsap.matchMedia()` para los
 efectos que dependen del ancho (se activan/desactivan solos al cambiar la ventana).
@@ -238,8 +239,9 @@ efectos que dependen del ancho (se activan/desactivan solos al cambiar la ventan
 - **El contenido nunca depende del JS.** `.fx-in` es CSS y siempre termina. `.fx-up` solo se
   oculta con `html.js-motion`, y el script del `<head>` quita esa clase si `motion.js` no arranca
   en 2,5 s. Con "reducir movimiento" no hay `js-motion`: todo visible y quieto.
-- `Showcase.astro` oculta los pasos no activos también **solo con `html.js-motion`**
-  (`:global(html:not(.js-motion))` = lista normal). Mismo patrón para cualquier sección nueva.
+- Lo que solo existe con JS se oculta solo cuando el JS ha arrancado: `html.js-motion` (escaparate,
+  Redes) o una clase que pone el propio componente (`.con-js` en "Lo que hacemos"). Sin JS = lista
+  normal. Mismo patrón para cualquier sección nueva.
 
 ### ⚡ Reglas de rendimiento (lo que hacía que fuera a tirones)
 - **Nada de `backdrop-filter` sobre fondo liso ni en elementos grandes o animados.** Se recalcula
@@ -294,9 +296,8 @@ src/
 ├── components/
 │   ├── Navbar.astro               toggle de tema, menú móvil, sección activa normalizada
 │   ├── Hero.astro                 ⭐ CSS PURO, sin JS (ver §9): oferta + anillo 3D de proyectos
-│   ├── Showcase.astro             "Anatomía de una web que vende" (420vh; 360vh en móvil): la web
-│   │                              REAL de GuadiCar se abre en 3 capas (diseño · Google · velocidad)
-│   │                              y se vuelve a montar al final. Datos de Google = los reales.
+│   ├── Ofrecemos.astro            "Lo que hacemos" (05/10): pestañas Web · Tienda · SEO local · Redes ·
+│   │                              Mantenimiento, con qué incluye y un ejemplo real. Sustituye a Showcase
 │   ├── Configurador.astro         "¿Cómo quedaría la web de tu negocio?": el visitante monta una
 │   │                              web (sector, nombre, foto, color, estilo, extras) y la maqueta
 │   │                              FUNCIONA (reservar/comprar, WhatsApp) → "Quiero una web así"
@@ -334,22 +335,30 @@ public/_redirects · public/_headers · public/v.js (contador de visitas)
 ```
 
 **Orden de la home (`index.astro`):**
-`Navbar → Hero → Showcase → Configurador → Services → RedesAnimadas (solo 'formatos') → Projects → Trust → Process → Areas → Faq → Cta → Footer`
+`Navbar → Hero → Ofrecemos → Configurador → Services → RedesAnimadas (solo 'formatos') → Projects → Trust → Process → Areas → Faq → Cta → Footer`
 
-**Showcase (`Showcase.astro`) — cómo funciona:**
-- Un proxy `{ p }` animado con ScrollTrigger (`scrub: 0.8`) suaviza el scroll; `pintar(p)` calcula
-  `--t` (inclinación) y `--s` (separación) con curvas suaves y cambia de paso en 0 / .2 / .42 / .62 / .8.
-- La capa activa se ilumina (azul diseño, verde Google, violeta velocidad) y las de encima se
-  apartan con `@property --an-up1/--an-up2` (se animan solas sin frenar el scroll).
-- La capa de Google usa el título, la descripción y el schema (`AutoDealer`) **reales** de
-  guadicar.es. Si GuadiCar los cambia, actualizarlos aquí. Nada de métricas ni reseñas inventadas.
-- **Rendimiento (22/09):** las capas llevan `will-change: transform` (se pintan una vez y luego solo
-  se recolocan). El brillo de la capa activa es un `::after` con la sombra ya pintada que solo
-  cambia de opacidad. Las etiquetas aparecen con la clase `.is-abierta`. El script solo escribe
-  `--t`/`--s` si cambian. En móvil, el texto cambia sin `filter: blur`.
+**Ofrecemos (`Ofrecemos.astro`) — "Lo que hacemos" (05/10):**
+- Sustituye a **Showcase** («Anatomía de una web que vende»: la web de GuadiCar se descomponía en 3
+  capas con 420vh fijados con GSAP). Saúl: ralentizaba mucho la web y no contaba qué ofrecemos.
+  Recuperable en git (`src/components/Showcase.astro`, borrado el 05/10).
+- 5 pestañas: **Web a medida · Tienda online · SEO local · Redes sociales · Mantenimiento**. Cada
+  una: para quién es, qué incluye (lista con ✓), «Pedir presupuesto» + «Ver más» (su página de
+  servicio) y un ejemplo. El contenido está en el array `SERVICIOS` del frontmatter.
+- Ejemplos **reales** (de `lib/proyectos.js`, captura `-800`): IMTEX (web a medida; sin link → tarjeta
+  sin enlace y «aún sin publicar»; antes Guzmán, demasiado básica), Físicas Élite (pagos online),
+  GuadiCar (mantenimiento: es la que mantenemos). SEO local enlaza a nuestra landing de Villanueva y Redes
+  a su página (perfil de ejemplo). **No inventar clientes, cifras ni precios** (sin precios hasta
+  que Saúl los dé).
+- Si `SITE.oferta` existe, abajo sale «−10% si nos escribes desde la web · Ver condiciones».
+- Sin JS: los 5 paneles uno debajo de otro. Con JS: el componente pone `.con-js` y funcionan las
+  pestañas (ARIA tabs; flechas, Inicio y Fin). En móvil la barra de pestañas se desliza de lado y se
+  centra en la elegida sin mover la página. Entrada con CSS (`translate` + `opacity`, valores fijos
+  en los fotogramas). Sin GSAP ni scroll fijado.
 
 **Projects (`Projects.astro`) — escaparate 3D (05/10; preparado fuera del repo el 30/09):**
-- Lee `lib/proyectos.js` y enseña **solo los que tienen `link`** (IMTEX entra cuando se publique).
+- Lee `lib/proyectos.js` y enseña **los que tienen capturas** (`existsSync` en el build). Sin `link`
+  (web aún sin publicar, p. ej. IMTEX) sale con «próximamente» en la barra y «Web nueva, aún sin
+  publicar.» en lugar de «Visitar web».
 - El activo sale grande y de frente en una ventana de navegador con su dominio real + un móvil con
   su versión móvil; los vecinos giran a los lados (CSS 3D: `perspective`, `translateZ`, `rotateY`
   con `--k` = distancia al activo). **Son imágenes, no texturas 3D**: el texto de cada web se lee.
@@ -359,7 +368,11 @@ public/_redirects · public/_headers · public/v.js (contador de visitas)
 - En el móvil del visitante (<700 px) manda la versión móvil; botón «Versión ordenador».
 - Sin JS o con "reducir movimiento": lista horizontal con título y «Visitar ↗» en cada tarjeta.
 - Capturas: `node scripts/capturas.mjs` (todas) o `node scripts/capturas.mjs <id>` (una). Usa el
-  Chrome instalado sin ventana y lee la lista de `lib/proyectos.js` (solo los que tienen link).
+  Chrome instalado sin ventana y lee la lista de `lib/proyectos.js` (los que tienen link). Una web
+  sin publicar, desde su servidor local: `node scripts/capturas.mjs imtex http://localhost:4330`
+  (`imtex-dev-4330` en `.claude/launch.json` arranca el de IMTEX). Quita la barra de Astro. `ALTOS`
+  recorta las webs que no se pueden capturar tan largas (IMTEX: sus "seis fases" van fijadas al
+  scroll y salían en negro).
   Escritorio 1440 px ×1,25 y móvil 390 px ×2, dos pantallas de alto, sin avisos de cookies.
   **Si cambia una web o se añade un proyecto, rehacer sus capturas.**
 - Peso: las capturas van todas en `loading="lazy"`: 0 KB al abrir la portada; al llegar a la sección,
@@ -432,6 +445,8 @@ páginas con barra y sin ella hace una redirección 301 extra en cada clic.
 - `proyectos/[slug].astro` → las tarjetas de proyecto enlazan a las **webs reales en vivo** con
   `target="_blank"`, no a fichas internas. Es lo correcto para una agencia.
 - `Stats.astro` (estaba vacío).
+- `Showcase.astro` (05/10): la web de GuadiCar que se descomponía en capas al hacer scroll. Pesaba
+  mucho (420vh fijados con GSAP) y no contaba qué ofrecemos. Sustituida por `Ofrecemos.astro`.
 - `Playground.astro` (18/09/2026): sustituido por `Configurador.astro`. Era la "web dentro de un
   navegador" con cursores, vista SEO y reseñas/métricas **inventadas**. Recuperable en git.
 
@@ -899,10 +914,14 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
     de desarrollo de Saúl estaba arrancado; el build se comprobó en una copia limpia: 18 páginas OK).
 22. **Dos piezas 3D con las mismas capturas en la portada** (anillo del Hero + escaparate). Se avisó:
     va contra "gastar el descaro en UN solo sitio". Valorar quitar una.
-23. **IMTEX** no sale en el escaparate (sin link). Al publicarse: link en `lib/proyectos.js` y
-    `node scripts/capturas.mjs imtex`. Mismo paso si Físicas Élite o Taller Guzmán cambian de dominio.
+23. **IMTEX** ya sale en el escaparate (05/10, capturas de su servidor local) con «aún sin publicar».
+    Al publicarse: link en `lib/proyectos.js` y `node scripts/capturas.mjs imtex` (desde la web real).
+    Mismo paso si Físicas Élite o Taller Guzmán cambian de dominio.
 24. Revisar las **descripciones** de `lib/proyectos.js` (las usan escaparate y `/proyectos/`; alguna
     es de relleno: "Presencia digital líder…"). La entrega traía otras sacadas de cada web.
+26. **«Lo que hacemos» y Services se pisan**: los dos hablan de web, tienda, SEO y soporte, y Services
+    además tiene las afirmaciones del punto 3 (+142%, 100/100, 24/7). Valorar quitar Services o
+    reconvertirlo.
 25. Escritorio de Redes: el móvil 3D va centrado junto a un calendario más alto; al llegar está
     abajo y el mes tarda un poco en arrancar. Si molesta: móvil `sticky` mientras pasa el calendario.
 

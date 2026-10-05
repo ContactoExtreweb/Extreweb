@@ -3,6 +3,8 @@
 // Escritorio 1440 px y móvil 390 px, unas dos pantallas de alto, sin avisos de cookies ni botones flotantes.
 // Uso (desde la raíz del repo):  node scripts/capturas.mjs            → todas
 //                                node scripts/capturas.mjs carmeet    → solo una
+//                                node scripts/capturas.mjs imtex http://localhost:4330
+//                                  → una web aún sin publicar (link: null), desde su servidor local
 // Salida: public/proyectos/capturas/<id>-escritorio.webp y <id>-movil.webp (los usa Projects.astro)
 // Si Chrome está en otra ruta: CHROME="ruta/a/chrome.exe" node scripts/capturas.mjs
 import { spawn } from 'node:child_process'
@@ -14,9 +16,15 @@ import { PROYECTOS } from '../src/lib/proyectos.js'
 const CHROME = process.env.CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe'
 const SALIDA = 'public/proyectos/capturas'
 const SOLO = process.argv[2]
-// La misma lista que la web (id y link); los que no tienen link aún no se pueden capturar
-const WEBS = PROYECTOS.filter((p) => p.link).map((p) => ({ id: p.id, url: p.link }))
+const URL_A_MANO = process.argv[3]
+// La misma lista que la web (id y link). Sin link solo se puede capturar dándole la dirección a mano
+const WEBS = SOLO && URL_A_MANO
+  ? PROYECTOS.filter((p) => p.id === SOLO).map((p) => ({ id: p.id, url: URL_A_MANO }))
+  : PROYECTOS.filter((p) => p.link).map((p) => ({ id: p.id, url: p.link }))
 // alto = cuántas pantallas de alto se capturan (para que el 3D pueda desplazarse por la web)
+// Webs que no se pueden capturar tan largas. IMTEX: bajo el hero, las "seis fases" van fijadas al
+// scroll y en una captura quieta salen vacías (en negro)
+const ALTOS = { imtex: { escritorio: 1.3, movil: 1.5 } }
 const FORMATOS = {
   escritorio: { w: 1440, h: 900, dpr: 1.25, movil: false, alto: 2.2, ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36' },
   movil: { w: 390, h: 844, dpr: 2, movil: true, alto: 2.1, ua: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1' },
@@ -43,6 +51,7 @@ async function conectar(url) {
 // Se ejecuta dentro de la página: rechaza cookies, recorre la página y oculta botones flotantes de abajo
 const PREPARAR = `(async () => {
   const esperar = (ms) => new Promise((r) => setTimeout(r, ms))
+  document.querySelectorAll('astro-dev-toolbar').forEach((e) => e.remove()) // al capturar desde un servidor local
   for (const b of document.querySelectorAll('button, a, [role=button]')) {
     const t = (b.textContent || '').trim().toLowerCase()
     if (/^(rechazar|rechazar todas|denegar|solo necesarias|solo las necesarias)$/.test(t)) { b.click(); break }
@@ -75,7 +84,7 @@ async function main() {
     const c = await conectar(pagina.webSocketDebuggerUrl)
     await c.enviar('Page.enable')
     const lista = WEBS.filter((w) => !SOLO || w.id === SOLO)
-    if (!lista.length) throw new Error(`No hay ninguna web con id "${SOLO}" y link en src/lib/proyectos.js`)
+    if (!lista.length) throw new Error(`No hay ninguna web con id "${SOLO}" y link en src/lib/proyectos.js (si aún no está publicada: node scripts/capturas.mjs ${SOLO} http://localhost:PUERTO)`)
     for (const web of lista) {
       for (const [nombre, f] of Object.entries(FORMATOS)) {
         await c.enviar('Emulation.setUserAgentOverride', { userAgent: f.ua })
@@ -88,9 +97,9 @@ async function main() {
           if (r.result.value === 'complete') break
         }
         await espera(2500)
-        const r = await c.enviar('Runtime.evaluate', { expression: PREPARAR.replace('ALTO', f.alto), awaitPromise: true, returnByValue: true })
+        const r = await c.enviar('Runtime.evaluate', { expression: PREPARAR.replace('ALTO', ALTOS[web.id]?.[nombre] ?? f.alto), awaitPromise: true, returnByValue: true })
         const altoPagina = r.result.value || f.h
-        const alto = Math.min(Math.round(f.h * f.alto), altoPagina)
+        const alto = Math.min(Math.round(f.h * (ALTOS[web.id]?.[nombre] ?? f.alto)), altoPagina)
         const shot = await c.enviar('Page.captureScreenshot', { format: 'webp', quality: 82, captureBeyondViewport: true, clip: { x: 0, y: 0, width: f.w, height: alto, scale: 1 } })
         const archivo = join(SALIDA, `${web.id}-${nombre}.webp`)
         writeFileSync(archivo, Buffer.from(shot.data, 'base64'))

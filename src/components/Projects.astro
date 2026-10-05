@@ -5,9 +5,10 @@
 //   la web se recorre sola y con la rueda; los vecinos giran a los lados en perspectiva (CSS 3D).
 // - Sin JS o con "reducir movimiento": lista horizontal normal que se desliza con el dedo.
 // Sin dependencias: CSS 3D + un poco de JS. Capturas: public/proyectos/capturas (scripts/capturas.mjs).
+import { existsSync } from 'node:fs'
 import { PROYECTOS } from '@/lib/proyectos.js'
-// Solo las webs publicadas: sin link no hay nada que capturar ni que visitar
-const projects = PROYECTOS.filter((p) => p.link)
+// Los que tienen capturas (scripts/capturas.mjs). Sin link (web aún sin publicar) salen sin «Visitar web»
+const projects = PROYECTOS.filter((p) => existsSync(`public/proyectos/capturas/${p.id}-escritorio.webp`))
 const n = projects.length
 const dominio = (url: string) => new URL(url).hostname.replace(/^www\./, '')
 // Distancia de cada proyecto al activo (−2…2) para que el primer pintado ya salga colocado
@@ -31,7 +32,7 @@ const p0 = projects[0]
                     data-titulo={p.title}
                     data-cat={p.category}
                     data-desc={p.desc}
-                    data-link={p.link}
+                    data-link={p.link ?? ''}
                     data-color={p.color}
                 >
                     <div class='ventana'>
@@ -39,7 +40,7 @@ const p0 = projects[0]
                             <i></i><i></i><i></i>
                             <span class='url'>
                                 <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><rect x='5' y='11' width='14' height='10' rx='2'></rect><path d='M8 11V7a4 4 0 0 1 8 0v4'></path></svg>
-                                {dominio(p.link)}
+                                {p.link ? dominio(p.link) : 'próximamente'}
                             </span>
                         </div>
                         <!-- data-lenis-prevent: sin él, Lenis se come la rueda y mueve la página -->
@@ -71,7 +72,7 @@ const p0 = projects[0]
                     <!-- Solo sin JS: cada tarjeta dice qué es y enlaza a la web -->
                     <p class='esc-pie'>
                         <b>{p.title}</b> · {p.category}
-                        <a href={p.link} target='_blank' rel='noopener'>Visitar&nbsp;↗</a>
+                        {p.link ? <a href={p.link} target='_blank' rel='noopener'>Visitar&nbsp;↗</a> : ' · aún sin publicar'}
                     </p>
                 </article>
             ))}
@@ -91,6 +92,7 @@ const p0 = projects[0]
                 Visitar web
                 <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M7 17 17 7M8 7h9v9'></path></svg>
             </a>
+            <p class='pj-pronto' data-pronto hidden>Web nueva, aún sin publicar.</p>
             <p class='pj-pista'>Desliza para cambiar de proyecto · usa la rueda sobre la web para recorrerla</p>
         </div>
         <div class='pj-nav'>
@@ -206,6 +208,7 @@ const p0 = projects[0]
     .pj-flecha svg { width: 20px; height: 20px; }
     @media (hover: hover) and (pointer: fine) { .pj-flecha:hover { background: var(--surface); border-color: var(--fg); } }
     .pj-pista { font-size: 0.8rem; color: var(--muted); margin-top: 0.6rem; }
+    .pj-pronto { font-weight: 500; padding-block: 0.7rem; }
     :global(html:not(.js-motion)) .pj-nav, :global(html:not(.js-motion)) .pj-pista, :global(html:not(.js-motion)) .pj-info { display: none; }
     @media (max-width: 699px) {
         .pj-pie { flex-direction: column; align-items: stretch; }
@@ -250,7 +253,11 @@ const p0 = projects[0]
                 info.querySelector('[data-titulo]')!.textContent = d.titulo!
                 const desc = info.querySelector('[data-desc]')!
                 desc.replaceChildren(Object.assign(document.createElement('b'), { textContent: `${d.cat}.` }), ` ${d.desc}`)
-                info.querySelector<HTMLAnchorElement>('[data-visitar]')!.href = d.link!
+                // Sin link (aún sin publicar): fuera el botón y en su sitio el aviso
+                const visitar = info.querySelector<HTMLAnchorElement>('[data-visitar]')!
+                if (d.link) visitar.href = d.link
+                visitar.style.display = d.link ? '' : 'none'
+                info.querySelector<HTMLElement>('[data-pronto]')!.hidden = !!d.link
                 info.classList.remove('is-cambiando')
             }, 200)
         }

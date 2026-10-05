@@ -5,8 +5,9 @@
 // link: null mientras la web no esté publicada (o no sepamos su dirección): la
 // tarjeta se enseña igual, pero sin enlace.
 //
-// id: nombre de sus capturas del escaparate de la portada (Projects.astro), que
-// solo enseña los que tienen link. Capturas: node scripts/capturas.mjs <id>
+// id: nombre de sus capturas del escaparate de la portada (Projects.astro), que enseña
+// los que tienen capturas: node scripts/capturas.mjs <id> (sin link, desde su servidor
+// local: node scripts/capturas.mjs <id> http://localhost:PUERTO). Sin link sale sin «Visitar web».
 export const PROYECTOS = [
   {
     id: 'carmeet',
