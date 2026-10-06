@@ -719,6 +719,11 @@ el menú. Puntito azul en la hamburguesa si hay mensajes sin leer.
   **web** (la nuestra o la de un cliente de `sitios`), periodo de 7 / 30 / 90 días y pestañas:
   - **Resumen:** páginas vistas (con **% frente al periodo anterior**), visitantes, media al día,
     % de móvil, **mensajes del formulario y conversión** (solo en la nuestra) y barras por día.
+    **Gráfico por día (06/10):** encima, una línea fija con las cifras del día elegido (páginas
+    vistas · visitantes · hoy/ayer/fecha; al abrir, hoy). Se elige pasando el ratón, tocando o
+    deslizando el dedo (`touch-action: pan-y`) o con las flechas. Sustituye a la etiqueta flotante,
+    que se cortaba por arriba (`overflow-x: auto` del gráfico recortaba también en vertical), no
+    salía en el móvil y en los últimos días creaba una barra de scroll encima de las barras.
   - **Páginas:** más vistas, **páginas de entrada** (la primera de cada visitante) y **enlaces
     rotos** (404 con la web desde la que llegaron).
   - **Origen:** de dónde llegan, **campañas** (utm), ciudades y **qué páginas traen mensajes**.

@@ -1099,7 +1099,16 @@ button.a-stat { cursor: pointer; }
   margin-bottom: 1.4rem;
 }
 
-/* Barras por día: una sola serie, en el azul del panel, apoyadas en la línea base */
+/* Barras por día: una sola serie, en el azul del panel, apoyadas en la línea base.
+   Sin overflow: con overflow-x: auto el navegador recortaba también por arriba y
+   salía una barra de scroll encima de las barras. Las columnas encogen (min-width: 0)
+   para que quepan los 90 días también en el móvil. */
+.a-vis-dia {
+  margin-bottom: 0.6rem;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+.a-vis-dia strong { font-size: 1.15rem; }
 .a-vis-chart {
   display: flex;
   align-items: flex-end;
@@ -1107,13 +1116,15 @@ button.a-stat { cursor: pointer; }
   height: 170px;
   padding-top: 1.4rem; /* sitio para el número del día más alto */
   border-bottom: 1px solid var(--border);
-  overflow-x: auto;
-  overflow-y: visible;
+  touch-action: pan-y; /* el dedo en horizontal elige día; en vertical sigue moviendo la página */
+  cursor: pointer;
 }
+.a-vis-chart[data-muchos] { gap: 1px; }
+.a-vis-chart:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
 .a-vis-col {
   position: relative;
   flex: 1 1 0;
-  min-width: 5px;
+  min-width: 0;
   height: 100%;
   display: flex;
   align-items: flex-end;
@@ -1123,11 +1134,13 @@ button.a-stat { cursor: pointer; }
   min-height: 2px;
   background: var(--accent);
   border-radius: 4px 4px 0 0; /* solo el extremo con datos */
-  transition: filter var(--dur-fast) ease;
 }
-.a-vis-col:hover .a-vis-bar,
-.a-vis-col:focus-within .a-vis-bar { filter: brightness(1.25); }
-.a-vis-bar:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.a-vis-chart[data-muchos] .a-vis-bar { border-radius: 2px 2px 0 0; }
+/* Día elegido: más claro en oscuro y más oscuro en claro (mezcla con el texto) */
+.a-vis-col.is-sel .a-vis-bar {
+  background: color-mix(in srgb, var(--accent) 55%, var(--fg));
+  min-height: 4px;
+}
 
 /* El número solo en el día más alto: uno en cada barra sería ruido */
 .a-vis-max {
@@ -1139,25 +1152,6 @@ button.a-stat { cursor: pointer; }
   font-weight: 600;
   color: var(--muted);
 }
-
-.a-vis-tip {
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  z-index: 5;
-  padding: 0.35rem 0.6rem;
-  border-radius: 8px;
-  background: var(--fg);
-  color: var(--bg);
-  font-size: 0.78rem;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--dur-fast) ease, transform var(--dur-fast) ease;
-}
-.a-vis-col:hover .a-vis-tip,
-.a-vis-col:focus-within .a-vis-tip { opacity: 1; transform: translateX(-50%) translateY(0); }
 
 .a-vis-eje {
   display: flex;
@@ -1460,7 +1454,7 @@ button.a-stat { cursor: pointer; }
   .a-print-bar, .a-no-print { display: none !important; }
   .a-print-hoja { max-width: none; padding: 0; border-radius: 0; box-shadow: none; }
   .a-print-hoja .a-card, .a-print-hoja .a-money-box, .a-doc-tabla tr { break-inside: avoid; }
-  .a-vis-tip { display: none; }
+  .a-vis-dia { display: none; } /* el día elegido no pinta nada en el informe */
 }
 
 /* ---------- Proyecto: presupuesto ---------- */

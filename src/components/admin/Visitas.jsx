@@ -71,7 +71,7 @@ export function agrupar(filas, dias) {
   for (let i = dias - 1; i >= 0; i--) {
     const d = new Date(hoy)
     d.setDate(d.getDate() - i)
-    huecos.set(claveDia(d), { fecha: d, vistas: 0 })
+    huecos.set(claveDia(d), { fecha: d, vistas: 0, quien: new Set() })
   }
 
   const buenas = filas.filter((f) => !f.es_404)
@@ -79,7 +79,10 @@ export function agrupar(filas, dias) {
   const primera = new Map() // visitante → su primera página vista (página de entrada)
   for (const f of buenas) {
     const hueco = huecos.get(claveDia(new Date(f.creado)))
-    if (hueco) hueco.vistas++
+    if (hueco) {
+      hueco.vistas++
+      hueco.quien.add(f.visitante)
+    }
     visitantes.add(f.visitante)
     const antes = primera.get(f.visitante)
     if (!antes || f.creado < antes.creado) primera.set(f.visitante, f)
@@ -96,7 +99,7 @@ export function agrupar(filas, dias) {
 
   const movil = buenas.filter((f) => f.movil).length
   return {
-    porDia: [...huecos.values()],
+    porDia: [...huecos.values()].map(({ quien, ...d }) => ({ ...d, visitantes: quien.size })),
     vistas: buenas.length,
     visitantes: visitantes.size,
     media: Math.round((buenas.length / dias) * 10) / 10,
@@ -793,27 +796,60 @@ function Semaforo({ ms, corto = false }) {
 }
 
 // Barras por día. Una sola serie, así que va en el azul del panel y sin leyenda;
-// solo se escribe el número del día más alto (un número en cada barra sería ruido)
+// en las barras solo se escribe el número del día más alto (uno en cada barra sería
+// ruido). Las cifras de cualquier día salen en la línea de encima (por defecto, hoy):
+// se elige pasando el ratón, tocando o deslizando el dedo por las barras, o con las
+// flechas. Antes era una etiqueta flotante que se cortaba por arriba, en el móvil
+// no salía y en los últimos días creaba scroll lateral.
 export function GraficoDias({ porDia }) {
-  const max = Math.max(1, ...porDia.map((d) => d.vistas))
-  const iMax = porDia.findIndex((d) => d.vistas === max)
+  const n = porDia.length
+  // Se guarda como "días antes de hoy": al cambiar de 7 a 30 días sigue el mismo día
+  const [atras, setAtras] = useState(0)
+  const i = n - 1 - Math.min(atras, n - 1)
+  const setSel = (k) => setAtras(n - 1 - k)
+  const d = porDia[i]
+  const max = Math.max(1, ...porDia.map((x) => x.vistas))
+  const iMax = porDia.findIndex((x) => x.vistas === max)
+
+  // El día que hay bajo el ratón o el dedo, por su posición en el ancho del gráfico
+  const elegir = (e) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    setSel(Math.max(0, Math.min(n - 1, Math.floor(((e.clientX - r.left) / r.width) * n))))
+  }
+  const teclas = (e) => {
+    const paso = { ArrowLeft: -1, ArrowRight: 1, Home: -n, End: n }[e.key]
+    if (!paso) return
+    e.preventDefault()
+    setSel(Math.max(0, Math.min(n - 1, i + paso)))
+  }
+  const cuando = i === n - 1 ? 'hoy' : i === n - 2 ? 'ayer' : diaLargo(d.fecha)
 
   return (
     <>
-      <div className="a-vis-chart" role="img" aria-label={`Páginas vistas por día. Máximo: ${max}.`}>
-        {porDia.map((d, i) => (
-          <div className="a-vis-col" key={claveDia(d.fecha)}>
-            {i === iMax && d.vistas > 0 && <span className="a-vis-max">{d.vistas}</span>}
-            <div
-              className="a-vis-bar"
-              style={{ height: `${(d.vistas / max) * 100}%` }}
-              tabIndex={0}
-              role="button"
-              aria-label={`${diaLargo(d.fecha)}: ${d.vistas} páginas vistas`}
-            />
-            <span className="a-vis-tip" aria-hidden="true">
-              <strong>{d.vistas}</strong> · {diaCorto(d.fecha)}
-            </span>
+      <p className="a-vis-dia" aria-live="polite">
+        <strong>{d.vistas.toLocaleString('es-ES')}</strong> {d.vistas === 1 ? 'página vista' : 'páginas vistas'}
+        {' · '}
+        {d.visitantes} {d.visitantes === 1 ? 'visitante' : 'visitantes'}
+        <span className="a-muted"> · {cuando}</span>
+      </p>
+      <div
+        className="a-vis-chart"
+        data-muchos={n > 45 ? '' : undefined}
+        role="slider"
+        tabIndex={0}
+        aria-label="Día del gráfico de páginas vistas"
+        aria-valuemin={0}
+        aria-valuemax={n - 1}
+        aria-valuenow={i}
+        aria-valuetext={`${diaLargo(d.fecha)}: ${d.vistas} páginas vistas`}
+        onPointerMove={elegir}
+        onPointerDown={elegir}
+        onKeyDown={teclas}
+      >
+        {porDia.map((x, k) => (
+          <div className={`a-vis-col${k === i ? ' is-sel' : ''}`} key={claveDia(x.fecha)}>
+            {k === iMax && x.vistas > 0 && <span className="a-vis-max">{x.vistas}</span>}
+            <div className="a-vis-bar" style={{ height: `${(x.vistas / max) * 100}%` }} />
           </div>
         ))}
       </div>
