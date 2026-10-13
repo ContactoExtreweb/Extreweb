@@ -1,7 +1,13 @@
 ---
 // src/components/Footer.astro
+import Logo from '@/components/Logo.astro'
 import { SITE } from '@/lib/site.js'
 const currentYear = new Date().getFullYear()
+// En extreweb.es se dice de quién es la marca (en fgdigitalsl.com el nombre ya es el de la empresa)
+const titular =
+    SITE.marca === 'fgdigital'
+        ? SITE.legalName
+        : `${SITE.name}, una marca de ${SITE.legalName}`
 ---
 
 <footer class='site-footer'>
@@ -10,23 +16,8 @@ const currentYear = new Date().getFullYear()
             <!-- Brand -->
             <div class='f-brand'>
                 <a href='/' class='logo'>
-                    <span class='logo-mark'>
-                        <!-- Icono Rayo Premium -->
-                        <svg
-                            width='24'
-                            height='24'
-                            viewBox='0 0 24 24'
-                            fill='none'
-                            stroke='currentColor'
-                            stroke-width='2'
-                            stroke-linecap='round'
-                            stroke-linejoin='round'
-                            ><polygon
-                                points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'
-                            ></polygon></svg
-                        >
-                    </span>
-                    <span class='logo-text'>Extreweb</span>
+                    <Logo class='logo-mark' />
+                    <span class='logo-text'>{SITE.name}</span>
                 </a>
                 <p>
                     Ingeniería digital premium desde Extremadura.<br />Diseñando
@@ -38,7 +29,7 @@ const currentYear = new Date().getFullYear()
                         href={SITE.instagram}
                         target='_blank'
                         rel='noopener'
-                        aria-label='Instagram de extreweb'
+                        aria-label={`Instagram de ${SITE.name}`}
                         ><svg
                             width='20'
                             height='20'
@@ -55,10 +46,29 @@ const currentYear = new Date().getFullYear()
                         ></a
                     >
                     <a
+                        href={SITE.tiktok}
+                        target='_blank'
+                        rel='noopener'
+                        aria-label={`TikTok de ${SITE.name}`}
+                        ><svg
+                            width='20'
+                            height='20'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            stroke='currentColor'
+                            stroke-width='2'
+                            stroke-linecap='round'
+                            stroke-linejoin='round'
+                            aria-hidden='true'
+                            ><path d='M9 12a4 4 0 1 0 4 4V3a5 5 0 0 0 5 5'
+                            ></path></svg
+                        ></a
+                    >
+                    <a
                         href={SITE.googleMaps}
                         target='_blank'
                         rel='noopener'
-                        aria-label='extreweb en Google Maps'
+                        aria-label={`${SITE.name} en Google Maps`}
                         ><svg
                             width='20'
                             height='20'
@@ -109,9 +119,7 @@ const currentYear = new Date().getFullYear()
                     <h2>Contacto</h2>
                     <ul>
                         <li>
-                            <a href='mailto:contactoextreweb@gmail.com'
-                                >contactoextreweb@gmail.com</a
-                            >
+                            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
                         </li>
                         <li><a href='tel:+34628775619'>+34 628 775 619</a></li>
                         <li>
@@ -138,12 +146,12 @@ const currentYear = new Date().getFullYear()
 
         <!-- Big Typography Decoration -->
         <div class='f-big-text'>
-            <span>EXTREWEB</span>
+            <span>{SITE.name.toUpperCase()}</span>
         </div>
 
         <!-- Bottom / Legal -->
         <div class='f-bottom'>
-            <p>&copy; {currentYear} Extreweb. Todos los derechos reservados.</p>
+            <p>&copy; {currentYear} {titular}. Todos los derechos reservados.</p>
             <div class='f-legal'>
                 <a href='/aviso-legal/'>Aviso Legal</a>
                 <a href='/privacidad/'>Privacidad</a>
@@ -188,14 +196,8 @@ const currentYear = new Date().getFullYear()
         margin-bottom: 1.5rem;
     }
     .logo-mark {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         width: 36px;
         height: 36px;
-        background: var(--fg);
-        color: var(--bg);
-        border-radius: 8px;
     }
     .f-brand p {
         color: var(--muted);

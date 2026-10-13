@@ -5,9 +5,9 @@
 > cometidos y por qué, y lo que queda pendiente.
 > **Léelo entero antes de proponer cambios.**
 >
-> Última actualización: **05/10/2026** (escaparate 3D de Proyectos con IMTEX, «Lo que hacemos» en lugar de
-> Showcase, Redes animadas en su página y en
-> la portada, anillo del Hero arreglado en móvil; §17 = cómo se prueba).
+> Última actualización: **13/10/2026** (FG Digital: fase 1 hecha, la marca sale de `SITE` según
+> `PUBLIC_MARCA`; ver `PLAN-FG-DIGITAL.md`). Antes, 05/10: escaparate 3D de Proyectos con IMTEX,
+> «Lo que hacemos» en lugar de Showcase, Redes animadas, anillo del Hero en móvil; §17 = cómo se prueba.
 
 ---
 
@@ -57,11 +57,17 @@ Web de la **agencia**. Es un híbrido: **negocio local** (confianza, contacto, g
 - **Estética:** **estilo Apple** — limpio, mucho aire, tipografía protagonista, animación fluida,
   claro/oscuro. Simple, elegante, rápido.
 
-### ⚠️ Rebranding pendiente
-La empresa se ha **registrado fiscalmente con otro nombre**. Habrá que hacer un **rebranding de
-nombre** (y probablemente de dominio). **De momento se mantiene "extreweb" y extreweb.es.**
-Cuando llegue: el nombre está repartido por textos, títulos, schema (`src/lib/site.js`), logo del
-Navbar/Footer, panel `/admin` y legales. Conviene centralizarlo antes (ver §14).
+### ⚠️ Segunda marca: FG Digital (decidido el 13/10/2026)
+La razón social es **FG Digital SL** y han comprado **fgdigitalsl.com**. Habrá **dos webs con el
+mismo contenido**: extreweb.es (se queda, sin redirigir) y fgdigitalsl.com (igual, pero con el
+nombre FG Digital). Se hacen desde **este mismo repo** (dos sitios de Netlify, variable
+`PUBLIC_MARCA`), y para Google la principal será fgdigitalsl.com (canonical).
+**Plan completo y estado: `PLAN-FG-DIGITAL.md`.**
+- **Fase 1 hecha (13/10):** nada de la marca va escrito a mano en la parte pública: nombre, email,
+  redes, titular legal, favicon y og salen de `SITE` (`src/lib/site.js`), que elige con
+  `PUBLIC_MARCA` (sin valor = extreweb; `fgdigital` = FG Digital). Para probar FG en local:
+  `astro-dev-fg-4324` en `.claude/launch.json`. **Texto nuevo con la marca → usar `SITE.name`.**
+- El panel `/admin` también pasará a FG Digital (fase 5 del plan).
 
 ---
 
@@ -110,6 +116,7 @@ Navbar/Footer, panel `/admin` y legales. Conviene centralizarlo antes (ver §14)
   tenemos más a mano; Zoho apenas se abre). Aparece en contacto, footer, menú móvil, legales y
   schema (`SITE.email`).
 - `contacto@extreweb.es` (Zoho) sigue existiendo, pero ya no se muestra en la web.
+- **fgdigitalsl.com** muestra **`pedro@fgdigitalsl.com`** (13/10). Sale de `SITE.email`.
 
 ### Hosting
 - **GitHub → Netlify**, auto-deploy en cada `git push`.
@@ -291,7 +298,8 @@ src/
 │   │                              `id` = nombre de sus capturas del escaparate (public/proyectos/capturas/)
 │   ├── redes-datos.js             el mes de ejemplo de Redes ("Horno Almendro", obrador INVENTADO)
 │   ├── redes-animadas.js          móviles 3D de Redes (Three.js + pantalla dibujada en canvas 2D)
-│   └── site.js                    datos NAP + constantes SEO (+ instagram, locality, oferta)
+│   └── site.js                    ⭐ datos NAP + SEO + MARCA (según PUBLIC_MARCA: name, email,
+│                                  legalName, nif, redes, ogImage, favicon…) + oferta
 ├── layouts/BaseLayout.astro       <head> SEO + Schema + anti-FOUC + preload fuente + motion.js
 ├── components/
 │   ├── Navbar.astro               toggle de tema, menú móvil, sección activa normalizada
@@ -312,7 +320,8 @@ src/
 │   ├── Faq.astro                  array `faqs` + JSON-LD FAQPage
 │   ├── LocalLanding.astro         plantilla de las páginas por ciudad (diseño común, TEXTO por props)
 │   ├── Cta.astro
-│   ├── Footer.astro               solo Instagram en redes (SITE.instagram)
+│   ├── Footer.astro               Instagram + TikTok + Maps (de SITE); © con el titular
+│   ├── Logo.astro                 símbolo de la marca (Navbar y Footer): «E» o «FG» según SITE.marca
 │   └── seo/
 │       ├── Schema.astro           JSON-LD @graph sitewide
 │       └── ServiceSchema.astro    Service + BreadcrumbList (URLs con barra final)
@@ -780,9 +789,11 @@ el menú. Puntito azul en la hamburguesa si hay mensajes sin leer.
 
 ## 12. SEO — lo que ya está hecho
 
-- **`src/lib/site.js`** → objeto `SITE`: name, url, description, email (Gmail), telephone
-  (`+34628775619`), `instagram`, **`googleMaps`** (enlace `?cid=` de la ficha de Google; 05/10),
-  **`sameAs: [instagram, googleMaps]`** (solo perfiles externos, nunca la propia web). La ficha va
+- **`src/lib/site.js`** → objeto `SITE`: name, url, description, email, telephone
+  (`+34628775619`), `instagram` y `tiktok` (13/10: los de FG Digital, en las dos webs),
+  **`googleMaps`** (enlace `?cid=` de la ficha de Google; 05/10),
+  **`sameAs: [instagram, tiktok, googleMaps]`** (solo perfiles externos, nunca la propia web).
+  Lo que cambia por marca (name, url, email, ogImage, favicon) lo elige `PUBLIC_MARCA` (§2). La ficha va
   además como `hasMap` en el schema del negocio y como icono de Maps en el pie: así Google sabe que
   la web y la ficha son el mismo negocio. Si cambia la ficha (p. ej. con el rebranding), cambiar
   el cid aquí. `locality: 'Villanueva de la Serena'`, region, country, `areaServed`, `founders`,
@@ -818,20 +829,26 @@ menciones. Es trabajo de meses, no de código. Lo técnico ya está hecho.
 Símbolo: una **"E" formada por barras redondeadas apiladas** dentro de un **squircle** con
 gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** en el panel.
 
-- ⚠️ **Inconsistencia:** el Navbar usa una "E" en cuadrado azul plano y el **Footer usa un rayo**
-  con "Extreweb" en mayúscula. Se deja así hasta el rebranding (§2).
+- ✅ (13/10) **Un solo símbolo:** `src/components/Logo.astro` en Navbar y Footer (antes «E» plana
+  arriba y rayo abajo). Gradiente en CSS, no en `<defs>`: el logo sale dos veces por página.
+- **FG Digital (provisional, 13/10):** el mismo squircle con «FG» en Inter 800 (`Logo.astro` y
+  `public/favicon-fg.svg`; el favicon usa letra del sistema, no puede cargar Inter). Imagen para
+  compartir: `public/og-fgdigital.jpg` (1200×630, misma plantilla que la de extreweb). Cuando haya
+  logo definitivo: `Logo.astro`, `favicon-fg.svg` y rehacer la og.
 - `public/og-portada.jpg` (1200×630) ✅ · `logo-extreweb-horizontal(-dark).png` para usos externos.
-- En la web, el wordmark "extreweb" es **texto Inter en vivo**, no imagen.
+- En la web, el nombre de la marca es **texto Inter en vivo** (`SITE.name`), no imagen.
 
 ---
 
 ## 14. PENDIENTE
 
 ### Bloqueado por datos
-1. **Aviso legal:** la razón social es **FG Digital SL** (dicho por Saúl el 05/10); falta el
-   **NIF** y los datos registrales (Registro Mercantil). **Lo exige la LSSI.**
-2. **Rebranding** (§2): cuando se decida el nombre. Antes conviene **centralizar la marca**:
-   un `Logo.astro` único para Navbar y Footer + usar `SITE.name` en títulos y textos.
+1. **Aviso legal:** el titular ya es **FG Digital SL** en las dos webs (13/10); falta el
+   **NIF** y los datos registrales (Registro Mercantil). **Lo exige la LSSI.** Se rellenan en
+   `SITE.nif` y `SITE.registro` (`site.js`) y salen solos en aviso legal, privacidad y schema.
+2. **FG Digital / fgdigitalsl.com** (§2): fase 1 (código) hecha el 13/10. Siguiente: fase 2
+   (Saúl: segundo sitio de Netlify), luego fase 3 (canonical a fgdigitalsl.com). Todo en
+   **`PLAN-FG-DIGITAL.md`**. Pendiente: proveedor del correo `pedro@fgdigitalsl.com` (privacidad).
 
 ### Contenido (decisión nuestra, no de código)
 3. **Afirmaciones difíciles de sostener** — conviene suavizarlas (credibilidad + publicidad engañosa):
@@ -987,7 +1004,10 @@ gradiente **`#0071e3 → #7c5cff`**. Está en `public/favicon.svg` y **inline** 
   proyecto comparten `node_modules/.vite`.
 - **Nunca `npm run build` con su servidor arrancado** (rompe `node_modules/.vite`, ver §15). Para
   comprobar el build: copia limpia en una carpeta temporal (`git ls-files -co --exclude-standard`
-  → tar → `npm ci` → `npm run build`).
+  → tar → `npm ci` → `npm run build`). ⚠️ Entrar en la copia con la ruta **con las mayúsculas
+  reales del disco** (`fs.realpathSync.native`): si no, Vite falla con «No cached compile metadata
+  found for …Hero.astro?astro&type=style» (13/10). Las dos marcas: `npm run build` y
+  `PUBLIC_MARCA=fgdigital npm run build`.
 - **Navegador:** el panel de navegador integrado a veces deja de pintar (`requestAnimationFrame` a
   0: capturas negras o descuadradas; no es un fallo de la web). Lo fiable: **Chrome sin ventana por
   DevTools Protocol** sin dependencias (Node 24 trae WebSocket): `chrome.exe --headless=new

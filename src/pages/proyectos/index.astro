@@ -4,10 +4,11 @@ import Navbar from '@/components/Navbar.astro'
 import Cta from '@/components/Cta.astro'
 import Footer from '@/components/Footer.astro'
 import { PROYECTOS as projects } from '@/lib/proyectos.js'
+import { SITE } from '@/lib/site.js'
 ---
 
 <BaseLayout 
-    title="Proyectos de diseño web en Extremadura — extreweb"
+    title={`Proyectos de diseño web en Extremadura — ${SITE.name}`}
     description="Webs reales que hemos diseñado y desarrollado: concesionarios, talleres, SaaS y más. Entra y pruébalas en vivo."
 >
     <Navbar />

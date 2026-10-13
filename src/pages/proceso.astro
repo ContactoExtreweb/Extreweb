@@ -3,8 +3,9 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import Navbar from '@/components/Navbar.astro'
 import Cta from '@/components/Cta.astro'
 import Footer from '@/components/Footer.astro'
+import { SITE } from '@/lib/site.js'
 
-const seoTitle = "Nuestro Proceso — extreweb, agencia web";
+const seoTitle = `Nuestro Proceso — ${SITE.name}, agencia web`;
 const seoDesc = "Conoce paso a paso cómo transformamos tu idea en una página web rápida, bonita y lista para conseguir clientes.";
 ---
 

@@ -4,8 +4,9 @@ import Navbar from '@/components/Navbar.astro'
 import Cta from '@/components/Cta.astro'
 import Footer from '@/components/Footer.astro'
 import ServiceSchema from '@/components/seo/ServiceSchema.astro'
+import { SITE } from '@/lib/site.js'
 
-const seoTitle = 'Auditoría y Posicionamiento SEO en Extremadura — extreweb'
+const seoTitle = `Auditoría y Posicionamiento SEO en Extremadura — ${SITE.name}`
 const seoDesc =
     'Si no estás en la primera página de Google, no existes. Especialistas en SEO Local y técnico para dominar las búsquedas en Extremadura.'
 ---

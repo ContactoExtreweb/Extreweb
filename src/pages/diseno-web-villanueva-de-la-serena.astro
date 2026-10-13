@@ -2,13 +2,14 @@
 // Página local: Villanueva de la Serena. El diseño está en LocalLanding.astro;
 // aquí solo va el contenido, que tiene que ser propio de esta ciudad.
 import LocalLanding from '@/components/LocalLanding.astro'
+import { SITE } from '@/lib/site.js'
 ---
 
 <LocalLanding
     ciudad='Villanueva de la Serena'
     provincia='Badajoz'
     slug='/diseno-web-villanueva-de-la-serena/'
-    title='Diseño web en Villanueva de la Serena | extreweb'
+    title={`Diseño web en Villanueva de la Serena | ${SITE.name}`}
     description='Páginas web a medida en Villanueva de la Serena. Somos de aquí y hemos hecho las webs de GuadiCar y Toldos Pallares. Pide presupuesto sin compromiso.'
     eyebrow='Somos de aquí'
     intro='Hacemos páginas web a medida para comercios, talleres y empresas de Villanueva de la Serena: rápidas, cómodas de usar desde el móvil y preparadas para que te encuentren en Google cuando alguien del pueblo busca lo que vendes.'

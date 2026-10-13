@@ -15,7 +15,7 @@ interface Props {
     es404?: boolean
 }
 const {
-    title = 'Diseño y desarrollo web en Extremadura — extreweb',
+    title = `Diseño y desarrollo web en Extremadura — ${SITE.name}`,
     description = SITE.description,
     canonical,
     es404 = false,
@@ -62,7 +62,7 @@ const ogImage = new URL(SITE.ogImage, SITE.url).href
             type='font/woff2'
             crossorigin
         />
-        <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+        <link rel='icon' type='image/svg+xml' href={SITE.favicon} />
         <meta name='generator' content={Astro.generator} />
         <meta
             name='theme-color'
@@ -87,7 +87,7 @@ const ogImage = new URL(SITE.ogImage, SITE.url).href
         <meta property='og:url' content={canonicalURL} />
         <meta property='og:image' content={ogImage} />
         <meta property='og:locale' content='es_ES' />
-        <meta property='og:site_name' content='extreweb' />
+        <meta property='og:site_name' content={SITE.name} />
         <meta name='twitter:card' content='summary_large_image' />
         <meta name='twitter:image' content={ogImage} />
 

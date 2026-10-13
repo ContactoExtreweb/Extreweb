@@ -1,17 +1,31 @@
 // src/lib/site.js
+// Dos marcas, una sola web (PLAN-FG-DIGITAL.md). La elige la variable de entorno PUBLIC_MARCA
+// al hacer el build: sin valor = extreweb (extreweb.es) · 'fgdigital' = FG Digital (fgdigitalsl.com)
+const FG = import.meta.env.PUBLIC_MARCA === 'fgdigital'
+
+const instagram = 'https://www.instagram.com/fgdigital_sl'
+const tiktok = 'https://www.tiktok.com/@fg.digital.sl'
+// Ficha de Google (Perfil de Empresa). El cid sale del enlace de Maps de la ficha
+const googleMaps = 'https://maps.google.com/?cid=15465466821035549424'
+
 export const SITE = {
-  name: 'extreweb',
-  url: 'https://extreweb.es',
+  marca: FG ? 'fgdigital' : 'extreweb', // lo que cambia de dibujo (Logo.astro, favicon)
+  name: FG ? 'FG Digital' : 'extreweb',
+  legalName: 'FG Digital SL', // titular de las DOS webs (legales y schema)
+  // Los exige la LSSI en el aviso legal. Pendientes a 13/10/2026: mientras sean null no salen
+  nif: null,
+  registro: null, // p. ej. 'Registro Mercantil de Badajoz, tomo …, folio …, hoja BA-…'
+  url: FG ? 'https://fgdigitalsl.com' : 'https://extreweb.es',
   description:
     'Agencia de diseño y desarrollo web, SEO y soporte técnico en Don Benito, Villanueva de la Serena y Cáceres. Webs a medida, rápidas y pensadas para vender.',
 
-  email: 'contactoextreweb@gmail.com',
+  email: FG ? 'pedro@fgdigitalsl.com' : 'contactoextreweb@gmail.com',
   telephone: '+34628775619',   // formato internacional (lo pide el schema de Google)
-  instagram: 'https://instagram.com/extreweb',
-  // Ficha de Google (Perfil de Empresa). El cid sale del enlace de Maps de la ficha
-  googleMaps: 'https://maps.google.com/?cid=15465466821035549424',
+  instagram,
+  tiktok,
+  googleMaps,
   // Perfiles EXTERNOS de la marca (Instagram, LinkedIn, Google Business…), nunca la propia web
-  sameAs: ['https://instagram.com/extreweb', 'https://maps.google.com/?cid=15465466821035549424'],
+  sameAs: [instagram, tiktok, googleMaps],
 
   // Oferta para quien nos contacta desde la web (portada + contacto). Para quitarla: oferta: null
   oferta: {
@@ -41,7 +55,8 @@ export const SITE = {
     { name: 'Sistemas y soporte técnico', path: '/servicios/sistemas-soporte/' },
   ],
 
-  ogImage: '/og-portada.jpg', // 1200×630, en public/
+  ogImage: FG ? '/og-fgdigital.jpg' : '/og-portada.jpg', // 1200×630, en public/
+  favicon: FG ? '/favicon-fg.svg' : '/favicon.svg', // también es el logo del schema
 };
 
 // Zona de servicio lista para JSON-LD: cada ciudad como City + Extremadura como región

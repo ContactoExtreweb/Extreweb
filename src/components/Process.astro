@@ -1,5 +1,6 @@
 ---
 // src/components/Process.astro
+import { SITE } from '@/lib/site.js'
 const steps = [
     {
         num: '01',
@@ -30,7 +31,7 @@ const steps = [
         <!-- Columna Izquierda (Sticky) -->
         <div class='p-left'>
             <div class='sticky-content'>
-                <span class='eyebrow fx-up'>El Método Extreweb</span>
+                <span class='eyebrow fx-up'>El Método {SITE.name}</span>
                 <h2 class='fx-up' style='--fx-delay: 120ms'>Ingeniería web.<br />Paso a paso.</h2>
                 <p class='fx-up' style='--fx-delay: 240ms'>Un proceso estructurado, transparente y diseñado milimétricamente para entregar productos digitales de calidad mundial. Así convertimos ideas complejas en código impecable.</p>
                 

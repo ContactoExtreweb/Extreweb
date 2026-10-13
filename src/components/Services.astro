@@ -1,5 +1,8 @@
 ---
 // src/components/Services.astro
+import { SITE } from '@/lib/site.js'
+// El nombre de la marca como clase del código de adorno: «Extreweb», «FGDigital»
+const clase = SITE.name.replace(/\s/g, '').replace(/^./, (c) => c.toUpperCase())
 ---
 
 <section class='services-premium' id='servicios' data-anim-pausa>
@@ -36,11 +39,11 @@
                             <span>App.tsx</span>
                         </div>
                         <div class='ide-body'>
-                            <p><span class='c-pink'>import</span> { '{' } <span class='c-blue'>Extreweb</span> { '}' } <span class='c-pink'>from</span> <span class='c-green'>'@/core'</span></p>
+                            <p><span class='c-pink'>import</span> { '{' } <span class='c-blue'>{clase}</span> { '}' } <span class='c-pink'>from</span> <span class='c-green'>'@/core'</span></p>
                             <br>
                             <p><span class='c-pink'>export default function</span> <span class='c-blue'>App</span>() { '{' }</p>
                             <p class='indent'><span class='c-pink'>return</span> (</p>
-                            <p class='indent-2'>&lt;<span class='c-blue'>Extreweb.Engine</span></p>
+                            <p class='indent-2'>&lt;<span class='c-blue'>{clase}.Engine</span></p>
                             <p class='indent-3'>performance=<span class='c-green'>"maximum"</span></p>
                             <p class='indent-3'>design=<span class='c-green'>"premium"</span></p>
                             <p class='indent-2'>/&gt;</p>

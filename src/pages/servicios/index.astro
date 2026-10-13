@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import Navbar from '@/components/Navbar.astro'
 import Cta from '@/components/Cta.astro'
 import Footer from '@/components/Footer.astro'
+import { SITE } from '@/lib/site.js'
 
 const services = [
     {
@@ -61,7 +62,7 @@ const techStack = [
 ---
 
 <BaseLayout
-    title='Servicios de diseño web, SEO y soporte — extreweb'
+    title={`Servicios de diseño web, SEO y soporte — ${SITE.name}`}
     description='Diseño y desarrollo web a medida, posicionamiento SEO, redes sociales y soporte técnico para negocios de Extremadura. Cuéntanos qué necesitas.'
 >
     <Navbar />

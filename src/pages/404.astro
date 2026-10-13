@@ -5,6 +5,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import Navbar from '@/components/Navbar.astro'
 import Footer from '@/components/Footer.astro'
+import { SITE } from '@/lib/site.js'
 
 const atajos = [
     { href: '/servicios/', titulo: 'Servicios', texto: 'Diseño web, SEO, redes y soporte.' },
@@ -14,7 +15,7 @@ const atajos = [
 ---
 
 <BaseLayout
-    title='Página no encontrada — extreweb'
+    title={`Página no encontrada — ${SITE.name}`}
     description='Esta página no existe o ha cambiado de dirección.'
     es404
 >

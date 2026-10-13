@@ -11,9 +11,9 @@ const whatsapp =
     SITE.telephone.replace('+', '') +
     (oferta ? '?text=' + encodeURIComponent(`Hola, vengo de vuestra web (${oferta.codigo}). `) : '')
 
-const seoTitle = 'Contacto — extreweb, tu agencia web'
+const seoTitle = `Contacto — ${SITE.name}, tu agencia web`
 const seoDesc =
-    'Habla directamente con los fundadores de extreweb. Cuéntanos tu proyecto y veamos cómo podemos ayudarte a crecer en internet.'
+    `Habla directamente con los fundadores de ${SITE.name}. Cuéntanos tu proyecto y veamos cómo podemos ayudarte a crecer en internet.`
 ---
 
 <BaseLayout title={seoTitle} description={seoDesc}>
@@ -57,9 +57,7 @@ const seoDesc =
                                 <span class='c-icon'>✉️</span>
                                 <div>
                                     <strong>Email directo</strong>
-                                    <a href='mailto:contactoextreweb@gmail.com'
-                                        >contactoextreweb@gmail.com</a
-                                    >
+                                    <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
                                 </div>
                             </div>
                             <div class='c-info-item'>
@@ -186,7 +184,7 @@ const seoDesc =
                                 </label>
 
                                 <p class='form-legal'>
-                                    <strong>Responsable:</strong> extreweb.
+                                    <strong>Responsable:</strong> {SITE.legalName}.
                                     <strong>Finalidad:</strong> responder a tu consulta.
                                     <strong>Legitimación:</strong> tu consentimiento.
                                     <strong>Destinatarios:</strong> no se ceden a
@@ -195,7 +193,7 @@ const seoDesc =
                                     técnicos.
                                     <strong>Derechos:</strong> acceso, rectificación,
                                     supresión y demás, escribiendo a
-                                    contactoextreweb@gmail.com.
+                                    {SITE.email}.
                                 </p>
 
                                 <!-- Netlify sustituye este div por el reCAPTCHA
@@ -222,8 +220,8 @@ const seoDesc =
                                 >
                                     No hemos podido enviar el mensaje. Prueba de
                                     nuevo o escríbenos a <a
-                                        href='mailto:contactoextreweb@gmail.com'
-                                        >contactoextreweb@gmail.com</a
+                                        href={`mailto:${SITE.email}`}
+                                        >{SITE.email}</a
                                     >.
                                 </p>
 

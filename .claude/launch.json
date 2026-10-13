@@ -4,26 +4,75 @@
     {
       "name": "astro-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 4321
     },
     {
       "name": "astro-dev-4323",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "4323"],
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "4323"
+      ],
       "port": 4323
+    },
+    {
+      "name": "astro-dev-fg-4324",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "4324"
+      ],
+      "env": { "PUBLIC_MARCA": "fgdigital" },
+      "port": 4324
     },
     {
       "name": "imtex-dev-4330",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "../Imtex/web", "run", "dev", "--", "--port", "4330"],
+      "runtimeArgs": [
+        "--prefix",
+        "../Imtex/web",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "4330"
+      ],
       "port": 4330
     },
     {
       "name": "astro-preview",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["astro", "preview", "--port", "4322"],
+      "runtimeArgs": [
+        "astro",
+        "preview",
+        "--port",
+        "4322"
+      ],
       "port": 4322
+    },
+    {
+      "name": "laserena-dev-4340",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "../LaSerena/web",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "4340"
+      ],
+      "port": 4340
     }
   ]
 }

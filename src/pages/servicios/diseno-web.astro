@@ -4,10 +4,11 @@ import Navbar from '@/components/Navbar.astro'
 import Cta from '@/components/Cta.astro'
 import Footer from '@/components/Footer.astro'
 
-const seoTitle = 'Diseño Web a Medida en Extremadura — extreweb'
+const seoTitle = `Diseño Web a Medida en Extremadura — ${SITE.name}`
 const seoDesc =
     'Creamos páginas web ultrarrápidas y orientadas a ventas. Olvídate de plantillas lentas: diseñamos a medida para tu negocio.'
 import ServiceSchema from '@/components/seo/ServiceSchema.astro'
+import { SITE } from '@/lib/site.js'
 ---
 
 <BaseLayout title={seoTitle} description={seoDesc}>

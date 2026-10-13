@@ -4,8 +4,9 @@ import Navbar from '@/components/Navbar.astro'
 import Cta from '@/components/Cta.astro'
 import Footer from '@/components/Footer.astro'
 import ServiceSchema from '@/components/seo/ServiceSchema.astro'
+import { SITE } from '@/lib/site.js'
 
-const seoTitle = 'Sistemas y Soporte Técnico en Extremadura — extreweb'
+const seoTitle = `Sistemas y Soporte Técnico en Extremadura — ${SITE.name}`
 const seoDesc =
     'Mantenimiento informático, redes y soporte técnico para empresas. Aseguramos que tu infraestructura tecnológica no te frene.'
 ---

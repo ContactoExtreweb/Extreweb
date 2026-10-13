@@ -1,5 +1,7 @@
 ---
 // src/components/Navbar.astro
+import Logo from '@/components/Logo.astro'
+import { SITE } from '@/lib/site.js'
 const links = [
     { href: '/servicios/', label: 'Servicios' },
     { href: '/proyectos/', label: 'Proyectos' },
@@ -19,10 +21,10 @@ const isActive = (href) => {
 <div class='nav-container'>
     <header class='smart-nav' id='smartNav'>
         <div class='nav-inner'>
-            <!-- Logo (Texto 'extreweb' visible siempre) -->
-            <a href='/' class='logo' aria-label='Inicio extreweb'>
-                <span class='logo-mark'>E</span>
-                <span class='logo-text'>extreweb</span>
+            <!-- Logo (el nombre de la marca visible siempre) -->
+            <a href='/' class='logo' aria-label={`Inicio ${SITE.name}`}>
+                <Logo class='logo-mark' />
+                <span class='logo-text'>{SITE.name}</span>
             </a>
 
             <!-- Enlaces PC -->
@@ -118,9 +120,7 @@ const isActive = (href) => {
                 >Empezar proyecto</a
             >
             <div class='menu-contact'>
-                <a href='mailto:contactoextreweb@gmail.com'
-                    >contactoextreweb@gmail.com</a
-                >
+                <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
                 <a href='tel:+34628775619'>628 77 56 19</a>
             </div>
         </div>
@@ -185,17 +185,8 @@ const isActive = (href) => {
         transform: scale(0.95);
     }
     .logo-mark {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
         width: 2rem;
         height: 2rem;
-        border-radius: 8px;
-        background: var(--accent);
-        color: var(--accent-fg);
-        font-size: 1.05rem;
-        font-weight: 700;
-        flex-shrink: 0;
     }
     .logo-text {
         flex-shrink: 0;

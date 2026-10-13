@@ -3,10 +3,11 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import Navbar from '@/components/Navbar.astro'
 import Cta from '@/components/Cta.astro'
 import Footer from '@/components/Footer.astro'
+import { SITE } from '@/lib/site.js'
 
-const seoTitle = 'Sobre nosotros — extreweb, agencia web en Extremadura'
+const seoTitle = `Sobre nosotros — ${SITE.name}, agencia web en Extremadura`
 const seoDesc =
-    'Somos extreweb, un equipo de Extremadura especializado en diseño y desarrollo web, SEO y soporte. Cercanía, trabajo real y webs que venden.'
+    `Somos ${SITE.name}, un equipo de Extremadura especializado en diseño y desarrollo web, SEO y soporte. Cercanía, trabajo real y webs que venden.`
 ---
 
 <BaseLayout title={seoTitle} description={seoDesc}>
@@ -50,10 +51,18 @@ const seoDesc =
                     <div class='h-block fx-up'>
                         <span class='h-year'>2022</span>
                         <p>
-                            <strong>extreweb</strong> nace de la unión de dos apasionados
+                            <strong>{SITE.name}</strong> nace de la unión de dos apasionados
                             de la tecnología de Villanueva de la Serena y Miajadas.
                             Una inquietud compartida por crear y revolucionar los
                             negocios locales.
+                            {
+                                SITE.marca !== 'fgdigital' && (
+                                    <>
+                                        Hoy, {SITE.name} es una marca de{' '}
+                                        <strong>{SITE.legalName}</strong>.
+                                    </>
+                                )
+                            }
                         </p>
                     </div>
                     <div

@@ -2,13 +2,14 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import Navbar from '@/components/Navbar.astro'
 import Footer from '@/components/Footer.astro'
+import { SITE } from '@/lib/site.js'
 
-const seoTitle = 'Política de Privacidad — extreweb'
+const seoTitle = `Política de Privacidad — ${SITE.name}`
 ---
 
 <BaseLayout
     title={seoTitle}
-    description='Cómo tratamos en extreweb los datos que nos envías por el formulario de contacto: finalidad, proveedores y tus derechos.'
+    description={`Cómo tratamos en ${SITE.name} los datos que nos envías por el formulario de contacto: finalidad, proveedores y tus derechos.`}
 >
     <Navbar />
     <main class='legal-main'>
@@ -23,8 +24,8 @@ const seoTitle = 'Política de Privacidad — extreweb'
 
                 <h2>1. Responsable del tratamiento</h2>
                 <p>
-                    <strong>Identidad:</strong> extreweb<br />
-                    <strong>Contacto:</strong> contactoextreweb@gmail.com<br />
+                    <strong>Identidad:</strong> {SITE.legalName}{SITE.nif && ` (NIF ${SITE.nif})`}<br />
+                    <strong>Contacto:</strong> {SITE.email}<br />
                     <strong>Finalidad:</strong> Responder a las consultas enviadas
                     a través del formulario de contacto y enviar información relacionada
                     con nuestros servicios si lo has solicitado explícitamente.

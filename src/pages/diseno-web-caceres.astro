@@ -2,13 +2,14 @@
 // Página local: Cáceres. El diseño está en LocalLanding.astro;
 // aquí solo va el contenido, que tiene que ser propio de esta ciudad.
 import LocalLanding from '@/components/LocalLanding.astro'
+import { SITE } from '@/lib/site.js'
 ---
 
 <LocalLanding
     ciudad='Cáceres'
     provincia='Cáceres'
     slug='/diseno-web-caceres/'
-    title='Diseño web en Cáceres — Páginas web a medida | extreweb'
+    title={`Diseño web en Cáceres — Páginas web a medida | ${SITE.name}`}
     description='Páginas web a medida para negocios de Cáceres y su provincia. Hemos hecho las webs del Taller M. Guzmán y de la academia Físicas Élite. Pide presupuesto.'
     eyebrow='Cáceres y provincia'
     intro='Páginas web a medida para negocios de Cáceres capital y del resto de la provincia: rápidas, cuidadas y pensadas para que el cliente te llame, te escriba o reserve sin dar vueltas.'

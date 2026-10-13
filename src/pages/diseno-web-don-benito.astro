@@ -2,13 +2,14 @@
 // Página local: Don Benito. El diseño está en LocalLanding.astro;
 // aquí solo va el contenido, que tiene que ser propio de esta ciudad.
 import LocalLanding from '@/components/LocalLanding.astro'
+import { SITE } from '@/lib/site.js'
 ---
 
 <LocalLanding
     ciudad='Don Benito'
     provincia='Badajoz'
     slug='/diseno-web-don-benito/'
-    title='Diseño web en Don Benito — Páginas web a medida | extreweb'
+    title={`Diseño web en Don Benito — Páginas web a medida | ${SITE.name}`}
     description='Páginas web a medida para negocios de Don Benito y las Vegas Altas. Estamos a 6 km, en Villanueva: reuniones en persona y soporte cercano. Pide presupuesto.'
     eyebrow='Vegas Altas del Guadiana'
     intro='Diseñamos y programamos páginas web para comercios, talleres, restaurantes, empresas agrícolas y profesionales de Don Benito. Webs rápidas, fáciles de usar desde el móvil y preparadas para que te encuentren en Google.'

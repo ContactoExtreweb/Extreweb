@@ -2,13 +2,14 @@
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import Navbar from '@/components/Navbar.astro'
 import Footer from '@/components/Footer.astro'
+import { SITE } from '@/lib/site.js'
 
-const seoTitle = 'Aviso Legal — extreweb'
+const seoTitle = `Aviso Legal — ${SITE.name}`
 ---
 
 <BaseLayout
     title={seoTitle}
-    description='Aviso legal de extreweb: datos del titular de la web, condiciones de uso, propiedad intelectual y responsabilidad.'
+    description={`Aviso legal de ${SITE.name}: datos del titular de la web, condiciones de uso, propiedad intelectual y responsabilidad.`}
 >
     <Navbar />
     <main class='legal-main'>
@@ -24,12 +25,22 @@ const seoTitle = 'Aviso Legal — extreweb'
 
                 <h2>1. Identificación del titular</h2>
                 <p>
-                    <strong>Denominación:</strong> extreweb<br />
+                    <strong>Titular:</strong> {SITE.legalName}<br />
+                    <strong>Nombre comercial:</strong> {SITE.name}<br />
+                    {SITE.nif && <><strong>NIF:</strong> {SITE.nif}<br /></>}
+                    {
+                        SITE.registro && (
+                            <>
+                                <strong>Datos registrales:</strong> {SITE.registro}
+                                <br />
+                            </>
+                        )
+                    }
                     <strong>Representantes:</strong> Saúl Correyero Pañero y Pedro
                     Fernández Sánchez<br />
                     <strong>Domicilio:</strong> Villanueva de la Serena (Badajoz),
                     Extremadura, España.<br />
-                    <strong>Email de contacto:</strong> contactoextreweb@gmail.com
+                    <strong>Email de contacto:</strong> {SITE.email}
                 </p>
 
                 <h2>2. Propiedad Intelectual e Industrial</h2>
@@ -37,7 +48,7 @@ const seoTitle = 'Aviso Legal — extreweb'
                     Todos los contenidos del sitio web (textos, fotografías,
                     gráficos, imágenes, tecnología, software, enlaces, diseño
                     audiovisual y código fuente) son propiedad intelectual de
-                    extreweb o de terceros, sin que puedan entenderse cedidos al
+                    {SITE.legalName} o de terceros, sin que puedan entenderse cedidos al
                     usuario ninguno de los derechos de explotación reconocidos
                     por la normativa vigente.
                 </p>
