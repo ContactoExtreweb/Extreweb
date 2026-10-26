@@ -1,6 +1,6 @@
 # Skills y plugins de Claude Code
 
-Inventario para tener los dos PCs iguales. Actualizado el 26/10/2026.
+Inventario para tener los dos PCs iguales. Actualizado el 26/10/2026 (todas las skills comprobadas contra su repo ese día).
 
 Todo va **en global** (`~/.claude/skills/` y plugins de usuario), nunca dentro de un repo.
 Las skills **no** viajan con git ni con la cuenta: en cada PC hay que instalarlas.
@@ -57,7 +57,7 @@ Clonar el repo (`git clone --depth 1 https://github.com/<repo>`) y copiar la car
 | `design-taste-frontend` ⚠️ | `Leonxlnx/taste-skill` | `skills/taste-skill/`, en una carpeta llamada `design-taste-frontend` |
 | `svg-animation` | `iart-ai/web-animation-skills` | `skills/svg-animation/` |
 | `web-animation-view-transitions` ⚠️ | `agents-inc/skills` | `dist/plugins/web-animation-view-transitions/skills/web-animation-view-transitions/` |
-| `threejs-animation`, `threejs-fundamentals`, `threejs-geometry`, `threejs-interaction`, `threejs-lighting`, `threejs-loaders`, `threejs-materials`, `threejs-postprocessing`, `threejs-shaders`, `threejs-textures` | `CloudAI-X/threejs-skills` | `skills/threejs-*/` (aquí hay una versión anterior a la actual) |
+| `threejs-animation`, `threejs-asset-pipeline`, `threejs-fundamentals`, `threejs-geometry`, `threejs-interaction`, `threejs-lighting`, `threejs-loaders`, `threejs-materials`, `threejs-performance`, `threejs-postprocessing`, `threejs-shaders`, `threejs-textures` | `CloudAI-X/threejs-skills` | `skills/threejs-*/`, todas excepto `threejs-react-three-fiber` |
 | `img2threejs` | `img2threejs/img2threejs` | el repo entero |
 
 ⚠️ **Cambios hechos a mano** (repetirlos al reinstalar):
@@ -79,7 +79,7 @@ Cada zip trae una carpeta con el nombre de la skill: descomprimirla dentro de `~
 
 ### Otras
 
-- **`graphify`**: viene del paquete Python `graphifyy` (versión 0.9.71), instalado con `uv tool`. Reinstalar siguiendo el README del paquete.
+- **`graphify`**: viene del paquete Python `graphifyy`. Aquí está solo la skill (versión 0.9.71); el programa `graphify` **no** está instalado en este PC, así que la skill no funciona. Última versión el 26/10: 0.9.95.
 - **`synced/`**: skills de claude.ai (docs, pdf, xlsx, deep-research…). La app las sincroniza sola con la cuenta; no hay que hacer nada.
 
 ## Descartadas
@@ -91,3 +91,4 @@ Cada zip trae una carpeta con el nombre de la skill: descomprimirla dentro de `~
 | `animation-designer` (`deve1993/quickfy-website`) | El repo ya no existe |
 | `css-animations` (`aiskillstore/marketplace`) | Ya no está en el repo; sustituida por `css-development` |
 | `threejs-animation` de `datit309/supergraph` | Idéntica a la que ya hay |
+| `threejs-react-three-fiber` (CloudAI-X) | Es para React; nosotros usamos three.js sin React |
